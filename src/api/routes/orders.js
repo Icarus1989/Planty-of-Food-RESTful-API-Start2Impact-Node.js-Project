@@ -7,33 +7,33 @@ const app = express();
 
 // testInsertData();
 
-async function testInsertData() {
-	try {
-		const orderTest = new Order({
-			orderId: "OrderOne",
-			users: [
-				{
-					username: "UserZero",
-					products: [
-						{
-							productname: "Strawberries",
-							quantity: 23
-						}
-					]
-				}
-			]
-		});
-		orderTest.save((err, doc) => {
-			if (err) {
-				console.log(err);
-			}
-			console.log("Data entered");
-		});
-		// console.log(orderTest);
-	} catch (error) {
-		console.log(error);
-	}
-}
+// async function testInsertData() {
+// 	try {
+// 		const orderTest = new Order({
+// 			orderId: "OrderOne",
+// 			users: [
+// 				{
+// 					username: "UserZero",
+// 					products: [
+// 						{
+// 							productname: "Strawberries",
+// 							quantity: 23
+// 						}
+// 					]
+// 				}
+// 			]
+// 		});
+// 		orderTest.save((err, doc) => {
+// 			if (err) {
+// 				console.log(err);
+// 			}
+// 			console.log("Data entered");
+// 		});
+// 		// console.log(orderTest);
+// 	} catch (error) {
+// 		console.log(error);
+// 	}
+// }
 
 router.get("/", async (req, res) => {
 	const savedOrders = await Order.find();

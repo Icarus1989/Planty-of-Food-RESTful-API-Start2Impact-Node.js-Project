@@ -16,53 +16,6 @@ const app = express();
 // 	}
 // );
 
-// testInsertData();
-
-async function testInsertData() {
-	try {
-		const userTest = new User({
-			firstname: "Usertest",
-			lastname: "fromCode",
-			username: "User0",
-			address: "test@code.com",
-			orders: [
-				{
-					orderid: "order00006",
-					url: "none"
-				}
-			]
-		});
-		userTest.save((err, doc) => {
-			if (err) {
-				console.log(err);
-			}
-			console.log("Insered");
-		});
-		console.log(userTest);
-	} catch (error) {
-		console.log(error);
-	}
-}
-
-// "firstname": "xxxxx",
-// 	  "lastname": "xxxxx",
-// 	  "username": "xxxxx",
-// 	  "mailaddress": "one@one.com",
-// 	  "orders": [
-// 		{
-// 			"orderid": "order00001",
-// 			"url": "path"
-// 		},
-// 		{
-// 			"orderid": "order00002",
-// 			"url": "path"
-// 		},
-// 		{
-// 			"orderid": "order00003",
-// 			"url": "path"
-// 		}
-// 	]
-
 router.get("/", async (req, res, next) => {
 	const accounts = await User.find({});
 	res.json(accounts);
@@ -107,9 +60,29 @@ router.post("/", (req, res) => {
 	}
 });
 
-router.put("/:userid", (req, res) => {});
+router.put("/:username", async (req, res) => {
+	const username = req.params.username;
+	const userChanged = await User.findOneAndUpdate(
+		{
+			username: username
+		},
+		{
+			address: "userzero@testcode.com"
+		},
+		{
+			new: true
+		}
+	);
+	res.json(userChanged);
+});
 
-router.delete("/:userid", (req, res) => {});
+router.delete("/:username", async (req, res) => {
+	const username = req.params.username;
+	const userRemoved = await User.findOneAndDelete({
+		username: username
+	});
+	res.json(userRemoved);
+});
 
 // Delete all
 router.delete("/", (req, res) => {

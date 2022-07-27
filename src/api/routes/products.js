@@ -41,12 +41,12 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:prodId", async (req, res) => {
-	const param = await req.params.prodId;
-	console.log(param);
-	const label = `${String(param)[0].toUpperCase()}${String(param).slice(1)}`;
+	const prodId = await req.params.prodId;
+	// console.log(param);
+	const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(1)}`;
 	Product.find({ name: label }, (err, data) => {
 		// gestire error
-		console.log(data);
+		// console.log(data);
 		res.json(data);
 	});
 });
@@ -70,9 +70,29 @@ router.post("/", (req, res) => {
 	}
 });
 
-router.put("/:id", (req, res) => {});
+router.put("/:prodId", async (req, res) => {
+	const prodId = await req.params.prodId;
+	const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(1)}`;
+	const productChanged = await Product.findOneAndUpdate(
+		{ name: label },
+		{
+			quantity: 56
+		},
+		{
+			new: true
+		}
+	);
+	res.json(productChanged);
+});
 
-router.delete("/:id", (req, res) => {});
+router.delete("/:prodId", async (req, res) => {
+	const prodId = req.params.prodId;
+	const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(1)}`;
+	const productRemoved = await Product.findOneAndDelete({
+		name: label
+	});
+	res.json(productRemoved);
+});
 
 // Delete all
 router.delete("/", (req, res) => {
