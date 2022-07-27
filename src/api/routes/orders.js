@@ -43,8 +43,8 @@ router.get("/", async (req, res) => {
 	// });
 });
 
-router.get("/:ordNumber", async (req, res) => {
-	const number = req.params.ordNumber;
+router.get("/:ordNum", async (req, res) => {
+	const number = req.params.ordNum;
 	// res.json(number);
 	const orderId = `order${String(number)}`;
 	Order.find({ orderId: orderId }, (err, data) => {
@@ -89,9 +89,41 @@ router.post("/", (req, res) => {
 	}
 });
 
-router.put("/:id", (req, res) => {});
+router.put("/:ordNum", async (req, res) => {
+	const number = req.params.ordNum;
+	const orderId = `order${String(number)}`;
 
-router.delete("/:id", (req, res) => {});
+	const orderChanged = await Order.findOneAndUpdate(
+		{ orderId: orderId },
+		{
+			users: {
+				username: "UserZero",
+				products: [
+					{
+						productname: "Strawberries",
+						quantity: 5
+					},
+					{
+						productname: "Watermelon",
+						quantity: 5
+					}
+				]
+			}
+		},
+		{
+			new: true
+		}
+	);
+
+	res.json(orderChanged);
+});
+
+router.delete("/:ordNum", async (req, res) => {
+	const number = req.params.ordNum;
+	const orderId = `order${String(number)}`;
+	const orderRemoved = await Order.findOneAndDelete({ orderId: orderId });
+	res.json(orderRemoved);
+});
 
 // Delete all
 router.delete("/", (req, res) => {
@@ -102,7 +134,6 @@ router.delete("/", (req, res) => {
 		res.json({
 			message: "All data removed."
 		});
-		// console.log("Insered");
 	});
 });
 // Delete all

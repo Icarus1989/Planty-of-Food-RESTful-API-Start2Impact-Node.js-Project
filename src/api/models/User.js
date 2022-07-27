@@ -1,10 +1,15 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-	firstname: { type: String, default: "newUser" },
-	lastname: { type: String, default: "" },
-	username: { type: String, default: "new user" },
-	address: { type: String, default: "one@one.com" },
+	firstname: { type: String, required: true, default: "newUser" },
+	lastname: { type: String, required: true, default: "" },
+	username: { type: String, required: true, default: "new user" },
+	address: {
+		type: String,
+		required: true,
+		lowercase: true,
+		default: "one@one.com"
+	},
 	createdAt: { type: Date, default: Date.now },
 	orders: [
 		{
