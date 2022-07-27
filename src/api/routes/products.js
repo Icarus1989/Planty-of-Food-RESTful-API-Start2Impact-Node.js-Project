@@ -40,11 +40,23 @@ router.get("/", async (req, res) => {
 	res.json(savedProducts);
 });
 
+router.get("/:prodId", async (req, res) => {
+	const param = await req.params.prodId;
+	console.log(param);
+	const label = `${String(param)[0].toUpperCase()}${String(param).slice(1)}`;
+	Product.find({ name: label }, (err, data) => {
+		// gestire error
+		console.log(data);
+		res.json(data);
+	});
+});
+
 router.post("/", (req, res) => {
 	try {
 		const productTest = new Product({
 			name: "Strawberries",
-			quantity: 100
+			quantity: 23,
+			origin: "Italy"
 		});
 		productTest.save((err, doc) => {
 			if (err) {

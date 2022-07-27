@@ -8,6 +8,9 @@ app.use(express.json());
 app.get("/", (req, res) => {
 	res.json({
 		message: "Welcome!",
+		GetAllOption1: "/api/v1/products-storage/",
+		GetAllOption2: "/api/v1/users/",
+		GetAllOption3: "/api/v1/orders-archieve/"
 	});
 });
 

@@ -23,11 +23,11 @@ async function testInsertData() {
 		const userTest = new User({
 			firstname: "Usertest",
 			lastname: "fromCode",
-			username: "UsertestFromCode",
+			username: "User0",
 			address: "test@code.com",
 			orders: [
 				{
-					orderid: "00001",
+					orderid: "order00006",
 					url: "none"
 				}
 			]
@@ -71,18 +71,26 @@ router.get("/", async (req, res, next) => {
 	// });
 });
 
-router.get("/users/:userid", async (req, res, next) => {});
+router.get("/:userid", async (req, res, next) => {
+	const username = await req.params.userid;
+	console.log(username);
+	User.find({ username: username }, (err, data) => {
+		// gestire error
+		console.log(data);
+		res.json(data);
+	});
+});
 
 router.post("/", (req, res) => {
 	try {
 		const userTest = new User({
 			firstname: "Usertest",
 			lastname: "fromCode",
-			username: "UsertestFromCode",
+			username: "User0",
 			address: "test@code.com",
 			orders: [
 				{
-					orderid: "00001",
+					orderid: "00006",
 					url: "none"
 				}
 			]
@@ -101,7 +109,7 @@ router.post("/", (req, res) => {
 
 router.put("/:userid", (req, res) => {});
 
-router.delete("/:id", (req, res) => {});
+router.delete("/:userid", (req, res) => {});
 
 // Delete all
 router.delete("/", (req, res) => {

@@ -13,7 +13,8 @@ const orderSchema = new mongoose.Schema({
 			]
 		}
 	],
-	createdAt: { type: Date, default: Date.now }
+	createdAt: { type: Date, default: Date.now },
+	shipped: { type: Boolean, default: false }
 });
 
 const conn = mongoose.createConnection(

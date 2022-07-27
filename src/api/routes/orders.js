@@ -43,30 +43,45 @@ router.get("/", async (req, res) => {
 	// });
 });
 
-router.get("/:id", async (req, res) => {});
+router.get("/:ordNumber", async (req, res) => {
+	const number = req.params.ordNumber;
+	// res.json(number);
+	const orderId = `order${String(number)}`;
+	Order.find({ orderId: orderId }, (err, data) => {
+		// gestire error
+		console.log(data);
+		res.json(data);
+	});
+});
 
 router.post("/", (req, res) => {
 	try {
 		const orderTest = new Order({
-			orderId: "OrderOne",
+			orderId: "order000002",
 			users: [
 				{
-					username: "UserZero",
+					username: "UserOne",
 					products: [
+						{
+							productname: "Watermelon",
+							quantity: 23
+						},
 						{
 							productname: "Strawberries",
 							quantity: 23
 						}
 					]
 				}
-			]
+			],
+			shipped: false
 		});
 		orderTest.save((err, doc) => {
 			if (err) {
 				console.log(err);
 			}
 			res.json(orderTest);
-			// console.log("Data entered");
+
+			// Qui possibile Ric...
 		});
 		// console.log(orderTest);
 	} catch (error) {

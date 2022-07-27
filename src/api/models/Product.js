@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
 	name: { type: String, default: "newProduct" },
-	quantity: { type: Number }
+	quantity: { type: Number },
+	origin: { type: String, default: "Italy" }
 });
 
 const conn = mongoose.createConnection(
