@@ -1,7 +1,7 @@
 ## RESTful API testing and experimental sections
 
-- [x] Simple database on MongoDB Atlas
-- [x] Routes
-- [x] Sinon.js testing
-- [x] Test coverage nyc
+- [ ] Simple database on MongoDB Atlas
+- [ ] Routes
+- [ ] Sinon.js testing
+- [ ] Test coverage nyc
 - [ ] Automate testing
