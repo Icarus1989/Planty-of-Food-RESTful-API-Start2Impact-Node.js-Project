@@ -51,37 +51,37 @@ router.get("/:prodId", async (req, res) => {
 	});
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
 	try {
-		const productTest = new Product({
-			name: "Strawberries",
-			quantity: 23,
-			origin: "Italy"
-		});
-		productTest.save((err, doc) => {
+		const data = await req.body;
+		// body = {
+		// 	name: "Bananas",
+		// 	quantity: 50,
+		// 	origin: "Brazil"
+		// };
+		const newProduct = new Product(await data);
+		newProduct.save((err, doc) => {
 			if (err) {
 				console.log(err);
 			}
 			console.log("Data entered");
 		});
-		res.json(productTest);
+		res.json(newProduct);
 	} catch (error) {
 		console.log(error);
 	}
 });
 
 router.put("/:prodId", async (req, res) => {
+	const data = await req.body;
+	// body = {
+	// 	quantity: 56
+	// };
 	const prodId = await req.params.prodId;
 	const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(1)}`;
-	const productChanged = await Product.findOneAndUpdate(
-		{ name: label },
-		{
-			quantity: 56
-		},
-		{
-			new: true
-		}
-	);
+	const productChanged = await Product.findOneAndUpdate({ name: label }, data, {
+		new: true
+	});
 	res.json(productChanged);
 });
 

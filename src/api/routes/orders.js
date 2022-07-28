@@ -54,62 +54,65 @@ router.get("/:ordNum", async (req, res) => {
 	});
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
 	try {
-		const orderTest = new Order({
-			orderId: "order000002",
-			users: [
-				{
-					username: "UserOne",
-					products: [
-						{
-							productname: "Watermelon",
-							quantity: 23
-						},
-						{
-							productname: "Strawberries",
-							quantity: 23
-						}
-					]
-				}
-			],
-			shipped: false
-		});
-		orderTest.save((err, doc) => {
+		const data = await req.body;
+		// body = {
+		// 	orderId: "order000002",
+		// 	users: [
+		// 		{
+		// 			username: "UserOne",
+		// 			products: [
+		// 				{
+		// 					productname: "Watermelon",
+		// 					quantity: 23
+		// 				},
+		// 				{
+		// 					productname: "Strawberries",
+		// 					quantity: 23
+		// 				}
+		// 			]
+		// 		}
+		// 	],
+		// 	shipped: false
+		// }
+		const newOrder = new Order(data);
+		newOrder.save((err, doc) => {
 			if (err) {
 				console.log(err);
 			}
-			res.json(orderTest);
+			res.json(newOrder);
 
 			// Qui possibile Ric...
 		});
-		// console.log(orderTest);
 	} catch (error) {
 		console.log(error);
 	}
 });
 
 router.put("/:ordNum", async (req, res) => {
-	const number = req.params.ordNum;
+	const data = await req.body;
+	// body = {
+	// 	users: {
+	// 		username: "User5",
+	// 		products: [
+	// 			{
+	// 				productname: "Strawberries",
+	// 				quantity: 5
+	// 			},
+	// 			{
+	// 				productname: "Watermelon",
+	// 				quantity: 5
+	// 			}
+	// 		]
+	// 	}
+	// };
+	const number = await req.params.ordNum;
 	const orderId = `order${String(number)}`;
 
 	const orderChanged = await Order.findOneAndUpdate(
 		{ orderId: orderId },
-		{
-			users: {
-				username: "UserZero",
-				products: [
-					{
-						productname: "Strawberries",
-						quantity: 5
-					},
-					{
-						productname: "Watermelon",
-						quantity: 5
-					}
-				]
-			}
-		},
+		data,
 		{
 			new: true
 		}

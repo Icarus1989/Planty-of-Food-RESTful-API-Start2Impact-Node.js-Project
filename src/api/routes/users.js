@@ -34,41 +34,44 @@ router.get("/:userid", async (req, res, next) => {
 	});
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
 	try {
-		const userTest = new User({
-			firstname: "Usertest",
-			lastname: "fromCode",
-			username: "User0",
-			address: "test@code.com",
-			orders: [
-				{
-					orderid: "00006",
-					url: "none"
-				}
-			]
-		});
-		userTest.save((err, doc) => {
+		// body = {
+		// 	"firstname": "UserFromInsomnia",
+		// 	"lastname": "from req.body",
+		// 	"username": "User4",
+		// 	"address": "test@request.com",
+		// 	"orders": [
+		// 		{
+		// 			"orderid": "00008",
+		// 			"url": "none"
+		// 		}
+		// 	]
+		// };
+		const data = await req.body;
+		const newUser = new User(await data);
+		newUser.save((err, doc) => {
 			if (err) {
 				console.log(err);
 			}
-			res.json(userTest);
+			res.json(newUser);
 		});
-		// console.log(userTest);
 	} catch (error) {
 		console.log(error);
 	}
 });
 
 router.put("/:username", async (req, res) => {
-	const username = req.params.username;
+	const username = await req.params.username;
+	const data = await req.body;
+	// body = {
+	// 	"address": "userzero@testcode.com"
+	// };
 	const userChanged = await User.findOneAndUpdate(
 		{
 			username: username
 		},
-		{
-			address: "userzero@testcode.com"
-		},
+		data,
 		{
 			new: true
 		}
