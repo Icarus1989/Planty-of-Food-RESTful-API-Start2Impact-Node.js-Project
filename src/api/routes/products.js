@@ -2,6 +2,8 @@ const express = require("express");
 const api = require("../../api");
 const mongoose = require("mongoose");
 const Product = require("../models/Product");
+const { celebrate, Joi, errors, Segments } = require("celebrate");
+
 const router = express.Router();
 const app = express();
 
@@ -15,26 +17,6 @@ const app = express();
 // 	}
 // );
 
-// testInsertData();
-
-async function testInsertData() {
-	try {
-		const productTest = new Product({
-			name: "TestProductOne",
-			quantity: 1
-		});
-		productTest.save((err, doc) => {
-			if (err) {
-				console.log(err);
-			}
-			console.log("Data entered");
-		});
-		console.log(productTest);
-	} catch (error) {
-		console.log(error);
-	}
-}
-
 router.get("/", async (req, res) => {
 	const savedProducts = await Product.find({});
 	res.json(savedProducts);
@@ -46,7 +28,6 @@ router.get("/:prodId", async (req, res) => {
 	const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(1)}`;
 	Product.find({ name: label }, (err, data) => {
 		// gestire error
-		// console.log(data);
 		res.json(data);
 	});
 });

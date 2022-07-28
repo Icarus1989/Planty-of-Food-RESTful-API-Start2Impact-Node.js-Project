@@ -3,6 +3,7 @@ const api = require("../../api");
 const monk = require("monk");
 const mongoose = require("mongoose");
 const User = require("../models/User");
+const { celebrate, Joi, errors, Segments } = require("celebrate");
 const router = express.Router();
 const app = express();
 
@@ -19,9 +20,6 @@ const app = express();
 router.get("/", async (req, res, next) => {
 	const accounts = await User.find({});
 	res.json(accounts);
-	// res.json({
-	// 	message: "Welcome to user GET ALL section"
-	// });
 });
 
 router.get("/:userid", async (req, res, next) => {
