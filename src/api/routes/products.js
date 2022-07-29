@@ -17,76 +17,136 @@ const app = express();
 // 	}
 // );
 
-router.get("/", async (req, res) => {
-	const savedProducts = await Product.find({});
-	res.json(savedProducts);
-});
-
-router.get("/:prodId", async (req, res) => {
-	const prodId = await req.params.prodId;
-	// console.log(param);
-	const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(1)}`;
-	Product.find({ name: label }, (err, data) => {
-		// gestire error
-		res.json(data);
-	});
-});
-
-router.post("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
 	try {
-		const data = await req.body;
-		// body = {
-		// 	name: "Bananas",
-		// 	quantity: 50,
-		// 	origin: "Brazil"
-		// };
-		const newProduct = new Product(await data);
-		newProduct.save((err, doc) => {
-			if (err) {
-				console.log(err);
-			}
-			console.log("Data entered");
-		});
-		res.json(newProduct);
+		const savedProducts = await Product.find({});
+		res.json(savedProducts);
 	} catch (error) {
-		console.log(error);
+		next(error);
 	}
 });
 
-router.put("/:prodId", async (req, res) => {
-	const data = await req.body;
-	// body = {
-	// 	quantity: 56
-	// };
-	const prodId = await req.params.prodId;
-	const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(1)}`;
-	const productChanged = await Product.findOneAndUpdate({ name: label }, data, {
-		new: true
-	});
-	res.json(productChanged);
+router.get("/:prodId", async (req, res, next) => {
+	try {
+		const prodId = await req.params.prodId;
+		const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(
+			1
+		)}`;
+		Product.find({ name: label }, (err, data) => {
+			// gestire error con 404
+			res.json(data);
+		});
+	} catch (error) {
+		next(error);
+	}
 });
 
-router.delete("/:prodId", async (req, res) => {
-	const prodId = req.params.prodId;
-	const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(1)}`;
-	const productRemoved = await Product.findOneAndDelete({
-		name: label
-	});
-	res.json(productRemoved);
-});
+router.post(
+	"/",
+	celebrate({
+		[Segments.BODY]: Joi.object({
+			name: Joi.string().required(),
+			quantity: Joi.number().integer().greater(0).required(),
+			origin: Joi.string().required()
+		})
+	}),
+	async (req, res, next) => {
+		try {
+			const data = await req.body;
+			const newProduct = new Product(await data);
+			newProduct.save((err, doc) => {
+				if (err) {
+					console.log(err);
+				}
+				console.log("Data entered");
+			});
+			res.json(newProduct);
+		} catch (error) {
+			next(error);
+		}
+	}
+);
+
+router.put(
+	"/:prodId",
+	celebrate({
+		[Segments.BODY]: Joi.object({
+			name: Joi.string(),
+			quantity: Joi.number().integer().greater(0),
+			origin: Joi.string()
+		})
+	}),
+	async (req, res, next) => {
+		try {
+			const data = await req.body;
+			const prodId = await req.params.prodId;
+			const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(
+				1
+			)}`;
+			const productChanged = await Product.findOneAndUpdate(
+				{ name: label },
+				data,
+				{
+					new: true
+				}
+			);
+			res.json(productChanged);
+		} catch (error) {
+			next(error);
+		}
+	}
+);
+
+router.delete(
+	"/:prodId",
+	celebrate({
+		[Segments.BODY]: Joi.object({
+			name: Joi.string().required(),
+			quantity: Joi.number().integer().greater(0),
+			origin: Joi.string()
+		})
+	}),
+	async (req, res, next) => {
+		try {
+			const prodId = req.params.prodId;
+			const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(
+				1
+			)}`;
+			const productRemoved = await Product.findOneAndDelete({
+				name: label
+			});
+			res.json(productRemoved);
+		} catch (error) {
+			next(error);
+		}
+	}
+);
 
 // Delete all
-router.delete("/", (req, res) => {
-	Product.remove({}, (err, doc) => {
-		if (err) {
-			console.log(err);
-		}
-		res.json({
-			message: "All data removed."
+router.delete("/", (req, res, next) => {
+	try {
+		Product.remove({}, (err, doc) => {
+			if (err) {
+				console.log(err);
+			}
+			res.json({
+				message: "All data removed."
+			});
 		});
-		// console.log("Insered");
-	});
+	} catch (error) {
+		next(error);
+	}
 });
 // Delete all
 
 module.exports = router;
+
+// body post = {
+// 	name: "Bananas",
+// 	quantity: 50,
+// 	origin: "Brazil"
+// };
+
+// body put = {
+// 	quantity: 56
+// };

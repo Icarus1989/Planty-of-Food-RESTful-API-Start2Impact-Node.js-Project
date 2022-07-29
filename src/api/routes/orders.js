@@ -7,110 +7,194 @@ const { celebrate, Joi, errors, Segments } = require("celebrate");
 const router = express.Router();
 const app = express();
 
-router.get("/", async (req, res) => {
-	const savedOrders = await Order.find();
-	res.json(savedOrders);
-	// res.json({
-	// 	message: "Welcome to the orders section!"
-	// });
-});
-
-router.get("/:ordNum", async (req, res) => {
-	const number = await req.params.ordNum;
-	// res.json(number);
-	const orderId = `order${String(number)}`;
-	Order.find({ orderId: orderId }, (err, data) => {
-		// gestire error
-		console.log(data);
-		res.json(data);
-	});
-});
-
-router.post("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
 	try {
-		const data = await req.body;
-		// body = {
-		// 	orderId: "order000002",
-		// 	users: [
-		// 		{
-		// 			username: "UserOne",
-		// 			products: [
-		// 				{
-		// 					productname: "Watermelon",
-		// 					quantity: 23
-		// 				},
-		// 				{
-		// 					productname: "Strawberries",
-		// 					quantity: 23
-		// 				}
-		// 			]
-		// 		}
-		// 	],
-		// 	shipped: false
-		// }
-		const newOrder = new Order(data);
-		newOrder.save((err, doc) => {
-			if (err) {
-				console.log(err);
-			}
-			res.json(newOrder);
-
-			// Qui possibile Ric...
-		});
+		const savedOrders = await Order.find();
+		res.json(savedOrders);
 	} catch (error) {
-		console.log(error);
+		next(error);
 	}
 });
 
-router.put("/:ordNum", async (req, res) => {
-	const data = await req.body;
-	// body = {
-	// 	users: {
-	// 		username: "User5",
-	// 		products: [
-	// 			{
-	// 				productname: "Strawberries",
-	// 				quantity: 5
-	// 			},
-	// 			{
-	// 				productname: "Watermelon",
-	// 				quantity: 5
-	// 			}
-	// 		]
-	// 	}
-	// };
-	const number = await req.params.ordNum;
-	const orderId = `order${String(number)}`;
+router.get("/:ordNum", async (req, res, next) => {
+	try {
+		const number = await req.params.ordNum;
+		const orderId = `order${String(number)}`;
+		Order.find({ orderId: orderId }, (err, data) => {
+			// gestire error con 404
+			console.log(data);
+			res.json(data);
+		});
+	} catch (error) {
+		next(error);
+	}
+});
 
-	const orderChanged = await Order.findOneAndUpdate(
-		{ orderId: orderId },
-		data,
-		{
-			new: true
+router.post(
+	"/",
+	celebrate({
+		[Segments.BODY]: Joi.object({
+			orderId: Joi.string().trim().required(),
+			users: Joi.array()
+				.items(
+					Joi.object({
+						username: Joi.string().trim().required(),
+						products: Joi.array().items(
+							Joi.object({
+								productname: Joi.string().trim().required(),
+								quantity: Joi.number().greater(0).integer().required()
+							})
+						)
+					})
+				)
+				.required(),
+			// createdAt: Joi.date().default(Date.now).required(),
+			shipped: Joi.boolean()
+		})
+	}),
+	async (req, res, next) => {
+		try {
+			const data = await req.body;
+			const newOrder = new Order(data);
+			newOrder.save((err, doc) => {
+				if (err) {
+					console.log(err);
+				}
+				res.json(newOrder);
+				// Qui possibile Ric...
+			});
+		} catch (error) {
+			next(error);
 		}
-	);
+	}
+);
 
-	res.json(orderChanged);
-});
+router.put(
+	"/:ordNum",
+	celebrate({
+		[Segments.BODY]: Joi.object({
+			orderId: Joi.string().trim(),
+			users: Joi.array().items(
+				Joi.object({
+					username: Joi.string().trim(),
+					products: Joi.array().items(
+						Joi.object({
+							productname: Joi.string().trim(),
+							quantity: Joi.number().greater(0).integer()
+						})
+					)
+				})
+			),
+			// createdAt: Joi.date().default(Date.now).required(),
+			shipped: Joi.boolean()
+		})
+	}),
+	async (req, res, next) => {
+		try {
+			const data = await req.body;
+			const number = await req.params.ordNum;
+			const orderId = `order${String(number)}`;
 
-router.delete("/:ordNum", async (req, res) => {
-	const number = await req.params.ordNum;
-	const orderId = `order${String(number)}`;
-	const orderRemoved = await Order.findOneAndDelete({ orderId: orderId });
-	res.json(orderRemoved);
-});
+			const orderChanged = await Order.findOneAndUpdate(
+				{ orderId: orderId },
+				data,
+				{
+					new: true
+				}
+			);
+
+			res.json(orderChanged);
+		} catch (error) {
+			next(error);
+		}
+	}
+);
+
+router.delete(
+	"/:ordNum",
+	celebrate({
+		[Segments.BODY]: Joi.object({
+			orderId: Joi.string().trim().required(),
+			users: Joi.array()
+				.items(
+					Joi.object({
+						username: Joi.string().trim().required(),
+						products: Joi.array().items(
+							Joi.object({
+								productname: Joi.string().trim().required(),
+								quantity: Joi.number().greater(0).integer().required()
+							})
+						)
+					})
+				)
+				.required(),
+			// createdAt: Joi.date().default(Date.now).required(),
+			shipped: Joi.boolean()
+		})
+	}),
+	async (req, res, next) => {
+		try {
+			const number = await req.params.ordNum;
+			const orderId = `order${String(number)}`;
+			const orderRemoved = await Order.findOneAndDelete({ orderId: orderId });
+			res.json(orderRemoved);
+		} catch (error) {
+			next(error);
+		}
+	}
+);
 
 // Delete all
 router.delete("/", (req, res) => {
-	Order.remove({}, (err, doc) => {
-		if (err) {
-			console.log(err);
-		}
-		res.json({
-			message: "All data removed."
+	try {
+		Order.remove({}, (err, doc) => {
+			if (err) {
+				console.log(err);
+			}
+			res.json({
+				message: "All data removed."
+			});
 		});
-	});
+	} catch (error) {
+		next(error);
+	}
 });
 // Delete all
 
 module.exports = router;
+
+// body post = {
+// 	orderId: "order000002",
+// 	users: [
+// 		{
+// 			username: "UserOne",
+// 			products: [
+// 				{
+// 					productname: "Watermelon",
+// 					quantity: 23
+// 				},
+// 				{
+// 					productname: "Strawberries",
+// 					quantity: 23
+// 				}
+// 			]
+// 		}
+// 	],
+// 	shipped: false
+// }
+
+// body put = {
+// 	users: {
+// 		username: "User5",
+// 		products: [
+// 			{
+// 				productname: "Strawberries",
+// 				quantity: 5
+// 			},
+// 			{
+// 				productname: "Watermelon",
+// 				quantity: 5
+// 			}
+// 		]
+// 	}
+// };

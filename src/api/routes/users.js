@@ -18,85 +18,161 @@ const app = express();
 // );
 
 router.get("/", async (req, res, next) => {
-	const accounts = await User.find({});
-	res.json(accounts);
-});
-
-router.get("/:userid", async (req, res, next) => {
-	const username = await req.params.userid;
-	console.log(username);
-	User.find({ username: username }, (err, data) => {
-		// gestire error
-		console.log(data);
-		res.json(data);
-	});
-});
-
-router.post("/", async (req, res) => {
 	try {
-		// body = {
-		// 	"firstname": "UserFromInsomnia",
-		// 	"lastname": "from req.body",
-		// 	"username": "User4",
-		// 	"address": "test@request.com",
-		// 	"orders": [
-		// 		{
-		// 			"orderid": "00008",
-		// 			"url": "none"
-		// 		}
-		// 	]
-		// };
-		const data = await req.body;
-		const newUser = new User(await data);
-		newUser.save((err, doc) => {
-			if (err) {
-				console.log(err);
-			}
-			res.json(newUser);
-		});
+		const accounts = await User.find({});
+		res.json(accounts);
 	} catch (error) {
-		console.log(error);
+		next(error);
 	}
 });
 
-router.put("/:username", async (req, res) => {
-	const username = await req.params.username;
-	const data = await req.body;
-	// body = {
-	// 	"address": "userzero@testcode.com"
-	// };
-	const userChanged = await User.findOneAndUpdate(
-		{
-			username: username
-		},
-		data,
-		{
-			new: true
-		}
-	);
-	res.json(userChanged);
+router.get("/:userid", async (req, res, next) => {
+	try {
+		const username = await req.params.userid;
+		console.log(username);
+		User.find({ username: username }, (err, data) => {
+			// gestire error
+			console.log(data);
+			res.json(data);
+		});
+	} catch (error) {
+		next(error);
+	}
 });
 
-router.delete("/:username", async (req, res) => {
-	const username = req.params.username;
-	const userRemoved = await User.findOneAndDelete({
-		username: username
-	});
-	res.json(userRemoved);
-});
+router.post(
+	"/",
+	celebrate({
+		[Segments.BODY]: Joi.object({
+			firstname: Joi.string().required(),
+			lastname: Joi.string().required(),
+			username: Joi.string().required(),
+			address: Joi.string().email().required(),
+			// createdAt: Joi.date().default(Date.now).required(),
+			orders: Joi.array()
+				.items(
+					Joi.object({
+						orderid: Joi.string().required(),
+						url: Joi.string().required()
+					})
+				)
+				.required()
+		})
+	}),
+	async (req, res, next) => {
+		try {
+			const data = await req.body;
+			const newUser = new User(await data);
+			newUser.save((err, doc) => {
+				if (err) {
+					console.log(err);
+				}
+				res.json(newUser);
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
+);
+
+router.put(
+	"/:username",
+	celebrate({
+		[Segments.BODY]: Joi.object({
+			firstname: Joi.string(),
+			lastname: Joi.string(),
+			username: Joi.string().required(),
+			address: Joi.string().email(),
+			// createdAt: Joi.date().default(Date.now).required(),
+			orders: Joi.array().items(
+				Joi.object({
+					orderid: Joi.string(),
+					url: Joi.string()
+				})
+			)
+		})
+	}),
+	async (req, res, next) => {
+		try {
+			const username = await req.params.username;
+			const data = await req.body;
+			const userChanged = await User.findOneAndUpdate(
+				{
+					username: username
+				},
+				data,
+				{
+					new: true
+				}
+			);
+			res.json(userChanged);
+		} catch (error) {
+			next(error);
+		}
+	}
+);
+
+router.delete(
+	"/:username",
+	celebrate({
+		[Segments.BODY]: Joi.object({
+			firstname: Joi.string(),
+			lastname: Joi.string(),
+			username: Joi.string().required(),
+			address: Joi.string().email(),
+			orders: Joi.array().items(
+				Joi.object({
+					orderid: Joi.string(),
+					url: Joi.string()
+				})
+			)
+		})
+	}),
+	async (req, res, next) => {
+		try {
+			const username = req.params.username;
+			const userRemoved = await User.findOneAndDelete({
+				username: username
+			});
+			res.json(userRemoved);
+		} catch (error) {
+			next(error);
+		}
+	}
+);
 
 // Delete all
 router.delete("/", (req, res) => {
-	User.remove({}, (err, doc) => {
-		if (err) {
-			console.log(err);
-		}
-		res.json({
-			message: "All data removed."
+	try {
+		User.remove({}, (err, doc) => {
+			if (err) {
+				console.log(err);
+			}
+			res.json({
+				message: "All data removed."
+			});
 		});
-		// console.log("Insered");
-	});
+	} catch (error) {
+		next(error);
+	}
 });
 // Delete all
 
 module.exports = router;
+
+// body post = {
+// "firstname": "UserFromInsomnia",
+// "lastname": "from req.body",
+// "username": "User4",
+// "address": "test@request.com",
+// "orders": [
+// 	{
+// 		"orderid": "00008",
+// 		"url": "none"
+// 	}
+// ]
+// };
+
+// body put = {
+// 	"address": "userzero@testcode.com"
+// };
