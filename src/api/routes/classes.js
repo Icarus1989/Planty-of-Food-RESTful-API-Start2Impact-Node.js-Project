@@ -55,7 +55,6 @@ class OrderClass {
 			});
 			// SISTEMARE NON FUNZIONA
 		} else if (this.filterQuery == "createdAt") {
-			// testing
 			console.log("Here date");
 			this.mapped = this.data.map((elem) => {
 				return elem["createdAt"];
