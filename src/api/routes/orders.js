@@ -4,172 +4,55 @@ const mongoose = require("mongoose");
 const Order = require("../models/Order");
 const { celebrate, Joi, errors, Segments } = require("celebrate");
 
+const OrderClass = require("./classes");
+
 const router = express.Router();
 const app = express();
-
-function filterBy(listOrders, query, value) {
-	let arr = listOrders.filter((elem) => {
-		// elem[query];
-		if (elem[query]) {
-			return true;
-		} else {
-			return false;
-		}
-	});
-	return arr;
-}
-
-function reorderDescent(a, b) {
-	if (a.orderId.slice(5) > b.orderId.slice(5)) {
-		return 1;
-	} else if (a.orderId.slice(5) < b.orderId.slice(5)) {
-		return -1;
-	}
-}
-
-function reorderAscedent(a, b) {
-	if (a.orderId.slice(5) > b.orderId.slice(5)) {
-		return -1;
-	} else if (a.orderId.slice(5) < b.orderId.slice(5)) {
-		return 1;
-	}
-}
 
 router.get("/", async (req, res, next) => {
 	try {
 		const query = req.query;
 		let savedOrders = await Order.find({});
-		let results = [];
 
-		// continuare test su i due switch
+		const orderManager = new OrderClass(
+			res,
+			savedOrders,
+			Order,
+			query.filter,
+			query.value,
+			query.order
+		);
 
-		if (query.filter || query.order) {
-			let mapped;
-			switch (query.filter) {
-				case "productname":
-					mapped = await savedOrders.map((elem) => {
-						return elem["users"][0]["products"];
-					});
-					for (let elem of mapped) {
-						for (let i = 0; i < elem.length; i++) {
-							if (
-								elem[i]["productname"] ==
-								`${String(query.value)[0].toUpperCase()}${String(
-									query.value
-								).slice(1)}`
-							) {
-								results.push(savedOrders[mapped.indexOf(elem)]);
-							}
-						}
-					}
-					break;
-				case "username":
-				case "products":
-					mapped = await savedOrders.map((elem) => {
-						return elem["users"][0];
-					});
-					for (let elem of mapped) {
-						if (elem["username"] == query.value) {
-							results.push(savedOrders[mapped.indexOf(elem)]);
-						}
-					}
-					break;
-				case "_id":
-				case "orderId":
-				case "shipped":
-				case "createAt":
-					results = await Order.find({
-						[query.filter]: query.value
-					});
-					break;
-				// default:
-				// 	res.status(200).json(savedOrders);
+		if (query.filter && query.value == undefined) {
+			orderManager.missParam("&value=");
+		} else if ((query.filter && query.value) || query.order) {
+			const ordersArchived = await orderManager.determinate();
+			console.log(ordersArchived);
+			if (ordersArchived < 1) {
+				await orderManager.noProducts();
+			} else {
+				await orderManager.ordering(ordersArchived);
+				await orderManager.createResponse(ordersArchived);
 			}
-
-			switch (query.order) {
-				case "ascendent":
-					if (results.length == 0) {
-						results = savedOrders;
-					}
-					const ascOrders = results.sort(reorderAscedent);
-					res.json(ascOrders);
-					break;
-				case "descendent":
-					if (results.length == 0) {
-						results = savedOrders;
-					}
-					const descOrders = results.sort(reorderDescent);
-					res.json(descOrders);
-					break;
-				default:
-					res.status(200).json(results);
-			}
-		} else {
-			res.status(200).json(savedOrders);
+		} else if (
+			query.filter == undefined &&
+			query.value == undefined &&
+			query.order
+		) {
+			await orderManager.ordering(savedOrders);
+			await orderManager.createResponse(savedOrders);
+		} else if (
+			query.filter == undefined &&
+			query.value == undefined &&
+			query.order == undefined
+		) {
+			orderManager.createResponse(savedOrders);
 		}
-
-		// --- funzionante ---
-
-		// if (query.filter || query.order) {
-		// 	if (query.filter == "productname") {
-		// 		let mapped = await savedOrders.map((elem) => {
-		// 			return elem["users"][0]["products"];
-		// 		});
-		// 		for (let elem of mapped) {
-		// 			for (let i = 0; i < elem.length; i++) {
-		// 				// console.log(elem[i]["productname"]);
-		// 				if (
-		// 					elem[i]["productname"] ==
-		// 					`${String(query.value)[0].toUpperCase()}${String(
-		// 						query.value
-		// 					).slice(1)}`
-		// 				) {
-		// 					results.push(savedOrders[mapped.indexOf(elem)]);
-		// 				}
-		// 			}
-		// 		}
-		// 	} else if (query.filter == "username" || query.filter == "products") {
-		// 		let mapped = await savedOrders.map((elem) => {
-		// 			return elem["users"][0];
-		// 		});
-		// 		for (let elem of mapped) {
-		// 			if (elem["username"] == query.value) {
-		// 				results.push(savedOrders[mapped.indexOf(elem)]);
-		// 			}
-		// 		}
-		// 	} else if (
-		// 		query.filter == "_id" ||
-		// 		query.filter == "orderId" ||
-		// 		query.filter == "shipped" ||
-		// 		query.filter == "createdAt"
-		// 	) {
-		// 		results = await Order.find({
-		// 			[query.filter]: query.value
-		// 		});
-		// 	}
-
-		// 	if (query.order) {
-		// 		if (results.length == 0) {
-		// 			results = savedOrders;
-		// 		}
-		// 		if (query.order == "descent") {
-		// 			const orders = results.sort(reorderDescent);
-		// 			return res.json(orders);
-		// 		} else if (query.order == "ascendent") {
-		// 			const orders = results.sort(reorderAscedent);
-		// 			return res.json(orders);
-		// 		}
-		// 	} else if (query.order == undefined) {
-		// 		res.status(200).json(results);
-		// 	}
-		// } else {
-		// 	res.status(200).json(savedOrders);
-		// }
-		// --- funzionante ---
 	} catch (error) {
 		next(error);
 	}
 });
+// test http://localhost:5000/api/v1/orders-archieve?filter=productname&value=bananas&order=ascendent
 
 router.get("/:ordNum", async (req, res, next) => {
 	try {
@@ -203,8 +86,8 @@ router.post(
 					})
 				)
 				.required(),
-			// createdAt: Joi.date().default(Date.now).required(),
 			shipped: Joi.boolean()
+			// createdAt: Joi.date().default(Date.now).required()
 		})
 	}),
 	async (req, res, next) => {
@@ -320,7 +203,8 @@ router.delete("/", (req, res) => {
 
 module.exports = router;
 
-// body post = {
+// body post =
+// {
 // 	orderId: "order000002",
 // 	users: [
 // 		{
