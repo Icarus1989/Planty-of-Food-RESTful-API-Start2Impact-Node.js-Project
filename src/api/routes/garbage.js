@@ -241,3 +241,28 @@ if (query.filter && query.value == undefined) {
 // 	}
 // 	return this.results;
 // }
+
+// console.log("Here date");
+// this.mapped = this.data.map((elem) => {
+// 	return elem[this.filterQuery];
+// });
+// console.log(this.mapped);
+// this.mapped = this.data.map((elem) => {
+// 	return elem["createdAt"];
+// });
+
+// this.mapped = this.data.filter((elem) => {
+// 	return elem[this.filterQuery];
+// });
+// for (let elem of this.mapped) {
+// 	if (
+// 		new Date(elem).getUTCFullYear() ==
+// 			new Date(this.valueQuery).getUTCFullYear() &&
+// 		new Date(elem).getUTCMonth() ==
+// 			new Date(this.valueQuery).getUTCMonth() &&
+// 		new Date(elem).getUTCDate() == new Date(this.valueQuery).getUTCDate()
+// 	) {
+// 		this.results.push(this.data[this.mapped.indexOf(elem)]);
+// 	}
+// }
+// return this.results;

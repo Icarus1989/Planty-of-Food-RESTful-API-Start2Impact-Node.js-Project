@@ -17,7 +17,6 @@ router.get("/", async (req, res, next) => {
 		const orderManager = new OrderClass(
 			res,
 			savedOrders,
-			Order,
 			query.filter,
 			query.value,
 			query.order
@@ -27,7 +26,7 @@ router.get("/", async (req, res, next) => {
 			orderManager.missParam("&value=");
 		} else if ((query.filter && query.value) || query.order) {
 			const ordersArchived = await orderManager.determinate();
-			console.log(ordersArchived);
+			// console.log(ordersArchived);
 			if (ordersArchived < 1) {
 				await orderManager.noProducts();
 			} else {
@@ -60,7 +59,7 @@ router.get("/:ordNum", async (req, res, next) => {
 		const orderId = `order${String(number)}`;
 		Order.find({ orderId: orderId }, (err, data) => {
 			// gestire error con 404
-			console.log(data);
+			// console.log(data);
 			res.json(data);
 		});
 	} catch (error) {

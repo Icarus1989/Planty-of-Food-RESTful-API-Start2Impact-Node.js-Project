@@ -1,5 +1,5 @@
 class OrderClass {
-	constructor(response, data, schema, filterQuery, valueQuery, orderQuery) {
+	constructor(response, data, filterQuery, valueQuery, orderQuery) {
 		this.res = response;
 		this.data = data;
 		this.filterQuery = filterQuery;
@@ -7,7 +7,6 @@ class OrderClass {
 		this.orderQuery = orderQuery;
 		this.results = [];
 		this.mapped;
-		this.schema = schema;
 	}
 	missParam(paramIndication) {
 		this.res.status(404).json({
@@ -45,36 +44,44 @@ class OrderClass {
 					this.results.push(this.data[this.mapped.indexOf(elem)]);
 				}
 			}
-		} else if (
-			this.filterQuery == "_id" ||
-			this.filterQuery == "orderId" ||
-			this.filterQuery == "shipped"
-		) {
-			this.results = await this.schema.find({
-				[this.filterQuery]: this.valueQuery
-			});
-			// SISTEMARE NON FUNZIONA
-		} else if (this.filterQuery == "createdAt") {
-			console.log("Here date");
-			this.mapped = this.data.map((elem) => {
-				return elem["createdAt"];
-			});
-			for (let elem of this.mapped) {
-				if (
-					new Date(elem).getUTCFullYear() ==
-						new Date(this.valueQuery).getUTCFullYear() &&
-					new Date(elem).getUTCMonth() ==
-						new Date(this.valueQuery).getUTCMonth() &&
-					new Date(elem).getUTCDate() == new Date(this.valueQuery).getUTCDate()
-				) {
-					this.results.push(this.data[this.mapped.indexOf(elem)]);
+		} else if (this.filterQuery == "shipped") {
+			this.results = this.data.filter((elem) => {
+				if (elem[this.filterQuery] == Boolean(this.valueQuery)) {
+					return true;
+				} else {
+					return false;
 				}
-			}
+			});
+			return this.results;
+		} else if (this.filterQuery == "_id" || this.filterQuery == "orderId") {
+			this.results = this.data.filter((elem) => {
+				if (elem[this.filterQuery] == this.valueQuery) {
+					return true;
+				} else {
+					return false;
+				}
+			});
+			return this.results;
+		} else if (this.filterQuery == "createdAt") {
+			this.results = this.data.filter((elem) => {
+				if (
+					new Date(elem[this.filterQuery]).getUTCFullYear() ==
+						new Date(this.valueQuery).getUTCFullYear() &&
+					new Date(elem[this.filterQuery]).getUTCMonth() ==
+						new Date(this.valueQuery).getUTCMonth() &&
+					new Date(elem[this.filterQuery]).getUTCDate() ==
+						new Date(this.valueQuery).getUTCDate()
+				) {
+					return true;
+				} else {
+					return false;
+				}
+			});
 			return this.results;
 		}
 	}
 
-	reorderDescent(a, b) {
+	reorderIncr(a, b) {
 		if (a.orderId.slice(5) > b.orderId.slice(5)) {
 			return 1;
 		} else if (a.orderId.slice(5) < b.orderId.slice(5)) {
@@ -82,7 +89,7 @@ class OrderClass {
 		}
 	}
 
-	reorderAscedent(a, b) {
+	reorderDecr(a, b) {
 		if (a.orderId.slice(5) > b.orderId.slice(5)) {
 			return -1;
 		} else if (a.orderId.slice(5) < b.orderId.slice(5)) {
@@ -92,10 +99,10 @@ class OrderClass {
 
 	async ordering(arr) {
 		this.arr = arr;
-		if (this.orderQuery == "ascendent" && this.arr.length > 0) {
-			return (this.arr = this.arr.sort(this.reorderAscedent));
-		} else if (this.orderQuery == "descendent" && this.arr.length > 0) {
-			return (this.arr = this.arr.sort(this.reorderDescent));
+		if (this.orderQuery == "decreasing" && this.arr.length > 0) {
+			return (this.arr = this.arr.sort(this.reorderDecr));
+		} else if (this.orderQuery == "increasing" && this.arr.length > 0) {
+			return (this.arr = this.arr.sort(this.reorderIncr));
 		} else {
 			return this.arr;
 		}
