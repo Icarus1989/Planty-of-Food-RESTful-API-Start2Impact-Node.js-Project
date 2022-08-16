@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
-	orderId: { type: String, default: "order00001" },
+	orderid: { type: String, default: "order00001" },
 	users: [
 		{
 			username: { type: String, default: "UserTest" },
@@ -13,7 +13,7 @@ const orderSchema = new mongoose.Schema({
 			]
 		}
 	],
-	createdAt: { type: Date, default: Date.now },
+	date: { type: Date, default: Date.now },
 	shipped: { type: Boolean, default: false }
 });
 

@@ -266,3 +266,226 @@ if (query.filter && query.value == undefined) {
 // 	}
 // }
 // return this.results;
+
+// const newOrder = new Order(data);
+// newOrder.save((err, postedData) => {
+// 	if (err) {
+// 		console.log(err);
+// 	}
+
+// 	// );
+// 	// Qui modifica user - aggiunta ad array orders - object con orderid e url...
+// 	// ... se user non disponibile res.status(404).json{message: userXXXX not exists}
+// 	// ........
+
+// 	// Qui modifica quantità dei vari products aggiunti all'ordine - diminuire...
+// 	// quantità dispinibile
+
+// 	// console.log(
+
+// 	// ---------------------------------------------------------------------------s
+// 	// Spostare tutto il blocco all'esterno di newOrder.save e inserirlo all'intero dell'if else...
+// 	// ...qui sotto
+// 	// postedData["users"].map((elem) => {
+// 	// 	elem["products"].map(async (el) => {
+// 	// 		console.log(el["productname"]);
+// 	// 		let pToChanged = await Product.find({ name: el["productname"] });
+// 	// 		if (pToChanged[0]["quantity"] < el["quantity"]) {
+// 	// 			res.status(200).json({
+// 	// 				message: `There aren't enough quantity of ${pToChanged[0]["name"]}.`
+// 	// 			});
+// 	// 			console.log(
+// 	// 				`There aren't enough quantity of ${pToChanged[0]["name"]}.`
+// 	// 			);
+// 	// 		} else {
+// 	// 			// let err = new Error(
+// 	// 			// 	`There aren't enough quantity of ${pToChanged[0]["name"]}.`
+// 	// 			// );
+// 	// 			// throw err;
+// 	// 			await Product.findOneAndUpdate(
+// 	// 				{
+// 	// 					name: el["productname"]
+// 	// 				},
+// 	// 				{
+// 	// 					quantity: pToChanged[0]["quantity"] - el["quantity"]
+// 	// 				}
+// 	// 			);
+// 	// 			// res.status(200).json(newOrder);
+// 	// 		}
+
+// 	// 		res.status(200).json(newOrder);
+// 	// 		// console.log(el["quantity"]);
+// 	// 		// console.log(pToChanged[0]["quantity"]);
+// 	// 	});
+// 	// });
+// 	// Spostare tutto il blocco all'esterno di newOrder.save e inserirlo all'intero dell'if else...
+// 	// ...qui sopra
+// 	// ---------------------------------------------------------------------------
+
+// 	// Qui possibile Ric...
+// });
+
+// 	// console.log(
+
+// 	// ---------------------------------------------------------------------------s
+// 	// Spostare tutto il blocco all'esterno di newOrder.save e inserirlo all'intero dell'if else...
+// 	// ...qui sotto
+// 	// postedData["users"].map((elem) => {
+// 	// 	elem["products"].map(async (el) => {
+// 	// 		console.log(el["productname"]);
+// 	// 		let pToChanged = await Product.find({ name: el["productname"] });
+// 	// 		if (pToChanged[0]["quantity"] < el["quantity"]) {
+// 	// 			res.status(200).json({
+// 	// 				message: `There aren't enough quantity of ${pToChanged[0]["name"]}.`
+// 	// 			});
+// 	// 			console.log(
+// 	// 				`There aren't enough quantity of ${pToChanged[0]["name"]}.`
+// 	// 			);
+// 	// 		} else {
+// 	// 			// let err = new Error(
+// 	// 			// 	`There aren't enough quantity of ${pToChanged[0]["name"]}.`
+// 	// 			// );
+// 	// 			// throw err;
+// 	// 			await Product.findOneAndUpdate(
+// 	// 				{
+// 	// 					name: el["productname"]
+// 	// 				},
+// 	// 				{
+// 	// 					quantity: pToChanged[0]["quantity"] - el["quantity"]
+// 	// 				}
+// 	// 			);
+// 	// 			// res.status(200).json(newOrder);
+// 	// 		}
+
+// 	// 		res.status(200).json(newOrder);
+// 	// 		// console.log(el["quantity"]);
+// 	// 		// console.log(pToChanged[0]["quantity"]);
+// 	// 	});
+// 	// });
+// 	// Spostare tutto il blocco all'esterno di newOrder.save e inserirlo all'intero dell'if else...
+// 	// ...qui sopra
+// 	// ---------------------------------------------------------------------------
+
+// let productsnames = products[0].map((elem) => {
+// 	return elem["productname"];
+// });
+// console.log(productsnames);
+
+// - trovare soluzione
+// - passare a classes -> ProductUpdaterClass
+
+// .map((prod) => {
+// 	console.log(prod);
+// });
+
+// console.log(products);
+
+// let results = data["users"].map((user) => {
+// 	user["products"].map(async (prod) => {
+// 		// console.log(prod["productname"]);
+// 		const prodsToUpdate = await Product.find({
+// 			name: prod["productname"]
+// 		});
+// 		// async function checkQuantity() {
+// 		if (prodsToUpdate[0]["quantity"] < prod["quantity"]) {
+// 			const message = `There aren't enough quantity of ${prodsToUpdate[0]["name"]}.`;
+
+// 			// console.log(
+// 			// 	`There aren't enough quantity of ${prodsToUpdate[0]["name"]}.`
+// 			// );
+// 			// return {
+// 			// 	response: "negative",
+// 			// 	message: message
+// 			// };
+// 			// reject("negative");
+// 		} else {
+// 			console.log("Start update quantity");
+
+// 			Product.findOneAndUpdate(
+// 				{
+// 					name: prod["productname"]
+// 				},
+// 				{
+// 					quantity: prodsToUpdate[0]["quantity"] - prod["quantity"]
+// 				}
+// 			);
+
+// 			const message = `All ok.`;
+
+// 			// return {
+// 			// 	response: "positive",
+// 			// 	message: message
+// 			// };
+// 			// resolve("Positive");
+// 			// 	// );
+// 			// 	// Qui modifica user - aggiunta ad array orders - object con orderid e url...
+// 			// 	// ... se user non disponibile res.status(404).json{message: userXXXX not exists}
+// 			// 	// ........
+// 		}
+
+// 		// }
+
+// 		// checkQuantity().then((response) => {
+// 		// 	return response;
+// 		// });
+
+// 		// if (prodsToUpdate[0]["quantity"] < prod["quantity"]) {
+// 		// 	jsonNegRes = {
+// 		// 		message: `There aren't enough quantity of ${prodsToUpdate[0]["name"]}.`
+// 		// 	};
+
+// 		// 	console.log(
+// 		// 		`There aren't enough quantity of ${prodsToUpdate[0]["name"]}.`
+// 		// 	);
+// 		// } else {
+// 		// 	console.log("Start update quantity");
+
+// 		// 	await Product.findOneAndUpdate(
+// 		// 		{
+// 		// 			name: prod["productname"]
+// 		// 		},
+// 		// 		{
+// 		// 			quantity: prodsToUpdate[0]["quantity"] - prod["quantity"]
+// 		// 		}
+// 		// 	);
+// 		// 	saveOk = true;
+
+// 		// 	// 	// );
+// 		// 	// 	// Qui modifica user - aggiunta ad array orders - object con orderid e url...
+// 		// 	// 	// ... se user non disponibile res.status(404).json{message: userXXXX not exists}
+// 		// 	// 	// ........
+// 		// }
+
+// 		// res.status(200).json(newOrder);
+// 		// console.log(el["quantity"]);
+// 		// console.log(pToChanged[0]["quantity"]);
+// 	});
+// });
+
+// Promise.all(results).then((result) => {
+// 	console.log(result);
+// });
+
+// if (saveOk == true) {
+// 	console.log("Start saving");
+// 	const newOrder = new Order(data);
+// 	newOrder.save((err, savedData) => {
+// 		if (err) {
+// 			console.log(err);
+// 		}
+// 		res.status(200).json(savedData);
+// 	});
+// } else if (saveOk == false) {
+// 	res.status(200).json(jsonNegRes);
+// }
+
+// let jsonNegRes;
+// let saveOk = false;
+
+// let products = data["users"].map((user) => {
+// 	user["products"];
+// });
+
+// for (let user in data["users"][0]) {
+// 	console.log(user);
+// }

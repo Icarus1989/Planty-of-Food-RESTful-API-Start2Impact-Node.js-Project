@@ -33,7 +33,7 @@ router.get("/:prodId", async (req, res, next) => {
 			1
 		)}`;
 		Product.find({ name: label }, (err, data) => {
-			// gestire error con 404
+			// gestire error con 404 o altro
 			res.json(data);
 		});
 	} catch (error) {

@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
 		lowercase: true,
 		default: "one@one.com"
 	},
-	createdAt: { type: Date, default: Date.now },
+	date: { type: Date, required: true, default: Date.now },
 	orders: [
 		{
 			orderid: String,
