@@ -120,67 +120,62 @@ class OrderManagerClass {
 }
 
 class ProductUpdaterClass {
-	constructor(data, productModel, orderModel) {
+	constructor(data, productModel, orderModel, response) {
 		this.data = data;
 		this.productModel = productModel;
 		this.orderModel = orderModel;
+		this.response = response;
 	}
 
-	async detProducts() {
-		this.data["users"].map((user) => {
+	async searchProd() {
+		this.products = await this.data["users"].map((user) => {
 			return user["products"];
 		});
-	}
-	async examPermissions() {
-		this.products = await this.detProducts();
-		this.permissions = await this.products.map(async (elem) => {
+		this.permissions = await this.products[0].map(async (elem) => {
 			this.prodsToUpdate = await this.productModel.find({
 				name: elem["productname"]
 			});
+			if ((await this.prodsToUpdate[0]["quantity"]) < elem["quantity"]) {
+				console.log("No");
+				return {
+					productname: elem["productname"],
+					response: "negative",
+					message: `Too little quantity of ${await this.prodsToUpdate[0][
+						"name"
+					]}`
+				};
+			} else {
+				console.log("Ok");
+				return {
+					productname: elem["productname"],
+					response: "positive",
+					quantity: elem["quantity"]
+				};
+			}
 		});
-		if ((await this.prodsToUpdate[0]["quantity"]) < elem["quantity"]) {
-			console.log("No");
-			return {
-				productname: elem["productname"],
-				response: "negative",
-				message: `Too little quantity of ${await this.prodsToUpdate[0]["name"]}`
-			};
-		} else {
-			console.log("Ok");
-			return {
-				productname: elem["productname"],
-				response: "positive",
-				quantity: elem["quantity"]
-			};
-		}
 	}
 	async createResults() {
 		this.results = await Promise.all(this.permissions);
 		this.negativeArr = [];
 		this.results.map(async (elem) => {
-			// console.log(elem["quantity"]);
 			if (elem["response"] == "negative") {
 				this.negativeArr.push({
 					message: elem["message"]
 				});
 			} else if (elem["response"] == "positive") {
-				// console.log("elem data ");
-				// console.log(elem["productname"]);
-				// -->
-				// const productToUpdate = await Product.findOne({
-				// 	name: elem["productname"]
-				// });
-				// <--
+				this.updatingProduct = await this.productModel.findOne({
+					name: elem["productname"]
+				});
 				this.productModel.findOneAndUpdate(
 					{
 						name: elem["productname"]
 					},
 					{
-						quantity: this.productToUpdate["quantity"] - elem["quantity"]
+						quantity: this.updatingProduct["quantity"] - elem["quantity"]
 					},
 					(err, docs) => {
 						if (err) {
-							// res.status(200).json({
+							// this.response.status(200).json({
 							// 	message: "Error in quantity updating"
 							// });
 							console.log("Error in quantity updating");
@@ -192,12 +187,12 @@ class ProductUpdaterClass {
 	}
 	async createNewOrder() {
 		if (this.negativeArr.length == 0) {
-			this.newOrder = new orderModel(this.data);
+			this.newOrder = new this.orderModel(this.data);
 			this.newOrder.save((err, savedData) => {
 				if (err) {
 					console.log(err);
 				}
-				res.status(200).json(savedData);
+				this.response.status(200).json(savedData);
 			});
 		} else {
 			this.negInfo = {};
@@ -205,7 +200,7 @@ class ProductUpdaterClass {
 				this.negInfo[`message${this.negativeArr.indexOf(elem)}`] =
 					elem["message"];
 			});
-			res.status(200).json(this.negInfo);
+			this.response.status(200).json(this.negInfo);
 		}
 	}
 }

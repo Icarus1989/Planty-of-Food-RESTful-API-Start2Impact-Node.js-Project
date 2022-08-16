@@ -5,7 +5,8 @@ const Order = require("../models/Order");
 const Product = require("../models/Product");
 const { celebrate, Joi, errors, Segments } = require("celebrate");
 
-const OrderManagerClass = require("./classes");
+const { OrderManagerClass, ProductUpdaterClass } = require("./classes");
+// const ProductUpdaterClass = require("./classes");
 
 const router = express.Router();
 const app = express();
@@ -94,120 +95,13 @@ router.post(
 		try {
 			const data = await req.body;
 
+			const prodUpdater = new ProductUpdaterClass(data, Product, Order, res);
+
 			// 	// Qui modifica quantità dei vari products aggiunti all'ordine - diminuire...
 			// 	// quantità dispinibile
-
-			let products = data["users"].map((user) => {
-				return user["products"];
-			});
-
-			// provare ad unire products e permissions
-
-			let permissions = products[0].map(async (elem) => {
-				const prodsToUpdate = await Product.find({
-					name: elem["productname"]
-				});
-				if ((await prodsToUpdate[0]["quantity"]) < elem["quantity"]) {
-					console.log("No");
-					return {
-						productname: elem["productname"],
-						response: "negative",
-						message: `Too little quantity of ${await prodsToUpdate[0]["name"]}`
-					};
-				} else {
-					console.log("Ok");
-					return {
-						productname: elem["productname"],
-						response: "positive",
-						quantity: elem["quantity"]
-						// data: prodsToUpdate
-					};
-				}
-			});
-			// let result = await Promise.all(permissions);
-			// let choose = await result.map(async (elem) => {
-			// 	if (elem["response"] == "negative") {
-			// 		negativeArr.push({
-			// 			message: elem["message"]
-			// 		});
-			// 	} else if (elem["response"] == "positive") {
-			// 		const productToUpdate = await Product.findOne({
-			// 			name: elem["productname"]
-			// 		});
-			// 		Product.findOneAndUpdate(
-			// 			{
-			// 				name: elem["productname"]
-			// 			},
-			// 			{
-			// 				quantity: productToUpdate["quantity"] - elem["quantity"]
-			// 			},
-			// 			(err, docs) => {
-			// 				// if (err) {
-			// 				// 	res.status(200).json({
-			// 				// 		message: "Error in quantity updating"
-			// 				// 	});
-			// 				// }
-			// 				console.log("Error in quantity updating");
-			// 			}
-			// 		);
-			// 	}
-			// });
-			// let response = await
-
-			Promise.all(permissions)
-				.then((result) => {
-					let negativeArr = [];
-					result.map(async (elem) => {
-						// console.log(elem["quantity"]);
-
-						if (elem["response"] == "negative") {
-							negativeArr.push({
-								message: elem["message"]
-							});
-						} else if (elem["response"] == "positive") {
-							// console.log("elem data ");
-							// console.log(elem["productname"]);
-							const productToUpdate = await Product.findOne({
-								name: elem["productname"]
-							});
-							Product.findOneAndUpdate(
-								{
-									name: elem["productname"]
-								},
-								{
-									quantity: productToUpdate["quantity"] - elem["quantity"]
-								},
-								(err, docs) => {
-									if (err) {
-										// res.status(200).json({
-										// 	message: "Error in quantity updating"
-										// });
-										console.log("Error in quantity updating");
-									}
-								}
-							);
-						}
-					});
-					return negativeArr;
-				})
-				.then((negativeArr) => {
-					console.log(negativeArr);
-					if (negativeArr.length == 0) {
-						const newOrder = new Order(data);
-						newOrder.save((err, savedData) => {
-							if (err) {
-								console.log(err);
-							}
-							res.status(200).json(savedData);
-						});
-					} else {
-						let negInfo = {};
-						negativeArr.map((elem) => {
-							negInfo[`message${negativeArr.indexOf(elem)}`] = elem["message"];
-						});
-						res.status(200).json(negInfo);
-					}
-				});
+			await prodUpdater.searchProd();
+			await prodUpdater.createResults();
+			await prodUpdater.createNewOrder();
 
 			// Qui possibile Ric...
 		} catch (error) {
