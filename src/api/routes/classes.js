@@ -127,6 +127,12 @@ class ProductUpdaterClass {
 		this.response = response;
 	}
 
+	async orderExistsCheck() {
+		return await this.orderModel.findOne({
+			orderid: this.data["orderid"]
+		});
+	}
+
 	async searchProd() {
 		this.products = await this.data["users"].map((user) => {
 			return user["products"];

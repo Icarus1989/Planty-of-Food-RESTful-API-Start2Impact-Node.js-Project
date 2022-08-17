@@ -99,9 +99,18 @@ router.post(
 
 			// 	// Qui modifica quantità dei vari products aggiunti all'ordine - diminuire...
 			// 	// quantità dispinibile
-			await prodUpdater.searchProd();
-			await prodUpdater.createResults();
-			await prodUpdater.createNewOrder();
+
+			const exists = await prodUpdater.orderExistsCheck();
+			if (exists !== null) {
+				res.status(200).json({
+					message: "OrderId already exists"
+				});
+			} else {
+				await prodUpdater.searchProd();
+				await prodUpdater.createResults();
+				await prodUpdater.createNewOrder();
+			}
+			// Controllo esistenza ordine
 
 			// Qui possibile Ric...
 		} catch (error) {
