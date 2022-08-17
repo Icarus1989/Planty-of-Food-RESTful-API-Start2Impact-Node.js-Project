@@ -211,6 +211,14 @@ class ProductUpdaterClass {
 	}
 }
 
-class UserClass {}
+class UserUpdaterClass {
+	constructor(data, OrderModel) {
+		this.data = data;
+		this.orderModel = OrderModel;
+	}
+	// Individuare names users
+	// per ogni user individuare array orders
+	// aggiungere orderid ad ogni array
+}
 
 module.exports = { OrderManagerClass, ProductUpdaterClass };

@@ -57,12 +57,21 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:ordNum", async (req, res, next) => {
 	try {
-		const number = await req.params.ordNum;
+		const number = req.params.ordNum;
 		const orderId = `order${String(number)}`;
-		Order.find({ orderId: orderId }, (err, data) => {
-			// gestire error con 404
-			// console.log(data);
-			res.json(data);
+		console.log(orderId);
+		Order.findOne({ orderid: orderId }, (err, data) => {
+			if (err) {
+				res.status(200).json({
+					message: `Error in searching ${orderId}`
+				});
+			} else if (data == null) {
+				res.status(200).json({
+					message: `${orderId} not exists`
+				});
+			} else {
+				res.json(data);
+			}
 		});
 	} catch (error) {
 		next(error);
@@ -96,6 +105,7 @@ router.post(
 			const data = await req.body;
 
 			const prodUpdater = new ProductUpdaterClass(data, Product, Order, res);
+			// const userUpdater;
 
 			// 	// Qui modifica quantità dei vari products aggiunti all'ordine - diminuire...
 			// 	// quantità dispinibile
