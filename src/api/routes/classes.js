@@ -154,7 +154,6 @@ class ProductUpdaterClass {
 			} else {
 				console.log("Ok");
 				console.log(this.prodsToUpdate[0]["name"]);
-
 				return {
 					productname: elem["productname"],
 					response: "positive",
