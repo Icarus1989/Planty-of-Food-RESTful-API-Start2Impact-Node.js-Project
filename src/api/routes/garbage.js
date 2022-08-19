@@ -608,3 +608,27 @@ if (query.filter && query.value == undefined) {
 // 		user["products"];
 // 	});
 // }
+
+// this.orderUsers = await this.data["users"].map(async (user) => {
+// 	try {
+// 		this.usersArr.push({
+// 			name: user["username"],
+// 			data: await this.userModel.findOne({
+// 				username: user["username"]
+// 			})
+// 		});
+// 		console.log(this.usersArr);
+// 	} catch (error) {
+// 		this.usersArr.push({
+// 			name: user["username"],
+// 			data: null
+// 		});
+// 	}
+// 	// return user["username"];
+// });
+// console.log(this.usersArr);
+// this.r = await this.orderUsers;
+// // console.log(Promise.all(this.r));
+// Promise.all(this.r).then((result) => {
+// 	console.log(result);
+// });

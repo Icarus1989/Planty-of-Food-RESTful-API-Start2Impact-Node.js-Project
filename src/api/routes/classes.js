@@ -143,6 +143,7 @@ class ProductUpdaterClass {
 			});
 			if ((await this.prodsToUpdate[0]["quantity"]) < elem["quantity"]) {
 				console.log("No");
+				console.log(this.prodsToUpdate[0]["name"]);
 				return {
 					productname: elem["productname"],
 					response: "negative",
@@ -152,6 +153,8 @@ class ProductUpdaterClass {
 				};
 			} else {
 				console.log("Ok");
+				console.log(this.prodsToUpdate[0]["name"]);
+
 				return {
 					productname: elem["productname"],
 					response: "positive",
@@ -212,13 +215,146 @@ class ProductUpdaterClass {
 }
 
 class UserUpdaterClass {
-	constructor(data, OrderModel) {
+	constructor(data, UserModel, OrderModel, response) {
 		this.data = data;
+		this.userModel = UserModel;
 		this.orderModel = OrderModel;
+		this.response = response;
 	}
-	// Individuare names users
-	// per ogni user individuare array orders
-	// aggiungere orderid ad ogni array
+
+	// Aggiungere controllo esistenza user
+
+	async findData() {
+		this.usersArr = [];
+
+		for (let user of this.data["users"]) {
+			try {
+				this.usersArr.push({
+					name: user["username"],
+					data: await this.userModel.findOne({
+						username: user["username"]
+					})
+				});
+				// console.log(this.usersArr);
+			} catch (error) {
+				this.usersArr.push({
+					name: user["username"],
+					data: null
+				});
+			}
+		}
+		return this.usersArr;
+	}
+
+	async usersExistCheck() {
+		this.existArray = await this.findData();
+		this.message = {};
+		// this.results = this.existArray.map((elem) =>
+
+		for (let elem of this.existArray) {
+			if (elem["data"] == null) {
+				this.message[
+					`message${this.usersArr.indexOf(elem)}`
+				] = `${elem["name"]} not exist.`;
+				// return this.message;
+			}
+			// else {
+			// 	return null;
+			// }
+		}
+		return this.message;
+		// .map(async (elem) => {
+		// 	this.resultElem = await this.userModel.findOne({
+		// 		username: elem
+		// 	});
+		// });
+		// this.results = this.usersArr.map(async (elem) => {
+		// 	if (elem["data"] == null) {
+		// 		this.message[
+		// 			`message${this.usersArr.indexOf(elem)}`
+		// 		] = `${elem["name"]} not exist.`;
+		// 		return this.message;
+		// 	} else {
+		// 		return elem["name"];
+		// 	}
+		// });
+		// // this.arr = await Promise.all(this.results);
+		// // console.log(this.results);
+		// return Promise.all(this.results);
+		// Cercare di sommare i risultati negativi in un'unica response in orders.js
+
+		// return await this.message;
+		// console.log(this.results.length);
+		// return this.results;
+		// if (this.results.length < 1) {
+		// 	return false;
+		// } else {
+		// 	return this.message;
+		// }
+		// this.results.map((elem) => {
+		// 	if(elem == null )
+		// })
+		// this.results.map((elem) => {
+		// 	if (elem == null) {
+		// 		this.response.status(200).json({
+
+		// 		})
+		// 	} else if (elem == null) {
+
+		// 	}
+		// })
+		// console.log(this.results);
+		// for (let i = 0; i < this.results.length; i++) {
+		// 	if (this.results[i] == null) {
+		// 		console.log("Miss");
+		// 		console.log(this.data["users"][i]["username"]);
+		// 		// this.response.status(200).json({
+		// 		// 	message: `The user ${
+		// 		// 		this.data["users"].indexOf(elem)["username"]
+		// 		// 	} not exist`
+		// 		// });
+		// 	}
+		// }
+
+		// this.results.map((elem) => {
+		// 	console.log(elem);
+		// });
+		// this.negInfo = {};
+		// this.negativeArr.map((elem) => {
+		// 	this.negInfo[`message${this.negativeArr.indexOf(elem)}`] =
+		// 		elem["message"];
+		// });
+		// this.response.status(200).json(this.negInfo);
+	}
+
+	async updateAccounts() {
+		this.users = this.data["users"].map((user) => {
+			return user["username"];
+		});
+		this.users.map(async (elem) => {
+			this.fieldToUpdate = await this.userModel.findOne({
+				username: elem
+			});
+			this.updatedField = await this.fieldToUpdate["orders"].concat([
+				{
+					orderid: this.data["orderid"],
+					url: `/api/v1/orders-archieve/${this.data["orderid"].slice(5)}`
+				}
+			]);
+			this.result = await this.userModel.findOneAndUpdate(
+				{
+					username: elem
+				},
+				{
+					orders: this.updatedField
+				}
+				// {
+				// 	new: true
+				// }
+			);
+			// console.log(this.result);
+		});
+	}
 }
 
-module.exports = { OrderManagerClass, ProductUpdaterClass };
+module.exports = { OrderManagerClass, ProductUpdaterClass, UserUpdaterClass };

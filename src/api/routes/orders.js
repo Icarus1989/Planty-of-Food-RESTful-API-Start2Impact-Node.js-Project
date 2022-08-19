@@ -3,9 +3,14 @@ const api = require("../../api");
 const mongoose = require("mongoose");
 const Order = require("../models/Order");
 const Product = require("../models/Product");
+const User = require("../models/User");
 const { celebrate, Joi, errors, Segments } = require("celebrate");
 
-const { OrderManagerClass, ProductUpdaterClass } = require("./classes");
+const {
+	OrderManagerClass,
+	ProductUpdaterClass,
+	UserUpdaterClass
+} = require("./classes");
 // const ProductUpdaterClass = require("./classes");
 
 const router = express.Router();
@@ -105,13 +110,19 @@ router.post(
 			const data = await req.body;
 
 			const prodUpdater = new ProductUpdaterClass(data, Product, Order, res);
-			// const userUpdater;
+			const userUpdater = new UserUpdaterClass(data, User, Order, res);
 
 			// 	// Qui modifica quantità dei vari products aggiunti all'ordine - diminuire...
 			// 	// quantità dispinibile
 
-			const exists = await prodUpdater.orderExistsCheck();
-			if (exists !== null) {
+			const orderExists = await prodUpdater.orderExistsCheck();
+			const existCheck = await userUpdater.usersExistCheck();
+
+			// ----> TEST su MongoDB Compass
+
+			if (Object.keys(existCheck).length > 0) {
+				res.status(200).json(existCheck);
+			} else if (orderExists !== null) {
 				res.status(200).json({
 					message: "OrderId already exists"
 				});
@@ -119,6 +130,7 @@ router.post(
 				await prodUpdater.searchProd();
 				await prodUpdater.createResults();
 				await prodUpdater.createNewOrder();
+				await userUpdater.updateAccounts();
 			}
 			// Controllo esistenza ordine
 
