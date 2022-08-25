@@ -632,3 +632,221 @@ if (query.filter && query.value == undefined) {
 // Promise.all(this.r).then((result) => {
 // 	console.log(result);
 // });
+
+// async searchProd() {
+// 		this.permissions = [];
+// 		for await (let userSection of this.data["users"]) {
+// 			console.log(userSection["products"]);
+
+// 			// this.permissions = userSection["products"].map(async (user) =>
+// 			for await (let user of userSection["products"]) {
+// 				// console.log(user["productname"]);
+// 				this.prodsToUp = await this.productModel.find({
+// 					name: user["productname"]
+// 				});
+// 				for (let i = 0; i < this.prodsToUp.length; i++) {
+// 					if ((await this.prodsToUp[i]["quantity"]) < user["quantity"]) {
+// 						// console.log("No");
+// 						// console.log(this.prodsToUp[0]["name"]);
+// 						this.permissions.push({
+// 							productname: user["productname"],
+// 							response: "negative",
+// 							message: `Too little quantity of ${await this.prodsToUp[i][
+// 								"name"
+// 							]}`
+// 						});
+// 					} else {
+// 						// console.log("Ok");
+// 						// console.log(this.prodsToUp[0]["name"]);
+// 						this.permissions.push({
+// 							productname: user["productname"],
+// 							response: "positive",
+// 							quantity: user["quantity"]
+// 						});
+// 					}
+// 				}
+// 			}
+// 		}
+// 		return this.permissions;
+// 		// console.log("Perm");
+// 		// console.log(this.perm);
+// 		// this.products = await this.data["users"].map((user) => {
+// 		// 	return user["products"];
+// 		// });
+// 		// // console.log(this.products);
+// 		// this.permissions = await this.products[0].map(async (elem) => {
+// 		// 	this.prodsToUpdate = await this.productModel.find({
+// 		// 		name: elem["productname"]
+// 		// 	});
+// 		// 	if ((await this.prodsToUpdate[0]["quantity"]) < elem["quantity"]) {
+// 		// 		console.log("No");
+// 		// 		console.log(this.prodsToUpdate[0]["name"]);
+// 		// 		return {
+// 		// 			productname: elem["productname"],
+// 		// 			response: "negative",
+// 		// 			message: `Too little quantity of ${await this.prodsToUpdate[0][
+// 		// 				"name"
+// 		// 			]}`
+// 		// 		};
+// 		// 	} else {
+// 		// 		console.log("Ok");
+// 		// 		console.log(this.prodsToUpdate[0]["name"]);
+// 		// 		return {
+// 		// 			productname: elem["productname"],
+// 		// 			response: "positive",
+// 		// 			quantity: elem["quantity"]
+// 		// 		};
+// 		// 	}
+// 		// });
+// 		// console.log("Permission");
+// 		// console.log(this.permission);
+// 	}
+// 	async createResults() {
+// 		console.log(this.permissions);
+
+// 		this.results = await Promise.all(this.permissions);
+
+// 		this.negativeArr = [];
+// 		// provare a correggere errore quantità qui
+// 		// this.results.map(async (elem) =>
+// 		for await (let elem of this.results) {
+// 			if (elem["response"] == "negative") {
+// 				this.negativeArr.push({
+// 					message: elem["message"]
+// 				});
+// 			} else if (elem["response"] == "positive") {
+// 				this.updatingProduct = await this.productModel.findOne({
+// 					name: elem["productname"]
+// 				});
+// 				this.productModel.findOneAndUpdate(
+// 					{
+// 						name: elem["productname"]
+// 					},
+// 					{
+// 						quantity: this.updatingProduct["quantity"] - elem["quantity"]
+// 					},
+// 					(err, docs) => {
+// 						if (err) {
+// 							// this.response.status(200).json({
+// 							// 	message: "Error in quantity updating"
+// 							// });
+// 							console.log("Error in quantity updating");
+// 						}
+// 					}
+// 				);
+// 			}
+// 		}
+// 	}
+
+// class UserUpdaterClass {
+// 	constructor(data, UserModel, OrderModel, response) {
+// 		this.data = data;
+// 		this.userModel = UserModel;
+// 		this.orderModel = OrderModel;
+// 		this.response = response;
+// 	}
+
+// 	// Aggiungere controllo esistenza user
+
+// 	async findData() {
+// 		this.usersArr = [];
+
+// 		for (let user of this.data["users"]) {
+// 			try {
+// 				this.usersArr.push({
+// 					name: user["username"],
+// 					data: await this.userModel.findOne({
+// 						username: user["username"]
+// 					})
+// 				});
+// 				// console.log(this.usersArr);
+// 			} catch (error) {
+// 				this.usersArr.push({
+// 					name: user["username"],
+// 					data: null
+// 				});
+// 			}
+// 		}
+// 		return this.usersArr;
+// 	}
+
+// 	async usersExistCheck() {
+// 		this.existArray = await this.findData();
+// 		this.message = {};
+// 		// this.results = this.existArray.map((elem) =>
+
+// 		for (let elem of this.existArray) {
+// 			if (elem["data"] == null) {
+// 				this.message[
+// 					`message${this.usersArr.indexOf(elem)}`
+// 				] = `${elem["name"]} not exist.`;
+// 				// return this.message;
+// 			}
+// 			// else {
+// 			// 	return null;
+// 			// }
+// 		}
+// 		return this.message;
+// 		// .map(async (elem) => {
+// 		// 	this.resultElem = await this.userModel.findOne({
+// 		// 		username: elem
+// 		// 	});
+// 		// });
+// 		// this.results = this.usersArr.map(async (elem) => {
+// 		// 	if (elem["data"] == null) {
+// 		// 		this.message[
+// 		// 			`message${this.usersArr.indexOf(elem)}`
+// 		// 		] = `${elem["name"]} not exist.`;
+// 		// 		return this.message;
+// 		// 	} else {
+// 		// 		return elem["name"];
+// 		// 	}
+// 		// });
+// 		// // this.arr = await Promise.all(this.results);
+// 		// // console.log(this.results);
+// 		// return Promise.all(this.results);
+// 		// Cercare di sommare i risultati negativi in un'unica response in orders.js
+
+// 		// return await this.message;
+// 		// console.log(this.results.length);
+// 		// return this.results;
+// 		// if (this.results.length < 1) {
+// 		// 	return false;
+// 		// } else {
+// 		// 	return this.message;
+// 		// }
+// 		// this.results.map((elem) => {
+// 		// 	if(elem == null )
+// 		// })
+// 		// this.results.map((elem) => {
+// 		// 	if (elem == null) {
+// 		// 		this.response.status(200).json({
+
+// 		// 		})
+// 		// 	} else if (elem == null) {
+
+// 		// 	}
+// 		// })
+// 		// console.log(this.results);
+// 		// for (let i = 0; i < this.results.length; i++) {
+// 		// 	if (this.results[i] == null) {
+// 		// 		console.log("Miss");
+// 		// 		console.log(this.data["users"][i]["username"]);
+// 		// 		// this.response.status(200).json({
+// 		// 		// 	message: `The user ${
+// 		// 		// 		this.data["users"].indexOf(elem)["username"]
+// 		// 		// 	} not exist`
+// 		// 		// });
+// 		// 	}
+// 		// }
+
+// 		// this.results.map((elem) => {
+// 		// 	console.log(elem);
+// 		// });
+// 		// this.negInfo = {};
+// 		// this.negativeArr.map((elem) => {
+// 		// 	this.negInfo[`message${this.negativeArr.indexOf(elem)}`] =
+// 		// 		elem["message"];
+// 		// });
+// 		// this.response.status(200).json(this.negInfo);
+// 	}
