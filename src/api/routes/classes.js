@@ -134,38 +134,82 @@ class ProductUpdaterClass {
 	}
 
 	async searchProd() {
-		this.products = await this.data["users"].map((user) => {
-			return user["products"];
-		});
-		this.permissions = await this.products[0].map(async (elem) => {
-			this.prodsToUpdate = await this.productModel.find({
-				name: elem["productname"]
-			});
-			if ((await this.prodsToUpdate[0]["quantity"]) < elem["quantity"]) {
-				console.log("No");
-				console.log(this.prodsToUpdate[0]["name"]);
-				return {
-					productname: elem["productname"],
-					response: "negative",
-					message: `Too little quantity of ${await this.prodsToUpdate[0][
-						"name"
-					]}`
-				};
-			} else {
-				console.log("Ok");
-				console.log(this.prodsToUpdate[0]["name"]);
-				return {
-					productname: elem["productname"],
-					response: "positive",
-					quantity: elem["quantity"]
-				};
+		this.permissions = [];
+		for await (let userSection of this.data["users"]) {
+			console.log(userSection["products"]);
+
+			// this.permissions = userSection["products"].map(async (user) =>
+			for await (let user of userSection["products"]) {
+				// console.log(user["productname"]);
+				this.prodsToUp = await this.productModel.find({
+					name: user["productname"]
+				});
+				for (let i = 0; i < this.prodsToUp.length; i++) {
+					if ((await this.prodsToUp[i]["quantity"]) < user["quantity"]) {
+						// console.log("No");
+						// console.log(this.prodsToUp[0]["name"]);
+						this.permissions.push({
+							productname: user["productname"],
+							response: "negative",
+							message: `Too little quantity of ${await this.prodsToUp[i][
+								"name"
+							]}`
+						});
+					} else {
+						// console.log("Ok");
+						// console.log(this.prodsToUp[0]["name"]);
+						this.permissions.push({
+							productname: user["productname"],
+							response: "positive",
+							quantity: user["quantity"]
+						});
+					}
+				}
 			}
-		});
+		}
+		return this.permissions;
+		// console.log("Perm");
+		// console.log(this.perm);
+		// this.products = await this.data["users"].map((user) => {
+		// 	return user["products"];
+		// });
+		// // console.log(this.products);
+		// this.permissions = await this.products[0].map(async (elem) => {
+		// 	this.prodsToUpdate = await this.productModel.find({
+		// 		name: elem["productname"]
+		// 	});
+		// 	if ((await this.prodsToUpdate[0]["quantity"]) < elem["quantity"]) {
+		// 		console.log("No");
+		// 		console.log(this.prodsToUpdate[0]["name"]);
+		// 		return {
+		// 			productname: elem["productname"],
+		// 			response: "negative",
+		// 			message: `Too little quantity of ${await this.prodsToUpdate[0][
+		// 				"name"
+		// 			]}`
+		// 		};
+		// 	} else {
+		// 		console.log("Ok");
+		// 		console.log(this.prodsToUpdate[0]["name"]);
+		// 		return {
+		// 			productname: elem["productname"],
+		// 			response: "positive",
+		// 			quantity: elem["quantity"]
+		// 		};
+		// 	}
+		// });
+		// console.log("Permission");
+		// console.log(this.permission);
 	}
 	async createResults() {
+		console.log(this.permissions);
+
 		this.results = await Promise.all(this.permissions);
+
 		this.negativeArr = [];
-		this.results.map(async (elem) => {
+		// provare a correggere errore quantità qui
+		// this.results.map(async (elem) =>
+		for await (let elem of this.results) {
 			if (elem["response"] == "negative") {
 				this.negativeArr.push({
 					message: elem["message"]
@@ -191,7 +235,7 @@ class ProductUpdaterClass {
 					}
 				);
 			}
-		});
+		}
 	}
 	async createNewOrder() {
 		if (this.negativeArr.length == 0) {
