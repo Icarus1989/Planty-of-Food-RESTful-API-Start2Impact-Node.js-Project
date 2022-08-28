@@ -850,3 +850,51 @@ if (query.filter && query.value == undefined) {
 // 		// });
 // 		// this.response.status(200).json(this.negInfo);
 // 	}
+
+// console.log(this.fieldToUpdate["orders"]);
+// for await (let orders of this.fieldToUpdate["orders"]) {
+// 	// console.log(orders["orderid"]);
+// 	if (orders["orderid"] == this.data["orderid"]) {
+// 		console.log("Yes");
+// 		console.log(orders);
+// 		console.log(this.fieldToUpdate["orders"]);
+// 	}
+// }
+
+// this.updatedField = await this.fieldToUpdate["orders"].concat([
+// 	{
+// 		orderid: this.data["orderid"],
+// 		url: `/api/v1/orders-archieve/${this.data["orderid"].slice(5)}`
+// 	}
+// ]);
+// this.result = await this.userModel.findOneAndUpdate(
+// 	{
+// 		username: elem
+// 	},
+// 	{
+// 		orders: this.updatedField
+// 	}
+// 	// {
+// 	// 	new: true
+// 	// }
+// );
+
+// console.log(this.fieldsToUpdate);
+// this.fieldsUpdated = await this.fieldsToUpdate.map((elem) => {
+// 	// elem.
+// 	// console.log(elem);
+// 	// user
+// 	// 	.filter((elem) => {
+// 	// 	console.log(elem["orderid"]);
+// 	// 	// elem["orderid"] !== this.data["orderid"];
+// 	// 	// console.log(this.data["orderid"]);
+// 	// });
+// });
+
+// console.log(this.dataUpdated);
+// console.log(this.resolvedUsers[this.fieldsToUpdate.indexOf(orders)]);
+// elem["orderid"] == this.data["orderid"];
+// console.log(orders);
+// console.log(this.fieldsUpdated);
+// console.log(this.resolvedUsers);
+// console.log(elem);

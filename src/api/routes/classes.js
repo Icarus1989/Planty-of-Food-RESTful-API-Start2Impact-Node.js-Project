@@ -296,63 +296,19 @@ class UserUpdaterClass {
 			return user["username"];
 		});
 		this.usersToUpdate = this.users.map(async (elem) => {
-			// console.log(elem);
 			return await this.userModel.findOne({
 				username: elem
 			});
-			// console.log(this.fieldToUpdate["orders"]);
-			// for await (let orders of this.fieldToUpdate["orders"]) {
-			// 	// console.log(orders["orderid"]);
-			// 	if (orders["orderid"] == this.data["orderid"]) {
-			// 		console.log("Yes");
-			// 		console.log(orders);
-			// 		console.log(this.fieldToUpdate["orders"]);
-			// 	}
-			// }
-
-			// this.updatedField = await this.fieldToUpdate["orders"].concat([
-			// 	{
-			// 		orderid: this.data["orderid"],
-			// 		url: `/api/v1/orders-archieve/${this.data["orderid"].slice(5)}`
-			// 	}
-			// ]);
-			// this.result = await this.userModel.findOneAndUpdate(
-			// 	{
-			// 		username: elem
-			// 	},
-			// 	{
-			// 		orders: this.updatedField
-			// 	}
-			// 	// {
-			// 	// 	new: true
-			// 	// }
-			// );
 		});
 		this.resolvedUsers = await Promise.all(this.usersToUpdate);
-		// console.log(this.resolvedUsers);
 		this.fieldsToUpdate = this.resolvedUsers.map((elem) => {
 			return elem["orders"];
 		});
-		// console.log(this.fieldsToUpdate);
-		this.fieldsUpdated = await this.fieldsToUpdate.map((elem) => {
-			// elem.
-			// console.log(elem);
-			// user
-			// 	.filter((elem) => {
-			// 	console.log(elem["orderid"]);
-			// 	// elem["orderid"] !== this.data["orderid"];
-			// 	// console.log(this.data["orderid"]);
-			// });
-		});
 
 		for await (let orders of this.fieldsToUpdate) {
-			// console.log(orders);
 			this.dataUpdated = await orders.filter((elem) => {
-				// elem["orderid"] == this.data["orderid"];
 				return elem["orderid"] !== this.data["orderid"];
 			});
-			// console.log(this.dataUpdated);
-			// console.log(this.resolvedUsers[this.fieldsToUpdate.indexOf(orders)]);
 
 			this.result = await this.userModel.findOneAndUpdate(
 				{
@@ -366,9 +322,7 @@ class UserUpdaterClass {
 				// 	new: true
 				// }
 			);
-			// Ulteriori test ma sembra funzionante
 		}
-		// console.log(this.fieldsUpdated);
 	}
 }
 
