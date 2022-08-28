@@ -130,9 +130,8 @@ router.post(
 				await prodUpdater.searchProd();
 				await prodUpdater.createResults();
 				await prodUpdater.createNewOrder();
-				await userUpdater.updateAccounts();
+				await userUpdater.updateAccountsNewOrder();
 			}
-			// Controllo esistenza ordine
 
 			// Qui possibile Ric...
 		} catch (error) {
@@ -188,20 +187,18 @@ router.delete(
 	"/:ordNum",
 	celebrate({
 		[Segments.BODY]: Joi.object({
-			orderId: Joi.string().trim().required(),
-			users: Joi.array()
-				.items(
-					Joi.object({
-						username: Joi.string().trim().required(),
-						products: Joi.array().items(
-							Joi.object({
-								productname: Joi.string().trim().required(),
-								quantity: Joi.number().greater(0).integer().required()
-							})
-						)
-					})
-				)
-				.required(),
+			orderId: Joi.string().trim(),
+			users: Joi.array().items(
+				Joi.object({
+					username: Joi.string().trim(),
+					products: Joi.array().items(
+						Joi.object({
+							productname: Joi.string().trim(),
+							quantity: Joi.number().greater(0).integer()
+						})
+					)
+				})
+			),
 			// createdAt: Joi.date().default(Date.now).required(),
 			shipped: Joi.boolean()
 		})
@@ -210,7 +207,24 @@ router.delete(
 		try {
 			const number = await req.params.ordNum;
 			const orderId = `order${String(number)}`;
-			const orderRemoved = await Order.findOneAndDelete({ orderId: orderId });
+			// console.log(orderId);
+
+			// da tenere -->
+			const orderRemoved = await Order.findOneAndDelete({ orderid: orderId });
+			// <--- da tenere
+
+			// sistemata ricerca ordine da cancellare --> orderId No --> orderid
+			// ripartire da creare metodo nelle classi per eliminare order dagli users
+			const userUpdater = new UserUpdaterClass(
+				await orderRemoved,
+				User,
+				Order,
+				res
+			);
+			// const existCheck = await userUpdater.usersExistCheck();
+			const t = await userUpdater.updateAccountsDelOrder();
+			// qui eliminazione ordine da users interessati
+
 			res.status(200).json(orderRemoved);
 		} catch (error) {
 			next(error);
