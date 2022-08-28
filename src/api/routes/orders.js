@@ -129,8 +129,14 @@ router.post(
 			} else {
 				await prodUpdater.searchProd();
 				await prodUpdater.createResults();
-				await prodUpdater.createNewOrder();
-				await userUpdater.updateAccountsNewOrder();
+				const numOfErrs = await prodUpdater.createNewOrder();
+				// Testing solution for bug
+				if (numOfErrs == 0) {
+					await userUpdater.updateAccountsNewOrder();
+				} else if (numOfErrs > 0) {
+					return;
+				}
+				// Testing solution for bug
 			}
 
 			// Qui possibile Ric...

@@ -204,7 +204,7 @@ class ProductUpdaterClass {
 				}
 				this.response.status(200).json(savedData);
 			});
-		} else {
+		} else if (this.negativeArr.length > 0) {
 			this.negInfo = {};
 			this.negativeArr.map((elem) => {
 				this.negInfo[`message${this.negativeArr.indexOf(elem)}`] =
@@ -212,6 +212,40 @@ class ProductUpdaterClass {
 			});
 			this.response.status(200).json(this.negInfo);
 		}
+		return this.negativeArr.length;
+	}
+
+	async updateQuantitiesAfterDelete() {
+		// console.log(this.permissions);
+		// this.results = await Promise.all(this.permissions);
+		// this.negativeArr = [];
+		// for await (let elem of this.results) {
+		// 	if (elem["response"] == "negative") {
+		// 		this.negativeArr.push({
+		// 			message: elem["message"]
+		// 		});
+		// 	} else if (elem["response"] == "positive") {
+		// 		this.updatingProduct = await this.productModel.findOne({
+		// 			name: elem["productname"]
+		// 		});
+		// 		this.productModel.findOneAndUpdate(
+		// 			{
+		// 				name: elem["productname"]
+		// 			},
+		// 			{
+		// 				quantity: this.updatingProduct["quantity"] - elem["quantity"]
+		// 			},
+		// 			(err, docs) => {
+		// 				if (err) {
+		// 					// this.response.status(200).json({
+		// 					// 	message: "Error in quantity updating"
+		// 					// });
+		// 					console.log("Error in quantity updating");
+		// 				}
+		// 			}
+		// 		);
+		// 	}
+		// }
 	}
 }
 
