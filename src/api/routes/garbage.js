@@ -898,3 +898,55 @@ if (query.filter && query.value == undefined) {
 // console.log(this.fieldsUpdated);
 // console.log(this.resolvedUsers);
 // console.log(elem);
+
+// console.log(this.permissions);
+// this.results = await Promise.all(this.permissions);
+// this.negativeArr = [];
+// for await (let elem of this.results) {
+// 	if (elem["response"] == "negative") {
+// 		this.negativeArr.push({
+// 			message: elem["message"]
+// 		});
+// 	} else if (elem["response"] == "positive") {
+// 		this.updatingProduct = await this.productModel.findOne({
+// 			name: elem["productname"]
+// 		});
+// 		this.productModel.findOneAndUpdate(
+// 			{
+// 				name: elem["productname"]
+// 			},
+// 			{
+// 				quantity: this.updatingProduct["quantity"] - elem["quantity"]
+// 			},
+// 			(err, docs) => {
+// 				if (err) {
+// 					// this.response.status(200).json({
+// 					// 	message: "Error in quantity updating"
+// 					// });
+// 					console.log("Error in quantity updating");
+// 				}
+// 			}
+// 		);
+// 	}
+// }
+
+// this.productsToUpdate = await user["products"].forEach(
+// Tested with .map too...results will be filtered and not update double products
+// 	async (product) => {
+// 		console.log(product["productname"]);
+// 		// ----->
+// 		// Inserire qui aumento quantità
+// 		this.oldQuantity = await this.productModel.findOne({
+// 			name: product["productname"]
+// 		});
+// 		this.productUpdate = await this.productModel.findOneAndUpdate(
+// 			{
+// 				name: product["productname"]
+// 			},
+// 			{
+// 				quantity: this.oldQuantity["quantity"] + product["quantity"]
+// 			}
+// 		);
+// 		// <-----
+// 	}
+// );

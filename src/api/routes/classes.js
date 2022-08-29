@@ -164,7 +164,6 @@ class ProductUpdaterClass {
 		return this.permissions;
 	}
 	async createResults() {
-		// console.log(this.permissions);
 		this.results = await Promise.all(this.permissions);
 		this.negativeArr = [];
 		for await (let elem of this.results) {
@@ -176,6 +175,7 @@ class ProductUpdaterClass {
 				this.updatingProduct = await this.productModel.findOne({
 					name: elem["productname"]
 				});
+				// test with await... -->
 				this.productModel.findOneAndUpdate(
 					{
 						name: elem["productname"]
@@ -192,6 +192,7 @@ class ProductUpdaterClass {
 						}
 					}
 				);
+				// <--- test with await...
 			}
 		}
 	}
@@ -216,36 +217,13 @@ class ProductUpdaterClass {
 	}
 
 	async restoreQuantities() {
-		// console.log(this.data);
 		this.productsToUpdate = this.data["users"].map((user) => {
 			console.log(user["products"]);
 		});
 
 		for await (let user of this.data["users"]) {
-			// this.productsToUpdate = await user["products"].forEach(
-			// Tested with .map too...results will be filtered and not update double products
-			// 	async (product) => {
-			// 		console.log(product["productname"]);
-			// 		// ----->
-			// 		// Inserire qui aumento quantità
-			// 		this.oldQuantity = await this.productModel.findOne({
-			// 			name: product["productname"]
-			// 		});
-			// 		this.productUpdate = await this.productModel.findOneAndUpdate(
-			// 			{
-			// 				name: product["productname"]
-			// 			},
-			// 			{
-			// 				quantity: this.oldQuantity["quantity"] + product["quantity"]
-			// 			}
-			// 		);
-			// 		// <-----
-			// 	}
-			// );
 			for await (let product of user["products"]) {
 				console.log(product["productname"]);
-				// ----->
-				// Inserire qui aumento quantità
 				this.oldQuantity = await this.productModel.findOne({
 					name: product["productname"]
 				});
@@ -257,40 +235,8 @@ class ProductUpdaterClass {
 						quantity: this.oldQuantity["quantity"] + product["quantity"]
 					}
 				);
-				// <-----
 			}
 		}
-
-		// console.log(this.permissions);
-		// this.results = await Promise.all(this.permissions);
-		// this.negativeArr = [];
-		// for await (let elem of this.results) {
-		// 	if (elem["response"] == "negative") {
-		// 		this.negativeArr.push({
-		// 			message: elem["message"]
-		// 		});
-		// 	} else if (elem["response"] == "positive") {
-		// 		this.updatingProduct = await this.productModel.findOne({
-		// 			name: elem["productname"]
-		// 		});
-		// 		this.productModel.findOneAndUpdate(
-		// 			{
-		// 				name: elem["productname"]
-		// 			},
-		// 			{
-		// 				quantity: this.updatingProduct["quantity"] - elem["quantity"]
-		// 			},
-		// 			(err, docs) => {
-		// 				if (err) {
-		// 					// this.response.status(200).json({
-		// 					// 	message: "Error in quantity updating"
-		// 					// });
-		// 					console.log("Error in quantity updating");
-		// 				}
-		// 			}
-		// 		);
-		// 	}
-		// }
 	}
 }
 
