@@ -215,7 +215,52 @@ class ProductUpdaterClass {
 		return this.negativeArr.length;
 	}
 
-	async updateQuantitiesAfterDelete() {
+	async restoreQuantities() {
+		// console.log(this.data);
+		this.productsToUpdate = this.data["users"].map((user) => {
+			console.log(user["products"]);
+		});
+
+		for await (let user of this.data["users"]) {
+			// this.productsToUpdate = await user["products"].forEach(
+			// Tested with .map too...results will be filtered and not update double products
+			// 	async (product) => {
+			// 		console.log(product["productname"]);
+			// 		// ----->
+			// 		// Inserire qui aumento quantità
+			// 		this.oldQuantity = await this.productModel.findOne({
+			// 			name: product["productname"]
+			// 		});
+			// 		this.productUpdate = await this.productModel.findOneAndUpdate(
+			// 			{
+			// 				name: product["productname"]
+			// 			},
+			// 			{
+			// 				quantity: this.oldQuantity["quantity"] + product["quantity"]
+			// 			}
+			// 		);
+			// 		// <-----
+			// 	}
+			// );
+			for await (let product of user["products"]) {
+				console.log(product["productname"]);
+				// ----->
+				// Inserire qui aumento quantità
+				this.oldQuantity = await this.productModel.findOne({
+					name: product["productname"]
+				});
+				this.productUpdate = await this.productModel.findOneAndUpdate(
+					{
+						name: product["productname"]
+					},
+					{
+						quantity: this.oldQuantity["quantity"] + product["quantity"]
+					}
+				);
+				// <-----
+			}
+		}
+
 		// console.log(this.permissions);
 		// this.results = await Promise.all(this.permissions);
 		// this.negativeArr = [];

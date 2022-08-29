@@ -227,9 +227,16 @@ router.delete(
 				Order,
 				res
 			);
+			const prodUpdater = new ProductUpdaterClass(
+				await orderRemoved,
+				Product,
+				Order,
+				res
+			);
 			// const existCheck = await userUpdater.usersExistCheck();
-			const t = await userUpdater.updateAccountsDelOrder();
+			const updates = await userUpdater.updateAccountsDelOrder();
 			// qui eliminazione ordine da users interessati
+			const restores = await prodUpdater.restoreQuantities();
 
 			res.status(200).json(orderRemoved);
 		} catch (error) {
