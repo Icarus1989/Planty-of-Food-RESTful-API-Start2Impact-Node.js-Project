@@ -950,3 +950,17 @@ if (query.filter && query.value == undefined) {
 // 		// <-----
 // 	}
 // );
+// console.log(this.newOrder);
+// console.log(Number(this.totalprice.toFixed(2)));
+
+// this.newOrder["users"].map(async (user) => {
+// 	// this.prod = await this.productModel.findOne({
+// 	// })
+// 	// user.cost =
+// });
+// user["products"].map(async (elem) =>
+// console.log(elem["quantity"]);
+// console.log(this.item["price"]);
+// console.log(this.itemsPrice);
+// console.log(this.itemPrice);
+// console.log(user);
