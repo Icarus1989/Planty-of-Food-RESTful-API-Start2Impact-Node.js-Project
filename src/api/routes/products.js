@@ -47,7 +47,8 @@ router.post(
 		[Segments.BODY]: Joi.object({
 			name: Joi.string().required(),
 			quantity: Joi.number().integer().greater(0).required(),
-			origin: Joi.string().required()
+			origin: Joi.string().required(),
+			price: Joi.number().precision(2).required()
 		})
 	}),
 	async (req, res, next) => {
@@ -141,11 +142,12 @@ router.delete("/", (req, res, next) => {
 
 module.exports = router;
 
-// body post = {
-// 	name: "Bananas",
-// 	quantity: 50,
-// 	origin: "Brazil"
-// };
+// body post =
+// {
+// // 	name: "Bananas",
+// // 	quantity: 50,
+// // 	origin: "Brazil"
+// // };
 
 // body put = {
 // 	quantity: 56

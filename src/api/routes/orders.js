@@ -97,10 +97,12 @@ router.post(
 								productname: Joi.string().trim().required(),
 								quantity: Joi.number().greater(0).integer().required()
 							})
-						)
+						),
+						cost: Joi.number().greater(0)
 					})
 				)
 				.required(),
+			totalprice: Joi.number().greater(0),
 			shipped: Joi.boolean(),
 			date: Joi.date()
 		})

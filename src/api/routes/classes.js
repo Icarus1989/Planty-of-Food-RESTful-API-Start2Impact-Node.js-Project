@@ -166,6 +166,7 @@ class ProductUpdaterClass {
 	async createResults() {
 		this.results = await Promise.all(this.permissions);
 		this.negativeArr = [];
+		this.totalprice = 0;
 		for await (let elem of this.results) {
 			if (elem["response"] == "negative") {
 				this.negativeArr.push({
@@ -175,6 +176,9 @@ class ProductUpdaterClass {
 				this.updatingProduct = await this.productModel.findOne({
 					name: elem["productname"]
 				});
+				// console.log(this.updatingProduct["price"]);
+				this.totalprice =
+					this.totalprice + this.updatingProduct["price"] * elem["quantity"];
 				// test with await... -->
 				this.productModel.findOneAndUpdate(
 					{
@@ -199,6 +203,35 @@ class ProductUpdaterClass {
 	async createNewOrder() {
 		if (this.negativeArr.length == 0) {
 			this.newOrder = new this.orderModel(this.data);
+			// console.log(this.newOrder);
+			// console.log(Number(this.totalprice.toFixed(2)));
+
+			// this.newOrder["users"].map(async (user) => {
+			// 	// this.prod = await this.productModel.findOne({
+			// 	// })
+			// 	// user.cost =
+			// });
+			for await (let user of this.newOrder["users"]) {
+				this.itemsCost = 0;
+				// user["products"].map(async (elem) =>
+				for await (let elem of user["products"]) {
+					// console.log(elem["quantity"]);
+					this.item = await this.productModel.findOne({
+						name: elem["productname"]
+					});
+					// console.log(this.item["price"]);
+					this.itemsPrice = this.item["price"] * elem["quantity"];
+					this.itemsCost = this.itemsCost + this.itemsPrice;
+					// console.log(this.itemsPrice);
+
+					user.cost = Number(this.itemsCost.toFixed(2));
+					this.itemsPrice = 0;
+					// console.log(this.itemPrice);
+					// console.log(user);
+				}
+			}
+			this.newOrder.totalprice = Number(this.totalprice.toFixed(2));
+
 			this.newOrder.save((err, savedData) => {
 				if (err) {
 					console.log(err);
@@ -217,13 +250,13 @@ class ProductUpdaterClass {
 	}
 
 	async restoreQuantities() {
-		this.productsToUpdate = this.data["users"].map((user) => {
-			console.log(user["products"]);
-		});
+		// this.productsToUpdate = this.data["users"].map((user) => {
+		// 	console.log(user["products"]);
+		// });
 
 		for await (let user of this.data["users"]) {
 			for await (let product of user["products"]) {
-				console.log(product["productname"]);
+				// console.log(product["productname"]);
 				this.oldQuantity = await this.productModel.findOne({
 					name: product["productname"]
 				});

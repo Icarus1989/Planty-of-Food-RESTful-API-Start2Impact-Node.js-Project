@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
+// const Float = require("@waape/mongoose-float").loadType(mongoose, 2);
 
 const productSchema = new mongoose.Schema({
 	name: { type: String, default: "newProduct" },
 	quantity: { type: Number },
-	origin: { type: String, default: "Italy" }
+	origin: { type: String, default: "Italy" },
+	price: { type: Number, float: true }
 });
 
 const conn = mongoose.createConnection(

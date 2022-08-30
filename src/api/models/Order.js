@@ -10,10 +10,12 @@ const orderSchema = new mongoose.Schema({
 					productname: { type: String, default: "ProductXXXXX" },
 					quantity: { type: Number }
 				}
-			]
+			],
+			cost: { type: Number }
 		}
 	],
 	date: { type: Date, default: Date.now },
+	totalprice: { type: Number },
 	shipped: { type: Boolean, default: false }
 });
 
