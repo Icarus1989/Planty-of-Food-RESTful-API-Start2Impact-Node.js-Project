@@ -1,12 +1,20 @@
 class OrderManagerClass {
-	constructor(response, data, filterQuery, valueQuery, orderQuery) {
+	constructor(
+		response,
+		data,
+		filterQuery,
+		valueQuery,
+		orderByQuery,
+		sortQuery
+	) {
 		this.res = response;
 		this.data = data;
 		this.filterQuery = filterQuery;
 		this.valueQuery = valueQuery;
-		this.orderQuery = orderQuery;
+		this.orderByQuery = orderByQuery;
+		this.sortQuery = sortQuery;
 		this.results = [];
-		this.mapped;
+		this.users;
 	}
 	missParam(paramIndication) {
 		this.res.status(400).json({
@@ -16,18 +24,18 @@ class OrderManagerClass {
 
 	async determinate() {
 		if (this.filterQuery == "productname") {
-			this.mapped = await this.data.map((elem) => {
+			this.users = await this.data.map((elem) => {
 				return elem["users"][0]["products"];
 			});
-			for (let elem of this.mapped) {
-				for (let i = 0; i < elem.length; i++) {
+			for (let user of this.users) {
+				for (let i = 0; i < user.length; i++) {
 					if (
-						elem[i]["productname"] ==
+						user[i]["productname"] ==
 						`${String(this.valueQuery)[0].toUpperCase()}${String(
 							this.valueQuery
 						).slice(1)}`
 					) {
-						this.results.push(this.data[this.mapped.indexOf(elem)]);
+						this.results.push(this.data[this.users.indexOf(user)]);
 					}
 				}
 			}
@@ -36,12 +44,12 @@ class OrderManagerClass {
 			this.filterQuery == "username" ||
 			this.filterQuery == "products"
 		) {
-			this.mapped = await this.data.map((elem) => {
+			this.users = await this.data.map((elem) => {
 				return elem["users"][0];
 			});
-			for (let elem of this.mapped) {
-				if (elem["username"] == this.valueQuery) {
-					this.results.push(this.data[this.mapped.indexOf(elem)]);
+			for (let user of this.users) {
+				if (user["username"] == this.valueQuery) {
+					this.results.push(this.data[this.users.indexOf(user)]);
 				}
 			}
 		} else if (this.filterQuery == "shipped") {
@@ -81,28 +89,24 @@ class OrderManagerClass {
 		}
 	}
 
-	reorderIncr(a, b) {
-		if (a.orderId.slice(5) > b.orderId.slice(5)) {
-			return 1;
-		} else if (a.orderId.slice(5) < b.orderId.slice(5)) {
-			return -1;
-		}
-	}
-
-	reorderDecr(a, b) {
-		if (a.orderId.slice(5) > b.orderId.slice(5)) {
-			return -1;
-		} else if (a.orderId.slice(5) < b.orderId.slice(5)) {
-			return 1;
-		}
-	}
-
 	async ordering(arr) {
 		this.arr = arr;
-		if (this.orderQuery == "decreasing" && this.arr.length > 0) {
-			return (this.arr = this.arr.sort(this.reorderDecr));
-		} else if (this.orderQuery == "increasing" && this.arr.length > 0) {
-			return (this.arr = this.arr.sort(this.reorderIncr));
+		if (this.sortQuery == "decreasing" && this.arr.length > 0) {
+			return (this.arr = this.arr.sort((a, b) => {
+				if (a[this.orderByQuery] > b[this.orderByQuery]) {
+					return -1;
+				} else if (a[this.orderByQuery] < b[this.orderByQuery]) {
+					return 1;
+				}
+			}));
+		} else if (this.sortQuery == "increasing" && this.arr.length > 0) {
+			return (this.arr = this.arr.sort((a, b) => {
+				if (a[this.orderByQuery] > b[this.orderByQuery]) {
+					return 1;
+				} else if (a[this.orderByQuery] < b[this.orderByQuery]) {
+					return -1;
+				}
+			}));
 		} else {
 			return this.arr;
 		}
@@ -142,7 +146,6 @@ class ProductUpdaterClass {
 				});
 				for (let i = 0; i < this.prodsToUp.length; i++) {
 					if ((await this.prodsToUp[i]["quantity"]) < user["quantity"]) {
-						// console.log("No");
 						this.permissions.push({
 							productname: user["productname"],
 							response: "negative",
@@ -151,7 +154,6 @@ class ProductUpdaterClass {
 							]}`
 						});
 					} else {
-						// console.log("Ok");
 						this.permissions.push({
 							productname: user["productname"],
 							response: "positive",
@@ -176,7 +178,6 @@ class ProductUpdaterClass {
 				this.updatingProduct = await this.productModel.findOne({
 					name: elem["productname"]
 				});
-				// console.log(this.updatingProduct["price"]);
 				this.totalprice =
 					this.totalprice + this.updatingProduct["price"] * elem["quantity"];
 				// test with await... -->
@@ -216,7 +217,7 @@ class ProductUpdaterClass {
 					this.itemsPrice = 0;
 				}
 			}
-			this.newOrder.totalprice = Number(this.totalprice.toFixed(2));
+			this.newOrder.totalcost = Number(this.totalprice.toFixed(2));
 
 			this.newOrder.save((err, savedData) => {
 				if (err) {
@@ -236,10 +237,6 @@ class ProductUpdaterClass {
 	}
 
 	async restoreQuantities() {
-		// this.productsToUpdate = this.data["users"].map((user) => {
-		// 	console.log(user["products"]);
-		// });
-
 		for await (let user of this.data["users"]) {
 			for await (let product of user["products"]) {
 				this.oldQuantity = await this.productModel.findOne({
@@ -296,9 +293,6 @@ class UserUpdaterClass {
 					`message${this.usersArr.indexOf(elem)}`
 				] = `${elem["name"]} not exist.`;
 			}
-			// else {
-			// 	return null;
-			// }
 		}
 		return this.message;
 	}
@@ -324,17 +318,11 @@ class UserUpdaterClass {
 				{
 					orders: this.updatedField
 				}
-				// {
-				// 	new: true
-				// }
 			);
 		});
-		console.log("Update from updateAccountsNewOrder");
 	}
 
 	async updateAccountsDelOrder() {
-		// console.log(this.data);
-
 		this.users = this.data["users"].map((user) => {
 			return user["username"];
 		});
@@ -352,7 +340,6 @@ class UserUpdaterClass {
 			this.dataUpdated = await orders.filter((elem) => {
 				return elem["orderid"] !== this.data["orderid"];
 			});
-
 			this.result = await this.userModel.findOneAndUpdate(
 				{
 					username:
@@ -361,9 +348,6 @@ class UserUpdaterClass {
 				{
 					orders: this.dataUpdated
 				}
-				// {
-				// 	new: true
-				// }
 			);
 		}
 	}

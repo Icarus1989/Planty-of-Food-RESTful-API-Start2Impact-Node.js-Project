@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-// const Float = require("@waape/mongoose-float").loadType(mongoose, 2);
 
 const productSchema = new mongoose.Schema({
 	name: { type: String, default: "newProduct" },

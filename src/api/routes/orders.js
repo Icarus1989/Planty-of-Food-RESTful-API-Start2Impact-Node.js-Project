@@ -11,7 +11,6 @@ const {
 	ProductUpdaterClass,
 	UserUpdaterClass
 } = require("./classes");
-// const ProductUpdaterClass = require("./classes");
 
 const router = express.Router();
 const app = express();
@@ -21,14 +20,18 @@ router.get("/", async (req, res, next) => {
 		const query = req.query;
 		let savedOrders = await Order.find({});
 
+		// console.log(query.orderby);
+
 		const orderManager = new OrderManagerClass(
 			res,
 			savedOrders,
 			query.filter,
 			query.value,
-			query.order
+			query.orderby,
+			query.sort
 		);
 
+		// mod with orderby and sort
 		if (query.filter && query.value == undefined) {
 			orderManager.missParam("&value=");
 		} else if ((query.filter && query.value) || query.order) {
@@ -58,12 +61,14 @@ router.get("/", async (req, res, next) => {
 		next(error);
 	}
 });
-// test http://localhost:5000/api/v1/orders-archieve?filter=productname&value=bananas&order=ascendent
+//  http://localhost:5000/api/v1/orders-archieve?filter=productname&value=bananas&order=ascendent
+
+// test http://localhost:5000/api/v1/orders-archieve?filter=productname&value=bananas&orderby=orderid&sort=ascending
 
 router.get("/:ordNum", async (req, res, next) => {
 	try {
-		const number = req.params.ordNum;
-		const orderId = `order${String(number)}`;
+		const orderNumber = req.params.ordNum;
+		const orderId = `order${String(orderNumber)}`;
 		console.log(orderId);
 		Order.findOne({ orderid: orderId }, (err, data) => {
 			if (err) {
@@ -102,25 +107,42 @@ router.post(
 					})
 				)
 				.required(),
-			totalprice: Joi.number().greater(0),
+			totalcost: Joi.number().greater(0),
 			shipped: Joi.boolean(),
 			date: Joi.date()
 		})
 	}),
 	async (req, res, next) => {
+		if (!req.body) {
+			res.status(200).json({
+				message: `For post an order please use this JSON structure in the request body: {
+				"orderid": String,
+				"users": [
+					{
+						"username": String,
+						"products": [
+							{
+								"productname": String,
+								"quantity": Number
+							}
+						],
+						"cost": Number (Automatically added)
+					}
+				],
+				"totalcost": Number (Automatically added),
+				"shipped": Boolean,
+				"date": (Automatically added)
+			}`
+			});
+		}
 		try {
 			const data = await req.body;
 
 			const prodUpdater = new ProductUpdaterClass(data, Product, Order, res);
 			const userUpdater = new UserUpdaterClass(data, User, Order, res);
 
-			// 	// Qui modifica quantità dei vari products aggiunti all'ordine - diminuire...
-			// 	// quantità dispinibile
-
 			const orderExists = await prodUpdater.orderExistsCheck();
 			const existCheck = await userUpdater.usersExistCheck();
-
-			// ----> TEST su MongoDB Compass
 
 			if (Object.keys(existCheck).length > 0) {
 				res.status(200).json(existCheck);
@@ -132,18 +154,15 @@ router.post(
 				await prodUpdater.searchProd();
 				await prodUpdater.createResults();
 				const numOfErrs = await prodUpdater.createNewOrder();
-				// Testing solution for bug
 				if (numOfErrs == 0) {
 					await userUpdater.updateAccountsNewOrder();
 				} else if (numOfErrs > 0) {
 					return;
 				}
-				// Testing solution for bug
 			}
 
 			// Qui possibile Ric...
 		} catch (error) {
-			// testing
 			res.status(404).json({ message: "Problem occured" });
 			next(error);
 		}
@@ -167,14 +186,16 @@ router.put(
 				})
 			),
 			// createdAt: Joi.date().default(Date.now).required(),
-			shipped: Joi.boolean()
+			totalcost: Joi.number(),
+			shipped: Joi.boolean(),
+			date: Joi.date()
 		})
 	}),
 	async (req, res, next) => {
 		try {
 			const data = await req.body;
-			const number = await req.params.ordNum;
-			const orderId = `order${String(number)}`;
+			const orderNumber = await req.params.ordNum;
+			const orderId = `order${String(orderNumber)}`;
 
 			const orderChanged = await Order.findOneAndUpdate(
 				{ orderId: orderId },
@@ -208,21 +229,17 @@ router.delete(
 				})
 			),
 			// createdAt: Joi.date().default(Date.now).required(),
-			shipped: Joi.boolean()
+			totalcost: Joi.number(),
+			shipped: Joi.boolean(),
+			date: Joi.date()
 		})
 	}),
 	async (req, res, next) => {
 		try {
-			const number = await req.params.ordNum;
-			const orderId = `order${String(number)}`;
-			// console.log(orderId);
-
-			// da tenere -->
+			const orderNumber = await req.params.ordNum;
+			const orderId = `order${String(orderNumber)}`;
 			const orderRemoved = await Order.findOneAndDelete({ orderid: orderId });
-			// <--- da tenere
 
-			// sistemata ricerca ordine da cancellare --> orderId No --> orderid
-			// ripartire da creare metodo nelle classi per eliminare order dagli users
 			const userUpdater = new UserUpdaterClass(
 				await orderRemoved,
 				User,
@@ -235,9 +252,7 @@ router.delete(
 				Order,
 				res
 			);
-			// const existCheck = await userUpdater.usersExistCheck();
 			const updates = await userUpdater.updateAccountsDelOrder();
-			// qui eliminazione ordine da users interessati
 			const restores = await prodUpdater.restoreQuantities();
 
 			res.status(200).json(orderRemoved);
