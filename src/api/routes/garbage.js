@@ -1388,3 +1388,115 @@ if (query.filter && query.value == undefined) {
 // 		return 1;
 // 	}
 // }
+
+// mod with orderby and sort
+// if (query.filter && query.value == undefined) {
+// 	orderManager.missParam("&value=");
+// } else if ((query.filter && query.value) || query.order) {
+// 	const ordersArchived = await orderManager.determinate();
+// 	// console.log(ordersArchived);
+// 	if (ordersArchived < 1) {
+// 		await orderManager.noProducts();
+// 	} else {
+// 		await orderManager.ordering(ordersArchived);
+// 		await orderManager.createResponse(ordersArchived);
+// 	}
+// } else if (
+// 	query.filter == undefined &&
+// 	query.value == undefined &&
+// 	query.order
+// ) {
+// 	await orderManager.ordering(savedOrders);
+// 	await orderManager.createResponse(savedOrders);
+// } else if (
+// 	query.filter == undefined &&
+// 	query.value == undefined &&
+// 	query.order == undefined
+// ) {
+// 	orderManager.createResponse(savedOrders);
+// }
+
+// this.queryArr = [
+// 	this.filterQuery,
+// 	this.valueQuery,
+// 	this.orderByQuery,
+// 	this.sortQuery
+// ];
+// this.queryObjArr = [
+// 	{
+// 		name: "filter",
+// 		value: this.filterQuery
+// 	},
+// 	{
+// 		name: "value",
+// 		value: this.valueQuery
+// 	},
+// 	{
+// 		name: "orderby",
+// 		value: this.orderByQuery
+// 	},
+// 	{
+// 		name: "sort",
+// 		value: this.sortQuery
+// 	}
+// ];
+// this.queryObjArr.map((elem) => {
+// 	if (
+// 		elem["value"] == undefined &&
+// 		elem["name"] == "value" &&
+// 		elem["name"] == "filter" &&
+// 		elem["value"] !== undefined
+// 	) {
+// 		this.missParam(`&${elem["name"]}= `);
+// 	}
+// 	// else if () {
+// 	// 	this.ordersArchived = await this.determinate();
+// 	// // console.log(ordersArchived);
+// 	// if (this.ordersArchived < 1) {
+// 	// 	await this.noProducts();
+// 	// } else {
+// 	// 	await this.ordering(this.ordersArchived);
+// 	// 	await this.createResponse(this.ordersArchived);
+// 	// }
+// 	// }
+
+// 	// else if (
+// 	// 	elem["value"] == undefined &&
+// 	// 	elem["name"] == "orderby" &&
+// 	// 	elem["value"] == undefined &&
+// 	// 	elem["name"] == "sort"
+// 	// ) {
+// 	// 	this.createResponse(this.data);
+// 	// }
+// 	else if (
+// 		elem["value"] == undefined &&
+// 		elem["name"] == "filter" &&
+// 		elem["name"] == "value" &&
+// 		elem["name"] == "orderby" &&
+// 		elem["name"] == "sort"
+// 	) {
+// 		this.createResponse(this.data);
+// 	}
+// });
+// // console.log(this.filterQuery);
+
+// // this.queryArr.map(async (elem) => {
+// // 	switch (elem) {
+// // 		case true:
+// // 			console.log(elem);
+// // 			break;
+// // 		case undefined:
+// // 			console.log("false");
+// // 	}
+// // });
+// console.log(this.queryObjArr);
+
+// else if (
+// 	this.filterQuery == undefined &&
+// 	this.valueQuery == undefined &&
+// 	this.orderByQuery &&
+// 	this.sortQuery
+// ) {
+// 	await this.ordering(this.data);
+// 	await this.createResponse(this.data);
+// }

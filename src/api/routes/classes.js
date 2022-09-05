@@ -86,6 +86,8 @@ class OrderManagerClass {
 				}
 			});
 			return this.results;
+		} else if (this.filterQuery == undefined && this.valueQuery == undefined) {
+			return (this.results = this.data);
 		}
 	}
 
@@ -107,6 +109,10 @@ class OrderManagerClass {
 					return -1;
 				}
 			}));
+		} else if (this.arr.length == 0) {
+			this.res.status(200).json({
+				message: "No orders with these parameters saved on database"
+			});
 		} else {
 			return this.arr;
 		}
@@ -120,6 +126,36 @@ class OrderManagerClass {
 		this.res.status(200).json({
 			message: `Product ${this.valueQuery} is not present in the orders archieve`
 		});
+	}
+
+	async parametersHandling() {
+		if (this.filterQuery && this.valueQuery == undefined) {
+			this.missParam("&value= ");
+		} else if (this.orderByQuery && this.sortQuery == undefined) {
+			this.missParam("&sort= ");
+		} else if (this.filterQuery == undefined && this.valueQuery) {
+			this.missParam("&filter= ");
+		} else if (this.orderByQuery == undefined && this.sortQuery) {
+			this.missParam("&orderby= ");
+		} else if (
+			(this.filterQuery && this.valueQuery) ||
+			(this.orderByQuery && this.sortQuery)
+		) {
+			this.ordersArchived = await this.determinate();
+			if (this.ordersArchived < 1) {
+				await this.noProducts();
+			} else {
+				await this.ordering(this.ordersArchived);
+				await this.createResponse(this.ordersArchived);
+			}
+		} else if (
+			this.filterQuery == undefined &&
+			this.valueQuery == undefined &&
+			this.orderByQuery == undefined &&
+			this.sortQuery == undefined
+		) {
+			this.createResponse(this.data);
+		}
 	}
 }
 

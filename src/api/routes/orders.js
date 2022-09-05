@@ -20,8 +20,6 @@ router.get("/", async (req, res, next) => {
 		const query = req.query;
 		let savedOrders = await Order.find({});
 
-		// console.log(query.orderby);
-
 		const orderManager = new OrderManagerClass(
 			res,
 			savedOrders,
@@ -31,32 +29,7 @@ router.get("/", async (req, res, next) => {
 			query.sort
 		);
 
-		// mod with orderby and sort
-		if (query.filter && query.value == undefined) {
-			orderManager.missParam("&value=");
-		} else if ((query.filter && query.value) || query.order) {
-			const ordersArchived = await orderManager.determinate();
-			// console.log(ordersArchived);
-			if (ordersArchived < 1) {
-				await orderManager.noProducts();
-			} else {
-				await orderManager.ordering(ordersArchived);
-				await orderManager.createResponse(ordersArchived);
-			}
-		} else if (
-			query.filter == undefined &&
-			query.value == undefined &&
-			query.order
-		) {
-			await orderManager.ordering(savedOrders);
-			await orderManager.createResponse(savedOrders);
-		} else if (
-			query.filter == undefined &&
-			query.value == undefined &&
-			query.order == undefined
-		) {
-			orderManager.createResponse(savedOrders);
-		}
+		orderManager.parametersHandling();
 	} catch (error) {
 		next(error);
 	}
