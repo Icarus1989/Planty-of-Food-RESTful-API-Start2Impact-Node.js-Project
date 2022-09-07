@@ -13,7 +13,7 @@ const {
 } = require("./classes");
 
 const router = express.Router();
-const app = express();
+// const app = express();
 
 router.get("/", async (req, res, next) => {
 	try {
