@@ -54,14 +54,23 @@ router.post(
 	async (req, res, next) => {
 		try {
 			const data = await req.body;
-			const newProduct = new Product(await data);
-			newProduct.save((err, doc) => {
-				if (err) {
-					console.log(err);
-				}
-				console.log("Data entered");
+			const productExists = await Product.findOne({
+				name: data["name"]
 			});
-			res.json(newProduct);
+			if (productExists == null) {
+				const newProduct = new Product(await data);
+				newProduct.save((err, doc) => {
+					if (err) {
+						console.log(err);
+					}
+					console.log("Data entered");
+				});
+				res.json(newProduct);
+			} else {
+				res.json({
+					message: `The product ${data["name"]} already exists.`
+				});
+			}
 		} catch (error) {
 			next(error);
 		}

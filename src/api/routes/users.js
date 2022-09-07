@@ -62,13 +62,22 @@ router.post(
 	async (req, res, next) => {
 		try {
 			const data = await req.body;
-			const newUser = new User(await data);
-			newUser.save((err, doc) => {
-				if (err) {
-					console.log(err);
-				}
-				res.json(newUser);
+			const userExists = await User.findOne({
+				username: data["username"]
 			});
+			if (userExists == null) {
+				const newUser = new User(await data);
+				newUser.save((err, doc) => {
+					if (err) {
+						console.log(err);
+					}
+					res.json(newUser);
+				});
+			} else {
+				res.json({
+					message: `The user ${data["username"]} already exists.`
+				});
+			}
 		} catch (error) {
 			next(error);
 		}
