@@ -1500,3 +1500,9 @@ if (query.filter && query.value == undefined) {
 // 	await this.ordering(this.data);
 // 	await this.createResponse(this.data);
 // }
+
+// da test/index.js
+// const routerProduct = require("../src/api/routes/products");
+// const routerOrder = require("../src/api/routes/orders");
+// const routerUser = require("../src/api/routes/users");
+// oppure -->

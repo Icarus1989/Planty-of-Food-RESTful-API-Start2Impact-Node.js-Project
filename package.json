@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "node src/index.js",
 		"dev": "nodemon src/server.js",
-		"test": "mocha ./test/index.js"
+		"test": "nyc mocha ./test/index.js"
 	},
 	"keywords": [
 		"node",
@@ -35,6 +35,7 @@
 		"sinon": "^14.0.0"
 	},
 	"devDependencies": {
-		"nodemon": "^2.0.19"
+		"nodemon": "^2.0.19",
+		"nyc": "^15.1.0"
 	}
 }

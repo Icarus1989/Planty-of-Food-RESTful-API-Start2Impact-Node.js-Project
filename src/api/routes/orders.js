@@ -272,7 +272,9 @@ module.exports = router;
 // 			]
 // 		}
 // 	],
-// 	shipped: false
+// 	shipped: false,
+// 	date: 2022-09-06T21:55:50.076+00:00,
+// 	totalcost: 2000
 // }
 
 // body put = {

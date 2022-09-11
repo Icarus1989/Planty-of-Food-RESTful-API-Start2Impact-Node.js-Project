@@ -1,9 +1,4 @@
-// const routerProduct = require("../src/api/routes/products");
-// const routerOrder = require("../src/api/routes/orders");
-// const routerUser = require("../src/api/routes/users");
-// oppure -->
 const router = require("../src/api/index");
-
 const sinon = require("sinon");
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
@@ -93,7 +88,6 @@ describe("Stub router product Get One", async () => {
 		router.get(`/products-storage/${testProdGet}`, (req, res, next) => {
 			expect("Content-Type", /json/);
 			expect(200);
-			// res contiente req.params
 			assert.match(JSON.parse(res), { name: testProdGet });
 			expect(JSON.parse(res)).to.have.property("name");
 			expect(JSON.parse(res)).to.have.property("quantity");
@@ -106,7 +100,7 @@ describe("Stub router product Get One", async () => {
 });
 
 describe("Stub router product Post", async () => {
-	const testProdPost = "Strawberries";
+	// const testProdPost = "Strawberries";
 	before(() => {
 		const stub = sinon.stub(router, "post").yields(
 			{
@@ -424,50 +418,453 @@ describe("Stub router user Post", async () => {
 	});
 });
 
-// describe("Stub router user Put", async () => {
-// 	before(() => {});
-// 	it(() => {});
-// 	after(() => {});
-// });
+describe("Stub router user Put", async () => {
+	const testUserPut = "User1";
+	const newAddress = "userone@sinon.com";
+	before(() => {
+		const stub = sinon.stub(router, "put").yields(
+			{
+				params: testUserPut,
+				body: {
+					firstname: "userTestOne",
+					lastname: "for Sinon Testing",
+					username: testUserPut,
+					address: newAddress,
+					orders: [
+						{
+							orderid: "00001",
+							url: "none"
+						}
+					]
+				}
+			},
+			JSON.stringify({
+				firstname: "userTestOne",
+				lastname: "for Sinon Testing",
+				username: testUserPut,
+				address: newAddress,
+				orders: [
+					{
+						orderid: "00001",
+						url: "none"
+					}
+				]
+			}),
+			null
+		);
+	});
+	it("Stub for user router put", async () => {
+		router.put(`/users/${testUserPut}`, async (req, res, next) => {
+			expect("Content-Type", /json/);
+			expect(200);
+			assert.match(JSON.parse(res), { username: testUserPut });
+			expect(JSON.parse(res)).to.have.property("firstname");
+			expect(JSON.parse(res)).to.have.property("lastname");
+			expect(JSON.parse(res)).to.have.property("username");
+			expect(JSON.parse(res)).to.have.property("address");
+			expect(JSON.parse(res)).to.have.property("orders");
+		});
+	});
+	after(() => {
+		router.put.restore();
+	});
+});
 
-// describe("Stub router user Delete One", async () => {
-// 	before(() => {});
-// 	it(() => {});
-// 	after(() => {});
-// });
+describe("Stub router user Delete ", async () => {
+	const testUserDelete = "User1";
+	before(() => {
+		const stub = sinon.stub(router, "delete").yields(
+			{ params: testUserDelete },
+			JSON.stringify({
+				message: "User delete."
+			}),
+			null
+		);
+	});
+	it("Stub for user router delete", () => {
+		router.delete(`/products-storage/${testUserDelete}`, (req, res, next) => {
+			expect("Content-Type", /json/);
+			expect(200);
+			assert.match(JSON.parse(res), {
+				message: "User delete."
+			});
+			expect(JSON.parse(res)).to.have.property("message");
+		});
+	});
+	after(() => {
+		router.delete.restore();
+	});
+});
 
 // // ----------- User tests
 
 // // ----------- Order tests
 
-// describe("Stub router order Get All", async () => {
-// 	before(() => {});
-// 	it(() => {});
-// 	after(() => {});
-// });
+describe("Stub router order Get All", async () => {
+	before(() => {
+		const stub = sinon.stub(router, "get").yields(
+			null,
+			JSON.stringify({
+				body: [
+					{
+						orderid: "order000001",
+						users: [
+							{
+								username: "UserOne",
+								products: [
+									{
+										productname: "Watermelon",
+										quantity: 23
+									},
+									{
+										productname: "Strawberries",
+										quantity: 23
+									}
+								]
+							}
+						],
+						shipped: false,
+						date: "2022-09-06T21:55:50.076+00:00",
+						totalcost: 2000
+					},
+					{
+						orderid: "order000002",
+						users: [
+							{
+								username: "UserTwo",
+								products: [
+									{
+										productname: "Watermelon",
+										quantity: 23
+									},
+									{
+										productname: "Strawberries",
+										quantity: 23
+									}
+								]
+							}
+						],
+						shipped: false,
+						date: "2022-09-06T21:55:50.076+00:00",
+						totalcost: 2000
+					}
+				]
+			}),
+			null
+		);
+	});
+	it("Stub for router order get (all)", async () => {
+		router.get("/orders-archieve/", (req, res, next) => {
+			expect("Content-Type", /json/);
+			expect(200);
+			assert.isArray(JSON.parse(res).body);
+			assert.match(
+				JSON.parse(res).body,
+				String({
+					body: [
+						{
+							orderid: "order000001",
+							users: [
+								{
+									username: "UserOne",
+									products: [
+										{
+											productname: "Watermelon",
+											quantity: 23
+										},
+										{
+											productname: "Strawberries",
+											quantity: 23
+										}
+									]
+								}
+							],
+							shipped: false,
+							date: "2022-09-06T21:55:50.076+00:00",
+							totalcost: 2000
+						},
+						{
+							orderid: "order000002",
+							users: [
+								{
+									username: "UserTwo",
+									products: [
+										{
+											productname: "Watermelon",
+											quantity: 23
+										},
+										{
+											productname: "Strawberries",
+											quantity: 23
+										}
+									]
+								}
+							],
+							shipped: false,
+							date: "2022-09-06T21:55:50.076+00:00",
+							totalcost: 2000
+						}
+					]
+				})
+			);
+			const orders = JSON.parse(res).body;
+			orders.map((order) => {
+				expect(order).to.have.property("orderid");
+				expect(order).to.have.property("users");
+				expect(order).to.have.property("shipped");
+				expect(order).to.have.property("date");
+				expect(order).to.have.property("totalcost");
+				// ...
+			});
+		});
+	});
+	after(() => {
+		router.get.restore();
+	});
+});
 
-// describe("Stub router order Get One", async () => {
-// 	before(() => {});
-// 	it(() => {});
-// 	after(() => {});
-// });
+describe("Stub router order Get One", async () => {
+	const testOrderGet = "order00001";
+	before(() => {
+		const stub = sinon.stub(router, "get").yields(
+			{ params: testOrderGet },
+			JSON.stringify({
+				orderid: testOrderGet,
+				users: [
+					{
+						username: "UserOne",
+						products: [
+							{
+								productname: "Watermelon",
+								quantity: 23
+							},
+							{
+								productname: "Strawberries",
+								quantity: 23
+							}
+						]
+					}
+				],
+				shipped: false,
+				date: "2022-09-06T21:55:50.076+00:00",
+				totalcost: 2000
+			}),
+			null
+		);
+	});
+	it("Stub for order router get (one)", async () => {
+		router.get(`/orders-archieve/${testOrderGet}`, async (req, res, next) => {
+			expect("Content-Type", /json/);
+			expect(200);
+			assert.match(JSON.parse(res), {
+				orderid: "order000001",
+				users: [
+					{
+						username: "UserOne",
+						products: [
+							{
+								productname: "Watermelon",
+								quantity: 23
+							},
+							{
+								productname: "Strawberries",
+								quantity: 23
+							}
+						]
+					}
+				],
+				shipped: false,
+				date: "2022-09-06T21:55:50.076+00:00",
+				totalcost: 2000
+			});
+			expect(JSON.parse(res)).to.have.property("orderid");
+			expect(JSON.parse(res)).to.have.property("users");
+			expect(JSON.parse(res)).to.have.property("shipped");
+			expect(JSON.parse(res)).to.have.property("date");
+			expect(JSON.parse(res)).to.have.property("totalcost");
+		});
+	});
+	after(() => {
+		router.get.restore();
+	});
+});
 
-// describe("Stub router order Post", async () => {
-// 	before(() => {});
-// 	it(() => {});
-// 	after(() => {});
-// });
+describe("Stub router order Post", async () => {
+	before(() => {
+		const stub = sinon.stub(router, "post").yields(
+			{
+				body: JSON.stringify({
+					orderid: "order000001",
+					users: [
+						{
+							username: "UserOne",
+							products: [
+								{
+									productname: "Watermelon",
+									quantity: 23
+								},
+								{
+									productname: "Strawberries",
+									quantity: 23
+								}
+							]
+						}
+					],
+					shipped: false,
+					date: "2022-09-06T21:55:50.076+00:00",
+					totalcost: 2000
+				})
+			},
+			JSON.stringify({
+				orderid: "order000001",
+				users: [
+					{
+						username: "UserOne",
+						products: [
+							{
+								productname: "Watermelon",
+								quantity: 23
+							},
+							{
+								productname: "Strawberries",
+								quantity: 23
+							}
+						]
+					}
+				],
+				shipped: false,
+				date: "2022-09-06T21:55:50.076+00:00",
+				totalcost: 2000
+			}),
+			null
+		);
+	});
+	it("Stub for order router post", async () => {
+		router.post("/orders-archieve/", async (req, res, next) => {
+			expect("Content-Type", /json/);
+			expect(200);
+			assert.match(JSON.parse(res), {
+				orderid: "order000001",
+				users: [
+					{
+						username: "UserOne",
+						products: [
+							{
+								productname: "Watermelon",
+								quantity: 23
+							},
+							{
+								productname: "Strawberries",
+								quantity: 23
+							}
+						]
+					}
+				],
+				shipped: false,
+				date: "2022-09-06T21:55:50.076+00:00",
+				totalcost: 2000
+			});
+			expect(JSON.parse(res)).to.have.property("orderid");
+			expect(JSON.parse(res)).to.have.property("users");
+			expect(JSON.parse(res)).to.have.property("shipped");
+			expect(JSON.parse(res)).to.have.property("date");
+			expect(JSON.parse(res)).to.have.property("totalcost");
+		});
+	});
+	after(() => {
+		router.post.restore();
+	});
+});
 
-// describe("Stub router order Put", async () => {
-// 	before(() => {});
-// 	it(() => {});
-// 	after(() => {});
-// });
+describe("Stub router order Put", async () => {
+	const testOrderPut = "order00001";
+	const newShipStatus = true;
+	before(() => {
+		const stub = sinon.stub(router, "put").yields(
+			{ params: testOrderPut },
+			JSON.stringify({
+				orderid: testOrderPut,
+				users: [
+					{
+						username: "UserOne",
+						products: [
+							{
+								productname: "Watermelon",
+								quantity: 23
+							},
+							{
+								productname: "Strawberries",
+								quantity: 23
+							}
+						]
+					}
+				],
+				shipped: newShipStatus,
+				date: "2022-09-06T21:55:50.076+00:00",
+				totalcost: 2000
+			}),
+			null
+		);
+	});
+	it("Stub for order router put", async () => {
+		router.put(`/orders-archieve/${testOrderPut}`, async (req, res, next) => {
+			assert.match(JSON.parse(res), {
+				orderid: "order00001",
+				users: [
+					{
+						username: "UserOne",
+						products: [
+							{
+								productname: "Watermelon",
+								quantity: 23
+							},
+							{
+								productname: "Strawberries",
+								quantity: 23
+							}
+						]
+					}
+				],
+				shipped: true,
+				date: "2022-09-06T21:55:50.076+00:00",
+				totalcost: 2000
+			});
+			expect(JSON.parse(res)).to.have.property("orderid");
+			expect(JSON.parse(res)).to.have.property("users");
+			expect(JSON.parse(res)).to.have.property("shipped");
+			expect(JSON.parse(res)).to.have.property("date");
+			expect(JSON.parse(res)).to.have.property("totalcost");
+		});
+	});
+	after(() => {
+		router.put.restore();
+	});
+});
 
-// describe("Stub router order Delete One", async () => {
-// 	before(() => {});
-// 	it(() => {});
-// 	after(() => {});
-// });
+describe("Stub router order Delete One", async () => {
+	const testOrderDelete = "order00001";
+	before(() => {
+		const stub = sinon.stub(router, "delete").yields(
+			{ params: testOrderDelete },
+			JSON.stringify({
+				message: "Order delete."
+			}),
+			null
+		);
+	});
+	it("Stub for user router delete", async () => {
+		router.delete(`/orders-archieve/${testOrderDelete}`, (req, res, next) => {
+			expect("Content-Type", /json/);
+			expect(200);
+			assert.match(JSON.parse(res), {
+				message: "Order delete."
+			});
+			expect(JSON.parse(res)).to.have.property("message");
+		});
+	});
+	after(() => {
+		router.delete.restore();
+	});
+});
 
 // // ----------- Order tests
