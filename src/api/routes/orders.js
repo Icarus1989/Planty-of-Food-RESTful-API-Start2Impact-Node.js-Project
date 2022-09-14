@@ -14,19 +14,16 @@ const {
 	deleteOneOrder
 } = require("../controllers/orderController");
 
-const {
-	OrderManagerClass,
-	ProductUpdaterClass,
-	UserUpdaterClass
-} = require("./classes");
+// const {
+// 	OrderManagerClass,
+// 	ProductUpdaterClass,
+// 	UserUpdaterClass
+// } = require("./classes");
 
 const router = express.Router();
 // const app = express();
 
 router.get("/", getAllOrders);
-//  http://localhost:5000/api/v1/orders-archieve?filter=productname&value=bananas&order=ascendent
-
-// test http://localhost:5000/api/v1/orders-archieve?filter=productname&value=bananas&orderby=orderid&sort=ascending
 
 router.get("/:ordNum", getOneOrder);
 
@@ -108,59 +105,22 @@ router.delete(
 );
 
 // Delete all
-router.delete("/", (req, res) => {
-	try {
-		Order.remove({}, (err, doc) => {
-			if (err) {
-				console.log(err);
-			}
-			res.json({
-				message: "All data removed."
-			});
-		});
-	} catch (error) {
-		next(error);
-	}
-});
+// router.delete("/", (req, res) => {
+// 	try {
+// 		Order.remove({}, (err, doc) => {
+// 			if (err) {
+// 				console.log(err);
+// 			}
+// 			res.json({
+// 				message: "All data removed."
+// 			});
+// 		});
+// 	} catch (error) {
+// 		next(error);
+// 	}
+// });
 // Delete all
 
 module.exports = router;
 
-// body post =
-// {
-// 	orderid: "order000002",
-// 	users: [
-// 		{
-// 			username: "UserOne",
-// 			products: [
-// 				{
-// 					productname: "Watermelon",
-// 					quantity: 23
-// 				},
-// 				{
-// 					productname: "Strawberries",
-// 					quantity: 23
-// 				}
-// 			]
-// 		}
-// 	],
-// 	shipped: false,
-// 	date: 2022-09-06T21:55:50.076+00:00,
-// 	totalcost: 2000
-// }
-
-// body put = {
-// 	users: {
-// 		username: "User5",
-// 		products: [
-// 			{
-// 				productname: "Strawberries",
-// 				quantity: 5
-// 			},
-// 			{
-// 				productname: "Watermelon",
-// 				quantity: 5
-// 			}
-// 		]
-// 	}
-// };
+// -----> continuare a dividere routes da controller anche per altri file <-----

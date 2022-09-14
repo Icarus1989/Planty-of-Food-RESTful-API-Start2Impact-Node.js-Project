@@ -17,28 +17,17 @@ const app = express();
 // 	}
 // );
 
-router.get("/", async (req, res, next) => {
-	try {
-		const accounts = await User.find({});
-		res.json(accounts);
-	} catch (error) {
-		next(error);
-	}
-});
+const {
+	getAllUsers,
+	getOneUser,
+	postOneUser,
+	putOneUser,
+	deleteOneUser
+} = require("../controllers/userController");
 
-router.get("/:userid", async (req, res, next) => {
-	try {
-		const username = await req.params.userid;
-		console.log(username);
-		User.find({ username: username }, (err, data) => {
-			// gestire error
-			console.log(data);
-			res.json(data);
-		});
-	} catch (error) {
-		next(error);
-	}
-});
+router.get("/", getAllUsers);
+
+router.get("/:userid", getOneUser);
 
 router.post(
 	"/",
@@ -59,29 +48,7 @@ router.post(
 				.required()
 		})
 	}),
-	async (req, res, next) => {
-		try {
-			const data = await req.body;
-			const userExists = await User.findOne({
-				username: data["username"]
-			});
-			if (userExists == null) {
-				const newUser = new User(await data);
-				newUser.save((err, doc) => {
-					if (err) {
-						console.log(err);
-					}
-					res.json(newUser);
-				});
-			} else {
-				res.json({
-					message: `The user ${data["username"]} already exists.`
-				});
-			}
-		} catch (error) {
-			next(error);
-		}
-	}
+	postOneUser
 );
 
 router.put(
@@ -101,24 +68,7 @@ router.put(
 			)
 		})
 	}),
-	async (req, res, next) => {
-		try {
-			const username = await req.params.username;
-			const data = await req.body;
-			const userChanged = await User.findOneAndUpdate(
-				{
-					username: username
-				},
-				data,
-				{
-					new: true
-				}
-			);
-			res.json(userChanged);
-		} catch (error) {
-			next(error);
-		}
-	}
+	putOneUser
 );
 
 router.delete(
@@ -137,51 +87,24 @@ router.delete(
 			)
 		})
 	}),
-	async (req, res, next) => {
-		try {
-			const username = req.params.username;
-			const userRemoved = await User.findOneAndDelete({
-				username: username
-			});
-			res.json(userRemoved);
-		} catch (error) {
-			next(error);
-		}
-	}
+	deleteOneUser
 );
 
 // Delete all
-router.delete("/", (req, res) => {
-	try {
-		User.remove({}, (err, doc) => {
-			if (err) {
-				console.log(err);
-			}
-			res.json({
-				message: "All data removed."
-			});
-		});
-	} catch (error) {
-		next(error);
-	}
-});
+// router.delete("/", (req, res) => {
+// 	try {
+// 		User.remove({}, (err, doc) => {
+// 			if (err) {
+// 				console.log(err);
+// 			}
+// 			res.json({
+// 				message: "All data removed."
+// 			});
+// 		});
+// 	} catch (error) {
+// 		next(error);
+// 	}
+// });
 // Delete all
 
 module.exports = router;
-
-// body post = {
-// "firstname": "UserFromInsomnia",
-// "lastname": "from req.body",
-// "username": "User4",
-// "address": "test@request.com",
-// "orders": [
-// 	{
-// 		"orderid": "00008",
-// 		"url": "none"
-// 	}
-// ]
-// };
-
-// body put = {
-// 	"address": "userzero@testcode.com"
-// };

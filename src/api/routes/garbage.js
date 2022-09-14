@@ -1725,3 +1725,298 @@ if (query.filter && query.value == undefined) {
 // 		}
 // 	}
 // );
+
+// router.get("/", async (req, res, next) => {
+// 	try {
+// 		const savedProducts = await Product.find({});
+// 		res.json(savedProducts);
+// 	} catch (error) {
+// 		next(error);
+// 	}
+// });
+
+// router.get("/:prodId", async (req, res, next) => {
+// 	try {
+// 		const prodId = await req.params.prodId;
+// 		const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(
+// 			1
+// 		)}`;
+// 		Product.find({ name: label }, (err, data) => {
+// 			// gestire error con 404 o altro
+// 			res.json(data);
+// 		});
+// 	} catch (error) {
+// 		next(error);
+// 	}
+// });
+
+// router.post(
+// 	"/",
+// 	celebrate({
+// 		[Segments.BODY]: Joi.object({
+// 			name: Joi.string().required(),
+// 			quantity: Joi.number().integer().greater(0).required(),
+// 			origin: Joi.string().required(),
+// 			price: Joi.number().precision(2).required()
+// 		})
+// 	}),
+// 	async (req, res, next) => {
+// 		try {
+// 			const data = await req.body;
+// 			const productExists = await Product.findOne({
+// 				name: data["name"]
+// 			});
+// 			if (productExists == null) {
+// 				const newProduct = new Product(await data);
+// 				newProduct.save((err, doc) => {
+// 					if (err) {
+// 						console.log(err);
+// 					}
+// 					console.log("Data entered");
+// 				});
+// 				res.json(newProduct);
+// 			} else {
+// 				res.json({
+// 					message: `The product ${data["name"]} already exists.`
+// 				});
+// 			}
+// 		} catch (error) {
+// 			next(error);
+// 		}
+// 	}
+// );
+
+// router.put(
+// 	"/:prodId",
+// 	celebrate({
+// 		[Segments.BODY]: Joi.object({
+// 			name: Joi.string(),
+// 			quantity: Joi.number().integer().greater(0),
+// 			origin: Joi.string()
+// 		})
+// 	}),
+// 	async (req, res, next) => {
+// 		try {
+// 			const data = await req.body;
+// 			const prodId = await req.params.prodId;
+// 			const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(
+// 				1
+// 			)}`;
+// 			const productChanged = await Product.findOneAndUpdate(
+// 				{ name: label },
+// 				data,
+// 				{
+// 					new: true
+// 				}
+// 			);
+// 			res.json(productChanged);
+// 		} catch (error) {
+// 			next(error);
+// 		}
+// 	}
+// );
+
+// router.get("/", async (req, res, next) => {
+// 	try {
+// 		const accounts = await User.find({});
+// 		res.json(accounts);
+// 	} catch (error) {
+// 		next(error);
+// 	}
+// });
+
+// router.get("/:userid", async (req, res, next) => {
+// 	try {
+// 		const username = await req.params.userid;
+// 		console.log(username);
+// 		User.find({ username: username }, (err, data) => {
+// 			// gestire error
+// 			console.log(data);
+// 			res.json(data);
+// 		});
+// 	} catch (error) {
+// 		next(error);
+// 	}
+// });
+
+// router.post(
+// 	"/",
+// 	celebrate({
+// 		[Segments.BODY]: Joi.object({
+// 			firstname: Joi.string().required(),
+// 			lastname: Joi.string().required(),
+// 			username: Joi.string().required(),
+// 			address: Joi.string().email().required(),
+// 			// createdAt: Joi.date().default(Date.now).required(),
+// 			orders: Joi.array()
+// 				.items(
+// 					Joi.object({
+// 						orderid: Joi.string().required(),
+// 						url: Joi.string().required()
+// 					})
+// 				)
+// 				.required()
+// 		})
+// 	}),
+// 	async (req, res, next) => {
+// 		try {
+// 			const data = await req.body;
+// 			const userExists = await User.findOne({
+// 				username: data["username"]
+// 			});
+// 			if (userExists == null) {
+// 				const newUser = new User(await data);
+// 				newUser.save((err, doc) => {
+// 					if (err) {
+// 						console.log(err);
+// 					}
+// 					res.json(newUser);
+// 				});
+// 			} else {
+// 				res.json({
+// 					message: `The user ${data["username"]} already exists.`
+// 				});
+// 			}
+// 		} catch (error) {
+// 			next(error);
+// 		}
+// 	}
+// );
+
+// router.put(
+// 	"/:username",
+// 	celebrate({
+// 		[Segments.BODY]: Joi.object({
+// 			firstname: Joi.string(),
+// 			lastname: Joi.string(),
+// 			username: Joi.string().required(),
+// 			address: Joi.string().email(),
+// 			// createdAt: Joi.date().default(Date.now).required(),
+// 			orders: Joi.array().items(
+// 				Joi.object({
+// 					orderid: Joi.string(),
+// 					url: Joi.string()
+// 				})
+// 			)
+// 		})
+// 	}),
+// 	async (req, res, next) => {
+// 		try {
+// 			const username = await req.params.username;
+// 			const data = await req.body;
+// 			const userChanged = await User.findOneAndUpdate(
+// 				{
+// 					username: username
+// 				},
+// 				data,
+// 				{
+// 					new: true
+// 				}
+// 			);
+// 			res.json(userChanged);
+// 		} catch (error) {
+// 			next(error);
+// 		}
+// 	}
+// );
+
+// router.delete(
+// 	"/:username",
+// 	celebrate({
+// 		[Segments.BODY]: Joi.object({
+// 			firstname: Joi.string(),
+// 			lastname: Joi.string(),
+// 			username: Joi.string().required(),
+// 			address: Joi.string().email(),
+// 			orders: Joi.array().items(
+// 				Joi.object({
+// 					orderid: Joi.string(),
+// 					url: Joi.string()
+// 				})
+// 			)
+// 		})
+// 	}),
+// 	async (req, res, next) => {
+// 		try {
+// 			const username = req.params.username;
+// 			const userRemoved = await User.findOneAndDelete({
+// 				username: username
+// 			});
+// 			res.json(userRemoved);
+// 		} catch (error) {
+// 			next(error);
+// 		}
+// 	}
+// );
+
+// -------- from test index.js -----------
+
+// describe("61529619", () => {
+// 	it("should pass", () => {
+// 		const routerStub = {
+// 			// route: sinon.stub().returnsThis(),
+// 			post: sinon.stub(router, "post").returnsThis(),
+// 			get: sinon.stub(router, "get").returnsThis(),
+// 			put: sinon.stub(router, "put").returnsThis(),
+// 			delete: sinon.stub(router, "delete").returnsThis()
+// 		};
+// 		sinon.stub(express, "Router").callsFake(() => routerStub);
+// 		// require("./router");
+// 		// sinon.assert.calledWith(routerStub.route, "/");
+// 		// sinon.assert.calledWith(routerStub.route, "/:id");
+// 		sinon.assert.calledWith(routerStub.get, "/orders-archieve/");
+// 		sinon.assert.calledWith(routerStub.post, "/orders-archieve/");
+// 		sinon.assert.calledWith(routerStub.put, "/orders-archieve/");
+// 		sinon.assert.calledWith(routerStub.delete, "/orders-archieve/");
+// 	});
+// });
+
+// <---- provare ad aggiungere per post get put delete .yields per...
+// aggiungere arguments
+
+// describe("test classes", async () => {
+// 	const sandbox = sinon.createSandbox();
+// 	before(() => {
+// 		const stub = sinon
+// 			.stub(router, "get")
+// 			.yields(
+// 				{ params: testProdGet },
+// 				JSON.stringify({ name: "Strawberries", quantity: 23, price: 20.23 }),
+// 				null
+// 			);
+// 	});
+// before(() => {
+// 	const stub = sinon.createStubInstance(OrderManagerClass);
+// 	// console.log(stub);
+// 	// stub.parametersHandling();
+
+// 	// sandbox.spy(OrderManagerClass);
+// 	// sandbox.spy(ProductUpdaterClass);
+// 	// sandbox.spy(UserUpdaterClass);
+// });
+// it("Should test OrderManagerClass", () => {
+// 	router.get("/orders-archieve/", (req, res, next) => {
+// 		const orderManager = new OrderManagerClass(
+// 			res,
+// 			res,
+// 			"productname",
+// 			"strawberries",
+// 			"orderid",
+// 			"decreasing"
+// 		);
+// 		orderManager.parametersHandling();
+// 	});
+// });
+// it('should respond with JSON data', function (done) {
+// const testProdGet = "Strawberries";
+
+// request(router)
+//   .get(`/orders-archieve/${testProdGet}`)
+//   .expect(200)
+//   .end(function (err, response) {
+//     assert.equal(response.header['content-type'], 'application/json; charset=utf-8');
+//     assert.deepEqual(response.body, { name: "Strawberries", quantity: 23, price: 20.23 });
+// 		done();
+
+//   });
+// });

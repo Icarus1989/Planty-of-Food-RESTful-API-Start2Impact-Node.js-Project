@@ -4,6 +4,14 @@ const mongoose = require("mongoose");
 const Product = require("../models/Product");
 const { celebrate, Joi, errors, Segments } = require("celebrate");
 
+const {
+	getAllProducts,
+	getOneProduct,
+	postOneProduct,
+	putOneProduct,
+	deleteOneProduct
+} = require("../controllers/productController");
+
 const router = express.Router();
 const app = express();
 
@@ -17,29 +25,9 @@ const app = express();
 // 	}
 // );
 
-router.get("/", async (req, res, next) => {
-	try {
-		const savedProducts = await Product.find({});
-		res.json(savedProducts);
-	} catch (error) {
-		next(error);
-	}
-});
+router.get("/", getAllProducts);
 
-router.get("/:prodId", async (req, res, next) => {
-	try {
-		const prodId = await req.params.prodId;
-		const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(
-			1
-		)}`;
-		Product.find({ name: label }, (err, data) => {
-			// gestire error con 404 o altro
-			res.json(data);
-		});
-	} catch (error) {
-		next(error);
-	}
-});
+router.get("/:prodId", getOneProduct);
 
 router.post(
 	"/",
@@ -51,30 +39,7 @@ router.post(
 			price: Joi.number().precision(2).required()
 		})
 	}),
-	async (req, res, next) => {
-		try {
-			const data = await req.body;
-			const productExists = await Product.findOne({
-				name: data["name"]
-			});
-			if (productExists == null) {
-				const newProduct = new Product(await data);
-				newProduct.save((err, doc) => {
-					if (err) {
-						console.log(err);
-					}
-					console.log("Data entered");
-				});
-				res.json(newProduct);
-			} else {
-				res.json({
-					message: `The product ${data["name"]} already exists.`
-				});
-			}
-		} catch (error) {
-			next(error);
-		}
-	}
+	postOneProduct
 );
 
 router.put(
@@ -86,25 +51,7 @@ router.put(
 			origin: Joi.string()
 		})
 	}),
-	async (req, res, next) => {
-		try {
-			const data = await req.body;
-			const prodId = await req.params.prodId;
-			const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(
-				1
-			)}`;
-			const productChanged = await Product.findOneAndUpdate(
-				{ name: label },
-				data,
-				{
-					new: true
-				}
-			);
-			res.json(productChanged);
-		} catch (error) {
-			next(error);
-		}
-	}
+	putOneProduct
 );
 
 router.delete(
@@ -116,48 +63,24 @@ router.delete(
 			origin: Joi.string()
 		})
 	}),
-	async (req, res, next) => {
-		try {
-			const prodId = req.params.prodId;
-			const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(
-				1
-			)}`;
-			const productRemoved = await Product.findOneAndDelete({
-				name: label
-			});
-			res.json(productRemoved);
-		} catch (error) {
-			next(error);
-		}
-	}
+	deleteOneProduct
 );
 
 // Delete all
-router.delete("/", (req, res, next) => {
-	try {
-		Product.remove({}, (err, doc) => {
-			if (err) {
-				console.log(err);
-			}
-			res.json({
-				message: "All data removed."
-			});
-		});
-	} catch (error) {
-		next(error);
-	}
-});
+// router.delete("/", (req, res, next) => {
+// 	try {
+// 		Product.remove({}, (err, doc) => {
+// 			if (err) {
+// 				console.log(err);
+// 			}
+// 			res.json({
+// 				message: "All data removed."
+// 			});
+// 		});
+// 	} catch (error) {
+// 		next(error);
+// 	}
+// });
 // Delete all
 
 module.exports = router;
-
-// body post =
-// {
-// // 	name: "Bananas",
-// // 	quantity: 50,
-// // 	origin: "Brazil"
-// // };
-
-// body put = {
-// 	quantity: 56
-// };

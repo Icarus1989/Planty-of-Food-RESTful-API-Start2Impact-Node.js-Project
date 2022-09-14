@@ -26,6 +26,14 @@ const {
 	deleteOneOrder
 } = require("../src/api/controllers/orderController");
 
+const {
+	getAllProducts,
+	getOneProduct,
+	postOneProduct,
+	putOneProduct,
+	deleteOneProduct
+} = require("../src/api/controllers/productController");
+
 // <---- provare ad inserire le chiamate delle funzioni (es getAllOrders) nei test
 
 // ----------- Product tests
@@ -33,76 +41,6 @@ const {
 const testProdPut = "Strawberries";
 const newQuantity = 23;
 const testProdDelete = "Strawberries";
-
-// describe("61529619", () => {
-// 	it("should pass", () => {
-// 		const routerStub = {
-// 			// route: sinon.stub().returnsThis(),
-// 			post: sinon.stub(router, "post").returnsThis(),
-// 			get: sinon.stub(router, "get").returnsThis(),
-// 			put: sinon.stub(router, "put").returnsThis(),
-// 			delete: sinon.stub(router, "delete").returnsThis()
-// 		};
-// 		sinon.stub(express, "Router").callsFake(() => routerStub);
-// 		// require("./router");
-// 		// sinon.assert.calledWith(routerStub.route, "/");
-// 		// sinon.assert.calledWith(routerStub.route, "/:id");
-// 		sinon.assert.calledWith(routerStub.get, "/orders-archieve/");
-// 		sinon.assert.calledWith(routerStub.post, "/orders-archieve/");
-// 		sinon.assert.calledWith(routerStub.put, "/orders-archieve/");
-// 		sinon.assert.calledWith(routerStub.delete, "/orders-archieve/");
-// 	});
-// });
-
-// <---- provare ad aggiungere per post get put delete .yields per...
-// aggiungere arguments
-
-// describe("test classes", async () => {
-// 	const sandbox = sinon.createSandbox();
-// 	before(() => {
-// 		const stub = sinon
-// 			.stub(router, "get")
-// 			.yields(
-// 				{ params: testProdGet },
-// 				JSON.stringify({ name: "Strawberries", quantity: 23, price: 20.23 }),
-// 				null
-// 			);
-// 	});
-// before(() => {
-// 	const stub = sinon.createStubInstance(OrderManagerClass);
-// 	// console.log(stub);
-// 	// stub.parametersHandling();
-
-// 	// sandbox.spy(OrderManagerClass);
-// 	// sandbox.spy(ProductUpdaterClass);
-// 	// sandbox.spy(UserUpdaterClass);
-// });
-// it("Should test OrderManagerClass", () => {
-// 	router.get("/orders-archieve/", (req, res, next) => {
-// 		const orderManager = new OrderManagerClass(
-// 			res,
-// 			res,
-// 			"productname",
-// 			"strawberries",
-// 			"orderid",
-// 			"decreasing"
-// 		);
-// 		orderManager.parametersHandling();
-// 	});
-// });
-// it('should respond with JSON data', function (done) {
-// const testProdGet = "Strawberries";
-
-// request(router)
-//   .get(`/orders-archieve/${testProdGet}`)
-//   .expect(200)
-//   .end(function (err, response) {
-//     assert.equal(response.header['content-type'], 'application/json; charset=utf-8');
-//     assert.deepEqual(response.body, { name: "Strawberries", quantity: 23, price: 20.23 });
-// 		done();
-
-//   });
-// });
 
 describe("Stub router product Get All", async () => {
 	before(() => {
@@ -137,9 +75,11 @@ describe("Stub router product Get All", async () => {
 		router.get("/products-storage/", (req, res, next) => {
 			expect("Content-Type", /json/);
 			expect(200);
+
 			// importante
 			sinon.assert.calledWith(router.get, "/products-storage/");
 			// importante
+			getAllProducts(req, res, next);
 
 			assert.isArray(JSON.parse(res).body);
 			assert.match(
@@ -195,6 +135,7 @@ describe("Stub router product Get One", async () => {
 
 			expect("Content-Type", /json/);
 			expect(200);
+			getOneProduct(req, res, next);
 			assert.match(JSON.parse(res), { name: testProdGet });
 			expect(JSON.parse(res)).to.have.property("name");
 			expect(JSON.parse(res)).to.have.property("quantity");
@@ -230,6 +171,7 @@ describe("Stub router product Post", async () => {
 			sinon.assert.calledWith(router.post, "/products-storage/");
 			expect("Content-Type", /json/);
 			expect(200);
+			postOneProduct(req, res, next);
 			assert.match(JSON.parse(res), {
 				name: "Strawberries",
 				quantity: 23,
@@ -270,6 +212,7 @@ describe("Stub router product Put", async () => {
 			sinon.assert.calledWith(router.put, `/products-storage/${testProdPut}`);
 			expect("Content-Type", /json/);
 			expect(200);
+			putOneProduct(req, res, next);
 			assert.match(JSON.parse(res), {
 				name: "Strawberries",
 				quantity: 23,
@@ -307,6 +250,7 @@ describe("Stub router product Delete One", async () => {
 			);
 			expect("Content-Type", /json/);
 			expect(200);
+			deleteOneProduct(req, res, next);
 			assert.match(JSON.parse(res), {
 				message: "Field delete."
 			});
