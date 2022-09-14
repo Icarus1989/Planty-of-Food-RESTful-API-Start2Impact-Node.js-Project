@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const { celebrate, Joi, errors, Segments } = require("celebrate");
 const router = express.Router();
-const app = express();
+// const app = express();
 
 // mongoose.connect(
 // 	`mongodb://localhost:27017/PoFTestDatabase`,

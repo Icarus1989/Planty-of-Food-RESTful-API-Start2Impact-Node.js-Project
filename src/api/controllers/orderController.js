@@ -44,7 +44,7 @@ async function getOneOrder(req, res, next) {
 					message: `${orderId} not exists`
 				});
 			} else {
-				res.json(data);
+				res.status(200).json(data);
 			}
 		});
 	} catch (error) {

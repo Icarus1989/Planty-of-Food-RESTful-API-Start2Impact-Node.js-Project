@@ -13,7 +13,7 @@ const {
 } = require("../controllers/productController");
 
 const router = express.Router();
-const app = express();
+// const app = express();
 
 // mongoose.connect(
 // 	`mongodb://localhost:27017/PoFTestDatabase`,

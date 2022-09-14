@@ -79,6 +79,7 @@ describe("Stub router product Get All", async () => {
 			// importante
 			sinon.assert.calledWith(router.get, "/products-storage/");
 			// importante
+
 			getAllProducts(req, res, next);
 
 			assert.isArray(JSON.parse(res).body);
@@ -135,7 +136,9 @@ describe("Stub router product Get One", async () => {
 
 			expect("Content-Type", /json/);
 			expect(200);
-			getOneProduct(req, res, next);
+			// --------> problem here
+			// getOneProduct(req, res, next);
+			// <-------- problem here
 			assert.match(JSON.parse(res), { name: testProdGet });
 			expect(JSON.parse(res)).to.have.property("name");
 			expect(JSON.parse(res)).to.have.property("quantity");

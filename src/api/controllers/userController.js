@@ -20,7 +20,7 @@ async function getOneUser(req, res, next) {
 		User.find({ username: username }, (err, data) => {
 			// gestire error
 			console.log(data);
-			res.json(data);
+			res.status(200).json(data);
 		});
 	} catch (error) {
 		next(error);

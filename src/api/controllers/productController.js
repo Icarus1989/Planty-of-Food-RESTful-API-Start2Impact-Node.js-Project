@@ -4,11 +4,11 @@ const Order = require("../models/Order");
 const Product = require("../models/Product");
 const User = require("../models/User");
 
-// const {
-// 	OrderManagerClass,
-// 	ProductUpdaterClass,
-// 	UserUpdaterClass
-// } = require("../routes/classes");
+const {
+	OrderManagerClass,
+	ProductUpdaterClass,
+	UserUpdaterClass
+} = require("../routes/classes");
 
 async function getAllProducts(req, res, next) {
 	try {
