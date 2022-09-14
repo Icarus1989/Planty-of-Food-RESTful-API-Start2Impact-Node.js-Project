@@ -1,0 +1,171 @@
+const express = require("express");
+
+const Order = require("../models/Order");
+const Product = require("../models/Product");
+const User = require("../models/User");
+
+const {
+	OrderManagerClass,
+	ProductUpdaterClass,
+	UserUpdaterClass
+} = require("../routes/classes");
+
+async function getAllOrders(req, res, next) {
+	try {
+		const query = req.query;
+		let savedOrders = await Order.find({});
+
+		const orderManager = new OrderManagerClass(
+			res,
+			savedOrders,
+			query.filter,
+			query.value,
+			query.orderby,
+			query.sort
+		);
+
+		orderManager.parametersHandling();
+	} catch (error) {
+		next(error);
+	}
+}
+
+async function getOneOrder(req, res, next) {
+	try {
+		const orderNumber = req.params.ordNum;
+		const orderId = `order${String(orderNumber)}`;
+		Order.findOne({ orderid: orderId }, (err, data) => {
+			if (err) {
+				res.status(200).json({
+					message: `Error in searching ${orderId}`
+				});
+			} else if (data == null) {
+				res.status(200).json({
+					message: `${orderId} not exists`
+				});
+			} else {
+				res.json(data);
+			}
+		});
+	} catch (error) {
+		next(error);
+	}
+}
+
+async function postOneOrder(req, res, next) {
+	if (!req.body) {
+		res.status(200).json({
+			message: `For post an order please use this JSON structure in the request body: {
+				"orderid": String,
+				"users": [
+					{
+						"username": String,
+						"products": [
+							{
+								"productname": String,
+								"quantity": Number
+							}
+						],
+						"cost": Number (Automatically added)
+					}
+				],
+				"totalcost": Number (Automatically added),
+				"shipped": Boolean,
+				"date": (Automatically added)
+			}`
+		});
+	}
+	try {
+		const data = await req.body;
+
+		const prodUpdater = new ProductUpdaterClass(data, Product, Order, res);
+		const userUpdater = new UserUpdaterClass(data, User, Order, res);
+
+		const orderExists = await prodUpdater.orderExistsCheck();
+		const existCheck = await userUpdater.usersExistCheck();
+
+		if (Object.keys(existCheck).length > 0) {
+			res.status(200).json(existCheck);
+		} else if (orderExists !== null) {
+			res.status(200).json({
+				message: "OrderId already exists"
+			});
+		} else {
+			await prodUpdater.searchProd();
+			await prodUpdater.createResults();
+			const numOfErrs = await prodUpdater.createNewOrder();
+			if (numOfErrs == 0) {
+				await userUpdater.updateAccountsNewOrder();
+			} else if (numOfErrs > 0) {
+				return;
+			}
+		}
+
+		// Qui possibile Ric...
+	} catch (error) {
+		res.status(404).json({ message: "Problem occured" });
+		next(error);
+	}
+}
+
+async function putOneOrder(req, res, next) {
+	try {
+		const orderNumber = await req.params.ordNum;
+		const orderId = `order${String(orderNumber)}`;
+		const orderRemoved = await Order.findOneAndDelete({ orderid: orderId });
+
+		const userUpdater = new UserUpdaterClass(
+			await orderRemoved,
+			User,
+			Order,
+			res
+		);
+		const prodUpdater = new ProductUpdaterClass(
+			await orderRemoved,
+			Product,
+			Order,
+			res
+		);
+		const updates = await userUpdater.updateAccountsDelOrder();
+		const restores = await prodUpdater.restoreQuantities();
+
+		res.status(200).json(orderRemoved);
+	} catch (error) {
+		next(error);
+	}
+}
+
+async function deleteOneOrder(req, res, next) {
+	try {
+		const orderNumber = await req.params.ordNum;
+		const orderId = `order${String(orderNumber)}`;
+		const orderRemoved = await Order.findOneAndDelete({ orderid: orderId });
+
+		const userUpdater = new UserUpdaterClass(
+			await orderRemoved,
+			User,
+			Order,
+			res
+		);
+		const prodUpdater = new ProductUpdaterClass(
+			await orderRemoved,
+			Product,
+			Order,
+			res
+		);
+		const updates = await userUpdater.updateAccountsDelOrder();
+		const restores = await prodUpdater.restoreQuantities();
+
+		res.status(200).json(orderRemoved);
+	} catch (error) {
+		next(error);
+	}
+}
+
+module.exports = {
+	getAllOrders,
+	getOneOrder,
+	postOneOrder,
+	putOneOrder,
+	deleteOneOrder
+};

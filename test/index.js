@@ -4,7 +4,105 @@ const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 const { expect } = require("chai");
 
+const express = require("express");
+
+// const ordersRoutes = require('../src/api/routes/orders')
+
+const Order = require("../src/api/models/Order");
+const Product = require("../src/api/models/Product");
+const User = require("../src/api/models/User");
+
+const {
+	OrderManagerClass,
+	ProductUpdaterClass,
+	UserUpdaterClass
+} = require("../src/api/routes/classes");
+
+const {
+	getAllOrders,
+	getOneOrder,
+	postOneOrder,
+	putOneOrder,
+	deleteOneOrder
+} = require("../src/api/controllers/orderController");
+
+// <---- provare ad inserire le chiamate delle funzioni (es getAllOrders) nei test
+
 // ----------- Product tests
+
+const testProdPut = "Strawberries";
+const newQuantity = 23;
+const testProdDelete = "Strawberries";
+
+// describe("61529619", () => {
+// 	it("should pass", () => {
+// 		const routerStub = {
+// 			// route: sinon.stub().returnsThis(),
+// 			post: sinon.stub(router, "post").returnsThis(),
+// 			get: sinon.stub(router, "get").returnsThis(),
+// 			put: sinon.stub(router, "put").returnsThis(),
+// 			delete: sinon.stub(router, "delete").returnsThis()
+// 		};
+// 		sinon.stub(express, "Router").callsFake(() => routerStub);
+// 		// require("./router");
+// 		// sinon.assert.calledWith(routerStub.route, "/");
+// 		// sinon.assert.calledWith(routerStub.route, "/:id");
+// 		sinon.assert.calledWith(routerStub.get, "/orders-archieve/");
+// 		sinon.assert.calledWith(routerStub.post, "/orders-archieve/");
+// 		sinon.assert.calledWith(routerStub.put, "/orders-archieve/");
+// 		sinon.assert.calledWith(routerStub.delete, "/orders-archieve/");
+// 	});
+// });
+
+// <---- provare ad aggiungere per post get put delete .yields per...
+// aggiungere arguments
+
+// describe("test classes", async () => {
+// 	const sandbox = sinon.createSandbox();
+// 	before(() => {
+// 		const stub = sinon
+// 			.stub(router, "get")
+// 			.yields(
+// 				{ params: testProdGet },
+// 				JSON.stringify({ name: "Strawberries", quantity: 23, price: 20.23 }),
+// 				null
+// 			);
+// 	});
+// before(() => {
+// 	const stub = sinon.createStubInstance(OrderManagerClass);
+// 	// console.log(stub);
+// 	// stub.parametersHandling();
+
+// 	// sandbox.spy(OrderManagerClass);
+// 	// sandbox.spy(ProductUpdaterClass);
+// 	// sandbox.spy(UserUpdaterClass);
+// });
+// it("Should test OrderManagerClass", () => {
+// 	router.get("/orders-archieve/", (req, res, next) => {
+// 		const orderManager = new OrderManagerClass(
+// 			res,
+// 			res,
+// 			"productname",
+// 			"strawberries",
+// 			"orderid",
+// 			"decreasing"
+// 		);
+// 		orderManager.parametersHandling();
+// 	});
+// });
+// it('should respond with JSON data', function (done) {
+// const testProdGet = "Strawberries";
+
+// request(router)
+//   .get(`/orders-archieve/${testProdGet}`)
+//   .expect(200)
+//   .end(function (err, response) {
+//     assert.equal(response.header['content-type'], 'application/json; charset=utf-8');
+//     assert.deepEqual(response.body, { name: "Strawberries", quantity: 23, price: 20.23 });
+// 		done();
+
+//   });
+// });
 
 describe("Stub router product Get All", async () => {
 	before(() => {
@@ -31,11 +129,18 @@ describe("Stub router product Get All", async () => {
 			}),
 			null
 		);
+		// .callsFake(() => {
+		// 	sinon.stub().returnsThis();
+		// });
 	});
 	it("Stub for product router get (all)", async () => {
 		router.get("/products-storage/", (req, res, next) => {
 			expect("Content-Type", /json/);
 			expect(200);
+			// importante
+			sinon.assert.calledWith(router.get, "/products-storage/");
+			// importante
+
 			assert.isArray(JSON.parse(res).body);
 			assert.match(
 				JSON.parse(res).body,
@@ -86,6 +191,8 @@ describe("Stub router product Get One", async () => {
 	});
 	it("Stub for product router get (one)", async () => {
 		router.get(`/products-storage/${testProdGet}`, (req, res, next) => {
+			sinon.assert.calledWith(router.get, `/products-storage/${testProdGet}`);
+
 			expect("Content-Type", /json/);
 			expect(200);
 			assert.match(JSON.parse(res), { name: testProdGet });
@@ -120,6 +227,7 @@ describe("Stub router product Post", async () => {
 	});
 	it("Stub for product router post", async () => {
 		router.post("/products-storage/", async (req, res, next) => {
+			sinon.assert.calledWith(router.post, "/products-storage/");
 			expect("Content-Type", /json/);
 			expect(200);
 			assert.match(JSON.parse(res), {
@@ -159,6 +267,7 @@ describe("Stub router product Put", async () => {
 	});
 	it("Stub for product router put", async () => {
 		router.put("/products-storage/Strawberries", (req, res, next) => {
+			sinon.assert.calledWith(router.put, `/products-storage/${testProdPut}`);
 			expect("Content-Type", /json/);
 			expect(200);
 			assert.match(JSON.parse(res), {
@@ -192,6 +301,10 @@ describe("Stub router product Delete One", async () => {
 	});
 	it("Stub for product router delete", () => {
 		router.delete("/products-storage/Strawberries", (req, res, next) => {
+			sinon.assert.calledWith(
+				router.delete,
+				`/products-storage/${testProdDelete}`
+			);
 			expect("Content-Type", /json/);
 			expect(200);
 			assert.match(JSON.parse(res), {
@@ -555,8 +668,92 @@ describe("Stub router order Get All", async () => {
 	});
 	it("Stub for router order get (all)", async () => {
 		router.get("/orders-archieve/", (req, res, next) => {
+			const orderManager = new OrderManagerClass(
+				res,
+				res,
+				"productname",
+				"strawberries",
+				"orderid",
+				"decreasing"
+			);
+			orderManager.parametersHandling();
+			const secondOrderManager = new OrderManagerClass(
+				res,
+				res,
+				"productname",
+				"strawberries",
+				"orderid",
+				undefined
+			);
+			secondOrderManager.parametersHandling();
+
+			const thirdOrderManager = new OrderManagerClass(
+				res,
+				res,
+				undefined,
+				undefined,
+				undefined,
+				undefined
+			);
+			thirdOrderManager.parametersHandling();
+
+			const fourthOrderManager = new OrderManagerClass(
+				res,
+				res,
+				"productname",
+				undefined,
+				"orderid",
+				"increasing"
+			);
+			fourthOrderManager.noProducts();
+			fourthOrderManager.parametersHandling();
+
+			const fifthOrderManager = new OrderManagerClass(
+				res,
+				res,
+				"shipped",
+				true,
+				"orderid",
+				"increasing"
+			);
+			fifthOrderManager.parametersHandling();
+
+			const sixthOrderManager = new OrderManagerClass(
+				res,
+				res,
+				"orderid",
+				"order00001",
+				"orderid",
+				"increasing"
+			);
+			sixthOrderManager.parametersHandling();
+
+			const seventhOrderManager = new OrderManagerClass(
+				res,
+				res,
+				"date",
+				"2022-09-06T21:55:50.076+00:00",
+				"orderid",
+				"decreasing"
+			);
+			seventhOrderManager.parametersHandling();
+
+			const eightOrderManager = new OrderManagerClass(
+				res,
+				res,
+				"date",
+				"2022-09-06T21:55:50.076+00:00",
+				undefined,
+				undefined
+			);
+			eightOrderManager.parametersHandling();
+
 			expect("Content-Type", /json/);
 			expect(200);
+			// expect(res.statusCode).to.equal(200);
+
+			getAllOrders(req, res, next);
+
 			assert.isArray(JSON.parse(res).body);
 			assert.match(
 				JSON.parse(res).body,
@@ -655,7 +852,10 @@ describe("Stub router order Get One", async () => {
 	it("Stub for order router get (one)", async () => {
 		router.get(`/orders-archieve/${testOrderGet}`, async (req, res, next) => {
 			expect("Content-Type", /json/);
-			expect(200);
+			// expect(200);
+			expect(res.statusCode).to.equal(200);
+			getOneOrder(req, res, next);
+
 			assert.match(JSON.parse(res), {
 				orderid: "order000001",
 				users: [
@@ -740,7 +940,25 @@ describe("Stub router order Post", async () => {
 		);
 	});
 	it("Stub for order router post", async () => {
-		router.post("/orders-archieve/", async (req, res, next) => {
+		router.post("/orders-archieve/", (req, res, next) => {
+			postOneOrder(req, res, next);
+			const prodUpdater = new ProductUpdaterClass(
+				req.body,
+				Product,
+				Order,
+				res
+			);
+			const orderExists = prodUpdater.orderExistsCheck();
+			const userUpdater = new UserUpdaterClass(req.body, User, Order, res);
+			const existCheck = userUpdater.usersExistCheck();
+			// console.log(existCheck);
+			// console.log("Testing");
+			prodUpdater.searchProd();
+			const results = prodUpdater.createResults();
+			const numOfErrs = prodUpdater.createNewOrder();
+			const orderUpdater = userUpdater.updateAccountsNewOrder();
+			// console.log(orderUpdater);
+
 			expect("Content-Type", /json/);
 			expect(200);
 			assert.match(JSON.parse(res), {
@@ -808,6 +1026,7 @@ describe("Stub router order Put", async () => {
 	});
 	it("Stub for order router put", async () => {
 		router.put(`/orders-archieve/${testOrderPut}`, async (req, res, next) => {
+			putOneOrder(req, res, next);
 			assert.match(JSON.parse(res), {
 				orderid: "order00001",
 				users: [
@@ -854,6 +1073,16 @@ describe("Stub router order Delete One", async () => {
 	});
 	it("Stub for user router delete", async () => {
 		router.delete(`/orders-archieve/${testOrderDelete}`, (req, res, next) => {
+			deleteOneOrder(req, res, next);
+			const prodUpdater = new ProductUpdaterClass(
+				req.body,
+				Product,
+				Order,
+				res
+			);
+			const userUpdater = new UserUpdaterClass(req.body, User, Order, res);
+			userUpdater.updateAccountsDelOrder();
+			prodUpdater.restoreQuantities();
 			expect("Content-Type", /json/);
 			expect(200);
 			assert.match(JSON.parse(res), {
