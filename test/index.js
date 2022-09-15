@@ -940,9 +940,9 @@ describe("Stub router order Post", async () => {
 			);
 			// const stubOne = sinon.stub(prodUpdater, "orderExistsCheck").resolves();
 			// stub(prodUpdater, "orderExistsCheck").callsFake();
-			const prodUpStub = sinon.createStubInstance(ProductUpdaterClass);
+			// const prodUpStub = sinon.createStubInstance(ProductUpdaterClass);
 
-			// const ordCheck = await prodUpdater.orderExistsCheck();
+			const ordCheck = await prodUpdater.orderExistsCheck();
 			const userUpdater = new UserUpdaterClass(req.body, User, Order, res);
 			// const stubTwo = sinon.stub(userUpdater, "usersExistCheck").resolves();
 			const userCheck = await userUpdater.usersExistCheck();
