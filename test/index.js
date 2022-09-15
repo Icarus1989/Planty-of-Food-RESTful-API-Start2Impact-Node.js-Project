@@ -962,7 +962,29 @@ describe("Stub router order Post", async () => {
 			// 	];
 			// });
 
-			prodUpdater.searchProd();
+			prodUpdater.searchProd().then(() => {
+				sinon.assert.match(JSON.parse(res), {
+					orderid: "order000001",
+					users: [
+						{
+							username: "UserOne",
+							products: [
+								{
+									productname: "Watermelon",
+									quantity: 23
+								},
+								{
+									productname: "Strawberries",
+									quantity: 23
+								}
+							]
+						}
+					],
+					shipped: false,
+					date: "2022-09-06T21:55:50.076+00:00",
+					totalcost: 2000
+				});
+			});
 			const results = await prodUpdater.createResults();
 			const numOfErrs = await prodUpdater.createNewOrder();
 			const orderUpdater = await userUpdater.updateAccountsNewOrder();
