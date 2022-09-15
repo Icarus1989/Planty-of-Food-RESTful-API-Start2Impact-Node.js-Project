@@ -34,6 +34,14 @@ const {
 	deleteOneProduct
 } = require("../src/api/controllers/productController");
 
+const {
+	getAllUsers,
+	getOneUser,
+	postOneUser,
+	putOneUser,
+	deleteOneUser
+} = require("../src/api/controllers/userController");
+
 // <---- provare ad inserire le chiamate delle funzioni (es getAllOrders) nei test
 
 // ----------- Product tests
@@ -119,29 +127,54 @@ describe("Stub router product Get All", async () => {
 	});
 });
 
-describe("Stub router product Get One", async () => {
-	const testProdGet = "Strawberries";
+describe("Stub router product Get One", () => {
+	const testProdGet = "strawberries";
 	before(() => {
-		const stub = sinon
-			.stub(router, "get")
-			.yields(
-				{ params: testProdGet },
-				JSON.stringify({ name: "Strawberries", quantity: 23, price: 20.23 }),
-				null
-			);
+		// const stub = sinon
+		// 	.stub(router, "get")
+		// 	.yields(
+		// 		{ params: testProdGet },
+		// 		JSON.stringify({ name: testProdGet, quantity: 23, price: 20.23 }),
+		// 		null
+		// 	);
+
+		const stub = sinon.stub(router, "get").yields(
+			{ params: testProdGet },
+			JSON.stringify({
+				name: testProdGet,
+				quantity: 23,
+				origin: "Italy",
+				price: 20.23
+			}),
+			null
+		);
 	});
 	it("Stub for product router get (one)", async () => {
-		router.get(`/products-storage/${testProdGet}`, (req, res, next) => {
-			sinon.assert.calledWith(router.get, `/products-storage/${testProdGet}`);
+		router.get(`/products-storage/${testProdGet}`, async (req, res, next) => {
+			// expect("Content-Type", /json/);
+			// expect(200);
+			// expect(res.statusCode).to.equal(200);
 
 			expect("Content-Type", /json/);
 			expect(200);
+			// expect(res.statusCode).to.equal(200);
+
 			// --------> problem here
-			// getOneProduct(req, res, next);
+			sinon.assert.calledWith(router.get, `/products-storage/${testProdGet}`);
+			getOneProduct(req, res, next);
+
 			// <-------- problem here
-			assert.match(JSON.parse(res), { name: testProdGet });
+
+			assert.match(JSON.parse(res), {
+				name: "strawberries",
+				quantity: 23,
+				origin: "Italy",
+				price: 20.23
+			});
+
 			expect(JSON.parse(res)).to.have.property("name");
 			expect(JSON.parse(res)).to.have.property("quantity");
+			expect(JSON.parse(res)).to.have.property("origin");
 			expect(JSON.parse(res)).to.have.property("price");
 		});
 	});
@@ -158,12 +191,14 @@ describe("Stub router product Post", async () => {
 				body: JSON.stringify({
 					name: "Strawberries",
 					quantity: 23,
+					origin: "Italy",
 					price: 10.23
 				})
 			},
 			JSON.stringify({
 				name: "Strawberries",
 				quantity: 23,
+				origin: "Italy",
 				price: 10.23
 			}),
 			null
@@ -320,6 +355,7 @@ describe("Stub router user Get All", async () => {
 		router.get("/users/", (req, res, next) => {
 			expect("Content-Type", /json/);
 			expect(200);
+			getAllUsers(req, res, next);
 			assert.isArray(JSON.parse(res).body);
 			assert.match(
 				JSON.parse(res).body,
@@ -404,6 +440,8 @@ describe("Stub router user Get One", async () => {
 		router.get(`/users/${testUserGet}`, async (req, res, next) => {
 			expect("Content-Type", /json/);
 			expect(200);
+			// stesso problema precedente
+			// getOneUser(req, res, next);
 			assert.match(JSON.parse(res), { username: testUserGet });
 			expect(JSON.parse(res)).to.have.property("firstname");
 			expect(JSON.parse(res)).to.have.property("lastname");
@@ -453,6 +491,7 @@ describe("Stub router user Post", async () => {
 		router.post("/users/", async (req, res, next) => {
 			expect("Content-Type", /json/);
 			expect(200);
+			postOneUser(req, res, next);
 			assert.match(JSON.parse(res), {
 				firstname: "userTestOne",
 				lastname: "for Sinon Testing",
@@ -517,6 +556,7 @@ describe("Stub router user Put", async () => {
 		router.put(`/users/${testUserPut}`, async (req, res, next) => {
 			expect("Content-Type", /json/);
 			expect(200);
+			putOneUser(req, res, next);
 			assert.match(JSON.parse(res), { username: testUserPut });
 			expect(JSON.parse(res)).to.have.property("firstname");
 			expect(JSON.parse(res)).to.have.property("lastname");
@@ -545,6 +585,7 @@ describe("Stub router user Delete ", async () => {
 		router.delete(`/products-storage/${testUserDelete}`, (req, res, next) => {
 			expect("Content-Type", /json/);
 			expect(200);
+			deleteOneUser(req, res, next);
 			assert.match(JSON.parse(res), {
 				message: "User delete."
 			});
@@ -799,6 +840,8 @@ describe("Stub router order Get One", async () => {
 	it("Stub for order router get (one)", async () => {
 		router.get(`/orders-archieve/${testOrderGet}`, async (req, res, next) => {
 			expect("Content-Type", /json/);
+
+			// provare a scrivere il findOne a mongo con i corretti require qui
 			// expect(200);
 			expect(res.statusCode).to.equal(200);
 			getOneOrder(req, res, next);
@@ -887,7 +930,7 @@ describe("Stub router order Post", async () => {
 		);
 	});
 	it("Stub for order router post", async () => {
-		router.post("/orders-archieve/", (req, res, next) => {
+		router.post("/orders-archieve/", async (req, res, next) => {
 			postOneOrder(req, res, next);
 			const prodUpdater = new ProductUpdaterClass(
 				req.body,
@@ -895,15 +938,34 @@ describe("Stub router order Post", async () => {
 				Order,
 				res
 			);
-			const orderExists = prodUpdater.orderExistsCheck();
+			// const stubOne = sinon.stub(prodUpdater, "orderExistsCheck").resolves();
+			// stub(prodUpdater, "orderExistsCheck").callsFake();
+			const prodUpStub = sinon.createStubInstance(ProductUpdaterClass);
+
+			// const ordCheck = await prodUpdater.orderExistsCheck();
 			const userUpdater = new UserUpdaterClass(req.body, User, Order, res);
-			const existCheck = userUpdater.usersExistCheck();
+			// const stubTwo = sinon.stub(userUpdater, "usersExistCheck").resolves();
+			const userCheck = await userUpdater.usersExistCheck();
+			// userCheck.then(() => {
+			// 	sinon.assert.match
+			// })
 			// console.log(existCheck);
 			// console.log("Testing");
-			prodUpdater.searchProd();
-			const results = prodUpdater.createResults();
-			const numOfErrs = prodUpdater.createNewOrder();
-			const orderUpdater = userUpdater.updateAccountsNewOrder();
+			const stubThree = sinon.stub(prodUpdater, "searchProd").resolves();
+
+			stubThree.callsFake(() => {
+				return [
+					{ productname: "Watermelon", response: "positive", quantity: 23 },
+					{ productname: "Strawberries", response: "positive", quantity: 23 },
+					{ productname: "Watermelon", response: "positive", quantity: 23 },
+					{ productname: "Strawberries", response: "positive", quantity: 23 }
+				];
+			});
+
+			// prodUpdater.searchProd();
+			const results = await prodUpdater.createResults();
+			const numOfErrs = await prodUpdater.createNewOrder();
+			const orderUpdater = await userUpdater.updateAccountsNewOrder();
 			// console.log(orderUpdater);
 
 			expect("Content-Type", /json/);

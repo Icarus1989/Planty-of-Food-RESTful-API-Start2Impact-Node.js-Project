@@ -19,20 +19,69 @@ async function getAllProducts(req, res, next) {
 	}
 }
 
+async function getOneOrder(req, res, next) {
+	try {
+		const orderNumber = req.params.ordNum;
+		const orderId = `order${String(orderNumber)}`;
+		Order.findOne({ orderid: orderId }, (err, data) => {
+			if (err) {
+				res.status(200).json({
+					message: `Error in searching ${orderId}`
+				});
+			} else if (data == null) {
+				res.status(200).json({
+					message: `${orderId} not exists`
+				});
+			} else {
+				res.status(200).json(data);
+			}
+		});
+	} catch (error) {
+		next(error);
+	}
+}
+
+// searching bug...
 async function getOneProduct(req, res, next) {
 	try {
 		const prodId = await req.params.prodId;
 		const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(
 			1
 		)}`;
-		Product.find({ name: label }, (err, data) => {
-			// gestire error con 404 o altro
-			res.status(200).json(data);
-		});
+		// Product.findOne({ name: label }, (err, data) => {
+		// 	console.log(data);
+		// 	// gestire error con 404 o altro
+		// 	if (err) {
+		// 		res.status(400).json({
+		// 			message: `Error in searching ${prodId}`
+		// 		});
+		// 	} else if (data == null) {
+		// 		res.status(200).json({
+		// 			message: `${prodId} not exists`
+		// 		});
+		// 	} else {
+		// 		res.status(200).json(data);
+		// 		// console.log(res);
+		// 	}
+		// 	// res.status(200).json(data);
+		// });
+
+		const prodFound = await Product.findOne({ name: label });
+		console.log(prodFound);
+		// to fix --> test ok data null
+
+		if (prodFound == null) {
+			res.status(200).json({
+				message: `${prodId} not exists`
+			});
+		} else {
+			res.status(200).json(prodFound);
+		}
 	} catch (error) {
 		next(error);
 	}
 }
+// searching bug...
 
 async function postOneProduct(req, res, next) {
 	try {

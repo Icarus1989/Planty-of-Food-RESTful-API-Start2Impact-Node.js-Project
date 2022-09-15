@@ -2020,3 +2020,26 @@ if (query.filter && query.value == undefined) {
 
 //   });
 // });
+
+if (!req.body) {
+	res.status(200).json({
+		message: `For post an order please use this JSON structure in the request body: {
+				"orderid": String,
+				"users": [
+					{
+						"username": String,
+						"products": [
+							{
+								"productname": String,
+								"quantity": Number
+							}
+						],
+						"cost": Number (Automatically added)
+					}
+				],
+				"totalcost": Number (Automatically added),
+				"shipped": Boolean,
+				"date": (Automatically added)
+			}`
+	});
+}

@@ -199,6 +199,8 @@ class ProductUpdaterClass {
 				}
 			}
 		}
+		console.log(this.permissions);
+
 		return this.permissions;
 	}
 	async createResults() {
