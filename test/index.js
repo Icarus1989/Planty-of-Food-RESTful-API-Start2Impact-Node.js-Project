@@ -951,18 +951,25 @@ describe("Stub router order Post", async () => {
 			// })
 			// console.log(existCheck);
 			// console.log("Testing");
-			const stubThree = sinon.stub(prodUpdater, "searchProd").resolves();
+			// const stubThree = sinon.stub(prodUpdater, "searchProd").resolves();
 
-			stubThree.callsFake(() => {
-				return [
+			// stubThree.callsFake(() => {
+			// 	return [
+			// 		{ productname: "Watermelon", response: "positive", quantity: 23 },
+			// 		{ productname: "Strawberries", response: "positive", quantity: 23 },
+			// 		{ productname: "Watermelon", response: "positive", quantity: 23 },
+			// 		{ productname: "Strawberries", response: "positive", quantity: 23 }
+			// 	];
+			// });
+
+			prodUpdater.searchProd().then(() => {
+				sinon.assert.match([
 					{ productname: "Watermelon", response: "positive", quantity: 23 },
 					{ productname: "Strawberries", response: "positive", quantity: 23 },
 					{ productname: "Watermelon", response: "positive", quantity: 23 },
 					{ productname: "Strawberries", response: "positive", quantity: 23 }
-				];
+				]);
 			});
-
-			// prodUpdater.searchProd();
 			const results = await prodUpdater.createResults();
 			const numOfErrs = await prodUpdater.createNewOrder();
 			const orderUpdater = await userUpdater.updateAccountsNewOrder();
