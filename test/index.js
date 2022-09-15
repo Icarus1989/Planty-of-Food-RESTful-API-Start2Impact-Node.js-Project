@@ -962,14 +962,7 @@ describe("Stub router order Post", async () => {
 			// 	];
 			// });
 
-			prodUpdater.searchProd().then(() => {
-				sinon.assert.match([
-					{ productname: "Watermelon", response: "positive", quantity: 23 },
-					{ productname: "Strawberries", response: "positive", quantity: 23 },
-					{ productname: "Watermelon", response: "positive", quantity: 23 },
-					{ productname: "Strawberries", response: "positive", quantity: 23 }
-				]);
-			});
+			prodUpdater.searchProd();
 			const results = await prodUpdater.createResults();
 			const numOfErrs = await prodUpdater.createNewOrder();
 			const orderUpdater = await userUpdater.updateAccountsNewOrder();
