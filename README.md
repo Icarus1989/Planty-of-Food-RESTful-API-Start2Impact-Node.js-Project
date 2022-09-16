@@ -3,8 +3,9 @@
 - [x] Simple internal MongoDB database
 - [x] Simple database on MongoDB Atlas
 - [x] Routes
-- [ ] Sinon.js testing
-- [ ] Test coverage nyc
+- [x] Sinon.js testing
+- [x] Test coverage nyc
+- [ ] Highest possible percentage of coverage
 - [ ] Automate testing
 - [ ] Code Coverage - Istanbul
 

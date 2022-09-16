@@ -44,6 +44,36 @@ const {
 
 // <---- provare ad inserire le chiamate delle funzioni (es getAllOrders) nei test
 
+describe("Stub router Get /", async () => {
+	before(() => {
+		const stub = sinon.stub(router, "get").yields(
+			null,
+			JSON.stringify({
+				message: "Welcome to Planty of Food API."
+			})
+		);
+	});
+	it("Stub for router get /", async () => {
+		router.get("/", (req, res) => {
+			expect("Content-Type", /json/);
+			expect(200);
+
+			// importante
+			sinon.assert.calledWith(router.get, "/");
+			// importante
+			assert.match(
+				res,
+				JSON.stringify({
+					message: "Welcome to Planty of Food API."
+				})
+			);
+		});
+	});
+	after(() => {
+		router.get.restore();
+	});
+});
+
 // ----------- Product tests
 
 const testProdPut = "Strawberries";
@@ -590,6 +620,11 @@ describe("Stub router user Delete ", async () => {
 				message: "User delete."
 			});
 			expect(JSON.parse(res)).to.have.property("message");
+			// expect(res).to.be.equal(
+			// 	JSON.stringify({
+			// 		message: "User delete."
+			// 	})
+			// );
 		});
 	});
 	after(() => {
@@ -962,28 +997,13 @@ describe("Stub router order Post", async () => {
 			// 	];
 			// });
 
-			prodUpdater.searchProd().then(() => {
-				sinon.assert.match(JSON.parse(res), {
-					orderid: "order000001",
-					users: [
-						{
-							username: "UserOne",
-							products: [
-								{
-									productname: "Watermelon",
-									quantity: 23
-								},
-								{
-									productname: "Strawberries",
-									quantity: 23
-								}
-							]
-						}
-					],
-					shipped: false,
-					date: "2022-09-06T21:55:50.076+00:00",
-					totalcost: 2000
-				});
+			prodUpdater.searchProd().then((result) => {
+				sinon.assert.match(result, [
+					{ productname: "Watermelon", response: "positive", quantity: 23 },
+					{ productname: "Strawberries", response: "positive", quantity: 23 },
+					{ productname: "Watermelon", response: "positive", quantity: 23 },
+					{ productname: "Strawberries", response: "positive", quantity: 23 }
+				]);
 			});
 			const results = await prodUpdater.createResults();
 			const numOfErrs = await prodUpdater.createNewOrder();
