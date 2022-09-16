@@ -1,103 +1,103 @@
 // Working
 
-if (query.filter && query.value == undefined) {
-	res.status(404).json({
-		message: "Need a &value=parameter for search..."
-	});
-	// orderManager.missParam("&value=");
-} else if ((query.filter && query.value) || query.order) {
-	// let mapped;
-	await orderManager.determinate();
-	await orderManager.ordering();
+// if (query.filter && query.value == undefined) {
+// 	res.status(404).json({
+// 		message: "Need a &value=parameter for search..."
+// 	});
+// 	// orderManager.missParam("&value=");
+// } else if ((query.filter && query.value) || query.order) {
+// 	// let mapped;
+// 	await orderManager.determinate();
+// 	await orderManager.ordering();
 
-	// // async function determinate(filter, value) {
-	switch (query.filter) {
-		case "productname":
-			mapped = await savedOrders.map((elem) => {
-				return elem["users"][0]["products"];
-			});
-			// (async function () {
-			for await (let elem of mapped) {
-				for (let i = 0; i < elem.length; i++) {
-					if (
-						elem[i]["productname"] ==
-						`${String(query.value)[0].toUpperCase()}${String(query.value).slice(
-							1
-						)}`
-					) {
-						results.push(savedOrders[mapped.indexOf(elem)]);
-						// return new Promise();
-						new Promise((resolve) => {
-							resolve();
-						});
-					}
-				}
-			}
+// 	// // async function determinate(filter, value) {
+// 	switch (query.filter) {
+// 		case "productname":
+// 			mapped = await savedOrders.map((elem) => {
+// 				return elem["users"][0]["products"];
+// 			});
+// 			// (async function () {
+// 			for await (let elem of mapped) {
+// 				for (let i = 0; i < elem.length; i++) {
+// 					if (
+// 						elem[i]["productname"] ==
+// 						`${String(query.value)[0].toUpperCase()}${String(query.value).slice(
+// 							1
+// 						)}`
+// 					) {
+// 						results.push(savedOrders[mapped.indexOf(elem)]);
+// 						// return new Promise();
+// 						new Promise((resolve) => {
+// 							resolve();
+// 						});
+// 					}
+// 				}
+// 			}
 
-			break;
-		case "username":
-		case "products":
-			mapped = await savedOrders.map((elem) => {
-				return elem["users"][0];
-			});
-			for (let elem of mapped) {
-				if (elem["username"] == query.value) {
-					results.push(savedOrders[mapped.indexOf(elem)]);
-				}
-			}
-			new Promise((resolve) => {
-				resolve();
-			});
-			break;
-		case "_id":
-		case "orderId":
-		case "shipped":
-		case "createAt":
-			results = await Order.find({
-				[query.filter]: query.value
-			});
-			new Promise((resolve) => {
-				resolve();
-			});
-			break;
-	}
-	// }
+// 			break;
+// 		case "username":
+// 		case "products":
+// 			mapped = await savedOrders.map((elem) => {
+// 				return elem["users"][0];
+// 			});
+// 			for (let elem of mapped) {
+// 				if (elem["username"] == query.value) {
+// 					results.push(savedOrders[mapped.indexOf(elem)]);
+// 				}
+// 			}
+// 			new Promise((resolve) => {
+// 				resolve();
+// 			});
+// 			break;
+// 		case "_id":
+// 		case "orderId":
+// 		case "shipped":
+// 		case "createAt":
+// 			results = await Order.find({
+// 				[query.filter]: query.value
+// 			});
+// 			new Promise((resolve) => {
+// 				resolve();
+// 			});
+// 			break;
+// 	}
+// 	// }
 
-	// determinate(query.filter, query.value).then(() => {
-	// 	console.log("Arrive Promise");
-	// if (results.length < 1) {
-	// 	return res.status(200).json({
-	// 		message: "Product not present in the orders"
-	// 	});
-	// }
-	// });
+// 	// determinate(query.filter, query.value).then(() => {
+// 	// 	console.log("Arrive Promise");
+// 	// if (results.length < 1) {
+// 	// 	return res.status(200).json({
+// 	// 		message: "Product not present in the orders"
+// 	// 	});
+// 	// }
+// 	// });
 
-	// if (results.length < 1) {
-	// 	return res.status(200).json({
-	// 		message: "Product not present in the orders"
-	// 	});
-	// }
-	// problemi con search all results
+// 	// if (results.length < 1) {
+// 	// 	return res.status(200).json({
+// 	// 		message: "Product not present in the orders"
+// 	// 	});
+// 	// }
+// 	// problemi con search all results
 
-	switch (query.order) {
-		case "ascendent":
-			if (results.length == 0) {
-				results = savedOrders;
-			}
-			const ascOrders = results.sort(reorderAscedent);
-			res.json(ascOrders);
-			break;
-		case "descendent":
-			if (results.length == 0) {
-				results = savedOrders;
-			}
-			const descOrders = results.sort(reorderDescent);
-			res.json(descOrders);
-			break;
-		// default:
-		// 	res.status(404).json({ message: "Error in url entries" });
-	}
-}
+// 	switch (query.order) {
+// 		case "ascendent":
+// 			if (results.length == 0) {
+// 				results = savedOrders;
+// 			}
+// 			const ascOrders = results.sort(reorderAscedent);
+// 			res.json(ascOrders);
+// 			break;
+// 		case "descendent":
+// 			if (results.length == 0) {
+// 				results = savedOrders;
+// 			}
+// 			const descOrders = results.sort(reorderDescent);
+// 			res.json(descOrders);
+// 			break;
+// 		// default:
+// 		// 	res.status(404).json({ message: "Error in url entries" });
+// 	}
+// }
 
 // --- funzionante ---
 
@@ -2021,25 +2021,100 @@ if (query.filter && query.value == undefined) {
 //   });
 // });
 
-if (!req.body) {
-	res.status(200).json({
-		message: `For post an order please use this JSON structure in the request body: {
-				"orderid": String,
-				"users": [
-					{
-						"username": String,
-						"products": [
-							{
-								"productname": String,
-								"quantity": Number
-							}
-						],
-						"cost": Number (Automatically added)
-					}
-				],
-				"totalcost": Number (Automatically added),
-				"shipped": Boolean,
-				"date": (Automatically added)
-			}`
-	});
-}
+// if (!req.body) {
+// 	res.status(200).json({
+// 		message: `For post an order please use this JSON structure in the request body: {
+// 				"orderid": String,
+// 				"users": [
+// 					{
+// 						"username": String,
+// 						"products": [
+// 							{
+// 								"productname": String,
+// 								"quantity": Number
+// 							}
+// 						],
+// 						"cost": Number (Automatically added)
+// 					}
+// 				],
+// 				"totalcost": Number (Automatically added),
+// 				"shipped": Boolean,
+// 				"date": (Automatically added)
+// 			}`
+// 	});
+// }
+
+// da getOnePRoduct
+
+// Product.findOne({ name: label }, (err, data) => {
+// 	console.log(data);
+// 	// gestire error con 404 o altro
+// 	if (err) {
+// 		res.status(400).json({
+// 			message: `Error in searching ${prodId}`
+// 		});
+// 	} else if (data == null) {
+// 		res.status(200).json({
+// 			message: `${prodId} not exists`
+// 		});
+// 	} else {
+// 		res.status(200).json(data);
+// 		// console.log(res);
+// 	}
+// 	// res.status(200).json(data);
+// });
+
+// if (Object.keys(existCheckStub).length > 0) {
+// 	res.status(200).json(existCheckStub);
+// } else if (orderExistStub !== null) {
+// 	res.status(200).json({
+// 		message: "OrderId already exists"
+// 	});
+// } else {
+// const searchProdStub = sinon.stub(prodUpdater, "searchprod");
+// console.log(searchProdStub());
+// prodUpdater.searchProd();
+// const createResultsStub = sinon.stub(prodUpdater, "createResults");
+// prodUpdater.createResults();
+// createResultsStub();
+// console.log("Here");
+// console.log(prodUpdater.negativeArr);
+// const numOfErrsStub = sinon.stub(prodUpdater, "createNewOrder");
+// 	// const numOfErrs = await prodUpdater.createNewOrder();
+// 	if (numOfErrsStub == 0) {
+// 		const updateAccStub = sinon.stub(
+// 			userUpdater,
+// 			"updateAccountsNewOrder"
+// 		);
+// 	} else if (numOfErrsStub > 0) {
+// 		return;
+// 	}
+// }
+// } catch {
+// 	res.status(404).json({ message: "Problem occured" });
+// }
+
+// userCheck.then(() => {
+// 	sinon.assert.match
+// })
+// console.log(existCheck);
+// console.log("Testing");
+// const stubThree = sinon.stub(prodUpdater, "searchProd").resolves();
+
+// stubThree.callsFake(() => {
+// 	return [
+// 		{ productname: "Watermelon", response: "positive", quantity: 23 },
+// 		{ productname: "Strawberries", response: "positive", quantity: 23 },
+// 		{ productname: "Watermelon", response: "positive", quantity: 23 },
+// 		{ productname: "Strawberries", response: "positive", quantity: 23 }
+// 	];
+// });
+
+// prodUpdater.searchProd().then((result) => {
+// 	sinon.assert.match(result, [
+// 		{ productname: "Watermelon", response: "positive", quantity: 23 },
+// 		{ productname: "Strawberries", response: "positive", quantity: 23 },
+// 		{ productname: "Watermelon", response: "positive", quantity: 23 },
+// 		{ productname: "Strawberries", response: "positive", quantity: 23 }
+// 	]);
+// });

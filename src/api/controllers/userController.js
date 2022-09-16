@@ -16,10 +16,10 @@ async function getAllUsers(req, res, next) {
 async function getOneUser(req, res, next) {
 	try {
 		const username = await req.params.userid;
-		console.log(username);
+		// console.log(username);
 		User.find({ username: username }, (err, data) => {
 			// gestire error
-			console.log(data);
+			// console.log(data);
 			res.status(200).json(data);
 		});
 	} catch (error) {

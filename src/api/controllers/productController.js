@@ -19,27 +19,27 @@ async function getAllProducts(req, res, next) {
 	}
 }
 
-async function getOneOrder(req, res, next) {
-	try {
-		const orderNumber = req.params.ordNum;
-		const orderId = `order${String(orderNumber)}`;
-		Order.findOne({ orderid: orderId }, (err, data) => {
-			if (err) {
-				res.status(200).json({
-					message: `Error in searching ${orderId}`
-				});
-			} else if (data == null) {
-				res.status(200).json({
-					message: `${orderId} not exists`
-				});
-			} else {
-				res.status(200).json(data);
-			}
-		});
-	} catch (error) {
-		next(error);
-	}
-}
+// async function getOneOrder(req, res, next) {
+// 	try {
+// 		const orderNumber = req.params.ordNum;
+// 		const orderId = `order${String(orderNumber)}`;
+// 		Order.findOne({ orderid: orderId }, (err, data) => {
+// 			if (err) {
+// 				res.status(200).json({
+// 					message: `Error in searching ${orderId}`
+// 				});
+// 			} else if (data == null) {
+// 				res.status(200).json({
+// 					message: `${orderId} not exists`
+// 				});
+// 			} else {
+// 				res.status(200).json(data);
+// 			}
+// 		});
+// 	} catch (error) {
+// 		next(error);
+// 	}
+// }
 
 // searching bug...
 async function getOneProduct(req, res, next) {
@@ -48,26 +48,9 @@ async function getOneProduct(req, res, next) {
 		const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(
 			1
 		)}`;
-		// Product.findOne({ name: label }, (err, data) => {
-		// 	console.log(data);
-		// 	// gestire error con 404 o altro
-		// 	if (err) {
-		// 		res.status(400).json({
-		// 			message: `Error in searching ${prodId}`
-		// 		});
-		// 	} else if (data == null) {
-		// 		res.status(200).json({
-		// 			message: `${prodId} not exists`
-		// 		});
-		// 	} else {
-		// 		res.status(200).json(data);
-		// 		// console.log(res);
-		// 	}
-		// 	// res.status(200).json(data);
-		// });
 
 		const prodFound = await Product.findOne({ name: label });
-		console.log(prodFound);
+		// console.log(prodFound);
 		// to fix --> test ok data null
 
 		if (prodFound == null) {

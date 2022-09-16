@@ -1,0 +1,17 @@
+{
+	"all": true,
+	"include": [
+		"test/**.js",
+		"src/**.js",
+		"src/api/**.js",
+		"src/api/routes/**.js",
+		"src/api/models/**.js",
+		"src/api/controllers/**.js"
+	],
+	"exclude": [
+		"src/server.js",
+		"test/test-setup.spec.js",
+		"src/api/routes/notes.js",
+		"src/api/routes/garbage.js"
+	]
+}

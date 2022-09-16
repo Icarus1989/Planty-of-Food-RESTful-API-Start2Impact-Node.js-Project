@@ -199,7 +199,7 @@ class ProductUpdaterClass {
 				}
 			}
 		}
-		console.log(this.permissions);
+		// console.log(this.permissions);
 
 		return this.permissions;
 	}
@@ -240,6 +240,7 @@ class ProductUpdaterClass {
 		}
 	}
 	async createNewOrder() {
+		console.log(this.negativeArr);
 		if (this.negativeArr.length == 0) {
 			this.newOrder = new this.orderModel(this.data);
 			for await (let user of this.newOrder["users"]) {

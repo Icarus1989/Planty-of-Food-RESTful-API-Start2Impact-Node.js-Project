@@ -35,7 +35,7 @@ async function getOneOrder(req, res, next) {
 		const orderNumber = req.params.ordNum;
 		const orderId = `order${String(orderNumber)}`;
 		Order.findOne({ orderid: orderId }, (err, data) => {
-			console.log(data);
+			// console.log(data);
 			// to fix --> test ok data null
 			if (err) {
 				res.status(200).json({

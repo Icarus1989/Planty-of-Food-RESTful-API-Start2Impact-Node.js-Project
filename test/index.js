@@ -4,6 +4,8 @@ const referee = require("@sinonjs/referee");
 const assert = referee.assert;
 const { expect } = require("chai");
 
+const mongoose = require("mongoose");
+
 const express = require("express");
 
 // const ordersRoutes = require('../src/api/routes/orders')
@@ -44,7 +46,38 @@ const {
 
 // <---- provare ad inserire le chiamate delle funzioni (es getAllOrders) nei test
 
+// describe("Test Testing Class", async () => {
+// 	function testClass() {
+// 		new ProductUpdaterClass(
+// 			JSON.parse({
+// 				orderid: "order000002",
+// 				users: [
+// 					{
+// 						username: "UserOne",
+// 						products: [
+// 							{
+// 								productname: "Watermelon",
+// 								quantity: 23
+// 							},
+// 							{
+// 								productname: "Strawberries",
+// 								quantity: 23
+// 							}
+// 						]
+// 					}
+// 				],
+// 				shipped: false
+// 			}),
+// 			Product,
+// 			Order,
+// 			null
+// 		);
+// 	}
+// });
+
 describe("Stub router Get /", async () => {
+	const req = mockRequest();
+	const res = mockResponse();
 	before(() => {
 		const stub = sinon.stub(router, "get").yields(
 			null,
@@ -54,9 +87,13 @@ describe("Stub router Get /", async () => {
 		);
 	});
 	it("Stub for router get /", async () => {
-		router.get("/", (req, res) => {
+		router.get("/", () => {
+			//  req = sinon.mock
 			expect("Content-Type", /json/);
 			expect(200);
+
+			// const resStub = sinon.stub(router.get, "res");
+			// resStub.status(200).json({ message: "Welcome to Planty of Food API." });
 
 			// importante
 			sinon.assert.calledWith(router.get, "/");
@@ -67,6 +104,7 @@ describe("Stub router Get /", async () => {
 					message: "Welcome to Planty of Food API."
 				})
 			);
+			expect(res.status.calledWith(200));
 		});
 	});
 	after(() => {
@@ -740,6 +778,7 @@ describe("Stub router order Get All", async () => {
 				"increasing"
 			);
 			fifthOrderManager.parametersHandling();
+			fifthOrderManager.ordering();
 
 			const sixthOrderManager = new OrderManagerClass(
 				res,
@@ -760,6 +799,7 @@ describe("Stub router order Get All", async () => {
 				"decreasing"
 			);
 			seventhOrderManager.parametersHandling();
+			seventhOrderManager.ordering();
 
 			const eightOrderManager = new OrderManagerClass(
 				res,
@@ -915,6 +955,30 @@ describe("Stub router order Get One", async () => {
 });
 
 describe("Stub router order Post", async () => {
+	// const req = mockRequest(
+	// 	JSON.stringify({
+	// 		orderid: "order000001",
+	// 		users: [
+	// 			{
+	// 				username: "UserOne",
+	// 				products: [
+	// 					{
+	// 						productname: "Watermelon",
+	// 						quantity: 23
+	// 					},
+	// 					{
+	// 						productname: "Strawberries",
+	// 						quantity: 23
+	// 					}
+	// 				]
+	// 			}
+	// 		],
+	// 		shipped: false,
+	// 		date: "2022-09-06T21:55:50.076+00:00",
+	// 		totalcost: 2000
+	// 	})
+	// );
+	// const res = mockResponse();
 	before(() => {
 		const stub = sinon.stub(router, "post").yields(
 			{
@@ -965,46 +1029,80 @@ describe("Stub router order Post", async () => {
 		);
 	});
 	it("Stub for order router post", async () => {
+		const stubvalue = null;
 		router.post("/orders-archieve/", async (req, res, next) => {
-			postOneOrder(req, res, next);
-			const prodUpdater = new ProductUpdaterClass(
-				req.body,
-				Product,
-				Order,
-				res
+			postOneOrder(req, res);
+			// const prodUpdater = new ProductUpdaterClass(
+			// 	req.body,
+			// 	Product,
+			// 	Order,
+			// 	res
+			// );
+
+			const prodUpStub = sinon.createStubInstance(ProductUpdaterClass);
+			prodUpStub.withArgs(req.body, Product, Order, res);
+
+			// const mock = sinon.mock(res);
+			// mock.expects("send").withExactArgs(stubvalue);
+			prodUpStub.orderExistsCheck.returns(null);
+			prodUpStub.searchProd.returns(
+				{ productname: "Watermelon", response: "positive", quantity: 23 },
+				{ productname: "Strawberries", response: "positive", quantity: 23 },
+				{ productname: "Watermelon", response: "positive", quantity: 23 },
+				{ productname: "Strawberries", response: "positive", quantity: 23 }
 			);
-			// const stubOne = sinon.stub(prodUpdater, "orderExistsCheck").resolves();
-			// stub(prodUpdater, "orderExistsCheck").callsFake();
-			// const prodUpStub = sinon.createStubInstance(ProductUpdaterClass);
-
-			const ordCheck = await prodUpdater.orderExistsCheck();
-			const userUpdater = new UserUpdaterClass(req.body, User, Order, res);
-			// const stubTwo = sinon.stub(userUpdater, "usersExistCheck").resolves();
-			const userCheck = await userUpdater.usersExistCheck();
-			// userCheck.then(() => {
-			// 	sinon.assert.match
-			// })
-			// console.log(existCheck);
-			// console.log("Testing");
-			// const stubThree = sinon.stub(prodUpdater, "searchProd").resolves();
-
-			// stubThree.callsFake(() => {
-			// 	return [
-			// 		{ productname: "Watermelon", response: "positive", quantity: 23 },
-			// 		{ productname: "Strawberries", response: "positive", quantity: 23 },
-			// 		{ productname: "Watermelon", response: "positive", quantity: 23 },
-			// 		{ productname: "Strawberries", response: "positive", quantity: 23 }
-			// 	];
-			// });
-
-			prodUpdater.searchProd().then((result) => {
-				sinon.assert.match(result, [
-					{ productname: "Watermelon", response: "positive", quantity: 23 },
-					{ productname: "Strawberries", response: "positive", quantity: 23 },
-					{ productname: "Watermelon", response: "positive", quantity: 23 },
-					{ productname: "Strawberries", response: "positive", quantity: 23 }
-				]);
+			// prodUpStub.createResults.returns();
+			// prodUpStub.results = prodUpStub.permissions;
+			prodUpStub.negativeArr = [];
+			prodUpStub.createNewOrder.returns({
+				orderid: "order000001",
+				users: [
+					{
+						username: "UserOne",
+						products: [
+							{
+								productname: "Watermelon",
+								quantity: 23
+							},
+							{
+								productname: "Strawberries",
+								quantity: 23
+							}
+						]
+					}
+				],
+				shipped: false,
+				date: "2022-09-06T21:55:50.076+00:00",
+				totalcost: 2000
 			});
+
+			// ----------HERE------------
+			const stubTest = sinon.stub(Order, "findOne").callsFake((callback) => {
+				callback(null, stubvalue);
+			});
+			// console.log(stubTest);
+
+			// const orderExistStub = sinon.stub(prodUpdater, "orderExistsCheck");
+
+			// userUpdater.usersExistCheck();
+			expect(stubTest.calledOnce).to.be.true;
+
+			// ----------HERE------------
+
+			// mock.verify();
+			stubTest.restore();
+
+			const existCheckStub = sinon.stub(userUpdater, "usersExistCheck");
+			// stub(prodUpdater, "orderExistsCheck").callsFake();
+
+			// prodUpdater.orderExistsCheck();
+			const userUpdater = new UserUpdaterClass(req.body, User, Order, res);
+			userUpdater.updateAccountsNewOrder();
+
+			userUpdater.findData();
+			// const stubTwo = sinon.stub(userUpdater, "usersExistCheck").resolves();
+			userUpdater.usersExistCheck();
+
 			const results = await prodUpdater.createResults();
 			const numOfErrs = await prodUpdater.createNewOrder();
 			const orderUpdater = await userUpdater.updateAccountsNewOrder();
