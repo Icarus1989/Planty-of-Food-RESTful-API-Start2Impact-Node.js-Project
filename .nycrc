@@ -11,6 +11,7 @@
 	"exclude": [
 		"src/server.js",
 		"test/test-setup.spec.js",
+		"test/sinon-mongoose.js",
 		"src/api/routes/notes.js",
 		"src/api/routes/garbage.js"
 	]

@@ -89,27 +89,38 @@ async function postOneOrder(req, res, next) {
 }
 
 async function putOneOrder(req, res, next) {
+	// 	async (req, res, next) => {
+	// 		try {
+	// const data = await req.body;
+	// 			const orderNumber = await req.params.ordNum;
+	// 			const orderId = `order${String(orderNumber)}`;
+
+	// 			const orderChanged = await Order.findOneAndUpdate(
+	// 				{ orderId: orderId },
+	// 				data,
+	// 				{
+	// 					new: true
+	// 				}
+	// 			);
+
+	// 			res.status(200).json(orderChanged);
+	// 		} catch (error) {
+	// 			next(error);
+	// 		}
+	// 	}
 	try {
+		const data = await req.body;
 		const orderNumber = await req.params.ordNum;
 		const orderId = `order${String(orderNumber)}`;
-		const orderRemoved = await Order.findOneAndDelete({ orderid: orderId });
-
-		const userUpdater = new UserUpdaterClass(
-			await orderRemoved,
-			User,
-			Order,
-			res
+		const orderChanged = await Order.findOneAndUpdate(
+			{ orderId: orderId },
+			data,
+			{
+				new: true
+			}
 		);
-		const prodUpdater = new ProductUpdaterClass(
-			await orderRemoved,
-			Product,
-			Order,
-			res
-		);
-		const updates = await userUpdater.updateAccountsDelOrder();
-		const restores = await prodUpdater.restoreQuantities();
 
-		res.status(200).json(orderRemoved);
+		res.status(200).json(orderChanged);
 	} catch (error) {
 		next(error);
 	}

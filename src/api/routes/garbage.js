@@ -2118,3 +2118,9 @@
 // 		{ productname: "Strawberries", response: "positive", quantity: 23 }
 // 	]);
 // });
+
+// console.log(stubTest);
+
+// const orderExistStub = sinon.stub(prodUpdater, "orderExistsCheck");
+
+// userUpdater.usersExistCheck();
