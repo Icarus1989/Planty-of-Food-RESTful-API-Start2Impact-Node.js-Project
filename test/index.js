@@ -1501,7 +1501,10 @@ describe("Stub router order Post", async () => {
 		const stubvalue = null;
 		router.post("/orders-archieve/", async (req, res, next) => {
 			// const stubMethod = sinon.stub(postOneOrder);
-			postOneOrder(req, res, next);
+
+			const reqMock = mockReq(req);
+			const resMock = mockRes(res);
+			postOneOrder(reqMock, resMock, next);
 			// postOneOrder.restore();
 
 			const prodUpStub = sinon.createStubInstance(ProductUpdaterClass, {
@@ -1541,10 +1544,10 @@ describe("Stub router order Post", async () => {
 
 			const prodUpManager = new ProductUpdaterClass();
 
-			prodUpManager.data = req.body;
+			prodUpManager.data = reqMock.body;
 			prodUpManager.productModel = Product;
 			prodUpManager.orderModel = Order;
-			prodUpManager.response = res;
+			prodUpManager.response = resMock;
 
 			prodUpManager.orderExistsCheck();
 			prodUpManager.searchProd();
@@ -1583,10 +1586,10 @@ describe("Stub router order Post", async () => {
 
 			const userUpdater = new UserUpdaterClass();
 
-			userUpdater.data = req.body;
+			userUpdater.data = reqMock.body;
 			userUpdater.userModel = User;
 			userUpdater.orderModel = Order;
-			userUpdater.response = res;
+			userUpdater.response = resMock;
 
 			userUpdater.findData();
 			userUpdater.usersExistCheck();
@@ -1626,7 +1629,10 @@ describe("Stub router order Post", async () => {
 	it("Stub for order router post - not enought products", async () => {
 		router.post("/orders-archieve/", async (req, res, next) => {
 			// const stubMethod = sinon.stub(postOneOrder);
-			postOneOrder(req, res, next);
+
+			const reqMock = mockReq(req);
+			const resMock = mockRes(res);
+			postOneOrder(reqMock, resMock, next);
 
 			const prodUpStub = sinon.createStubInstance(ProductUpdaterClass, {
 				orderExistsCheck: sinon.stub().returns(null),
@@ -1651,10 +1657,10 @@ describe("Stub router order Post", async () => {
 
 			const prodUpManager = new ProductUpdaterClass();
 
-			prodUpManager.data = req.body;
+			prodUpManager.data = reqMock.body;
 			prodUpManager.productModel = Product;
 			prodUpManager.orderModel = Order;
-			prodUpManager.response = res;
+			prodUpManager.response = resMock;
 
 			prodUpManager.orderExistsCheck();
 			prodUpManager.searchProd();
@@ -1710,8 +1716,10 @@ describe("Stub router order Post - order just exists", async () => {
 
 	it("Stub for order router post - order just exists", async () => {
 		router.post("/orders-archieve/", async (req, res, next) => {
+			const reqMock = mockReq(req);
+			const resMock = mockRes(res);
 			const stubMethod = sinon.stub(postOneOrder);
-			postOneOrder(req, res, next);
+			postOneOrder(reqMock, resMock, next);
 
 			const prodUpStub = sinon.createStubInstance(ProductUpdaterClass, {
 				orderExistsCheck: sinon.stub().returns({
@@ -1742,10 +1750,10 @@ describe("Stub router order Post - order just exists", async () => {
 
 			const prodUpManager = new ProductUpdaterClass();
 
-			prodUpManager.data = req.body;
+			prodUpManager.data = reqMock.body;
 			prodUpManager.productModel = Product;
 			prodUpManager.orderModel = Order;
-			prodUpManager.response = res;
+			prodUpManager.response = resMock;
 
 			prodUpManager.orderExistsCheck();
 			prodUpManager.searchProd();
@@ -1794,8 +1802,10 @@ describe("Stub router order Put", async () => {
 	});
 	it("Stub for order router put", async () => {
 		router.put(`/orders-archieve/${testOrderPut}`, async (req, res, next) => {
+			const reqMock = mockReq(req);
+			const resMock = mockRes(res);
 			const stubMethod = sinon.stub(putOneOrder);
-			putOneOrder(req, res, next);
+			putOneOrder(reqMock, resMock, next);
 
 			assert.match(JSON.parse(res), {
 				orderid: "order00001",
@@ -1856,8 +1866,10 @@ describe("Stub router order Delete One", async () => {
 				// 	res
 				// );
 
+				const reqMock = mockReq(req);
+				const resMock = mockRes(res);
 				const stubMethod = sinon.stub(deleteOneOrder);
-				deleteOneOrder(req, res, next);
+				deleteOneOrder(reqMock, resMock, next);
 				// deleteOneOrder.restore();
 				const prodUpStub = sinon.createStubInstance(ProductUpdaterClass, {
 					orderExistsCheck: sinon.stub().returns({
@@ -1888,10 +1900,10 @@ describe("Stub router order Delete One", async () => {
 
 				const prodUdManager = new ProductUpdaterClass();
 
-				prodUdManager.data = req.body;
+				prodUdManager.data = reqMock.body;
 				prodUdManager.productModel = Product;
 				prodUdManager.orderModel = Order;
-				prodUdManager.response = res;
+				prodUdManager.response = resMock;
 
 				prodUdManager.orderExistsCheck();
 				prodUdManager.searchProd();
@@ -1938,10 +1950,10 @@ describe("Stub router order Delete One", async () => {
 
 				const userUpdater = new UserUpdaterClass();
 				// userUpdater.withArgs(req.body, User, Order, res);
-				userUpdater.data = req.body;
+				userUpdater.data = reqMock.body;
 				userUpdater.userModel = User;
 				userUpdater.orderModel = Order;
-				userUpdater.response = res;
+				userUpdater.response = resMock;
 
 				userUpdater.findData();
 				userUpdater.usersExistCheck();
