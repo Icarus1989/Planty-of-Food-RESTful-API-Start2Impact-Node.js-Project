@@ -240,7 +240,7 @@ class ProductUpdaterClass {
 		}
 	}
 	async createNewOrder() {
-		console.log(this.negativeArr);
+		// console.log(this.negativeArr);
 		if (this.negativeArr.length == 0) {
 			this.newOrder = new this.orderModel(this.data);
 			for await (let user of this.newOrder["users"]) {
@@ -337,10 +337,10 @@ class UserUpdaterClass {
 	}
 
 	async updateAccountsNewOrder() {
-		this.users = this.data["users"].map((user) => {
+		this.usersUp = this.data["users"].map((user) => {
 			return user["username"];
 		});
-		this.users.map(async (elem) => {
+		this.usersUp.map(async (elem) => {
 			this.fieldToUpdate = await this.userModel.findOne({
 				username: elem
 			});
@@ -350,7 +350,7 @@ class UserUpdaterClass {
 					url: `/api/v1/orders-archieve/${this.data["orderid"].slice(5)}`
 				}
 			]);
-			this.result = await this.userModel.findOneAndUpdate(
+			this.resultUpdate = await this.userModel.findOneAndUpdate(
 				{
 					username: elem
 				},

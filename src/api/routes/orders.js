@@ -14,11 +14,11 @@ const {
 	deleteOneOrder
 } = require("../controllers/orderController");
 
-// const {
-// 	OrderManagerClass,
-// 	ProductUpdaterClass,
-// 	UserUpdaterClass
-// } = require("./classes");
+const {
+	OrderManagerClass,
+	ProductUpdaterClass,
+	UserUpdaterClass
+} = require("../routes/classes");
 
 const router = express.Router();
 // const app = express();

@@ -2124,3 +2124,1179 @@
 // const orderExistStub = sinon.stub(prodUpdater, "orderExistsCheck");
 
 // userUpdater.usersExistCheck();
+
+// DA QUI ----> Order findOneAndDelete
+
+// it("Mock every method", () => {
+// 	// sinon.mock(Product).expects("save").withArgs(err, docs).resolves({
+// 	// 	name: "Strawberries",
+// 	// 	quantity: 23000,
+// 	// 	origin: "Italy",
+// 	// 	price: 20.23
+// 	// });
+// 	// sinon.mock(Product).expects("findOne").withArgs({ name: label }).resolves({
+// 	// 	name: "Strawberries",
+// 	// 	quantity: 23000,
+// 	// 	origin: "Italy",
+// 	// 	price: 20.23
+// 	// });
+// });
+
+// sinon
+// 	.mock(Order)
+// 	.expects("findOne")
+// 	.withArgs({ orderid: "order000001" })
+// 	.resolves({
+// 		orderid: "order000001",
+// 		users: [
+// 			{
+// 				username: "UserOne",
+// 				products: [
+// 					{
+// 						productname: "Watermelon",
+// 						quantity: 23
+// 					},
+// 					{
+// 						productname: "Strawberries",
+// 						quantity: 23
+// 					}
+// 				]
+// 			}
+// 		],
+// 		shipped: false,
+// 		date: "2022-09-06T21:55:50.076+00:00",
+// 		totalcost: 2000
+// 	});
+
+// const stubvalue = {
+// 	message: "OrderId already exists"
+// };
+
+// const mock = sinon.mock(res);
+// mock.expects("send").withExactArgs(stubvalue);
+// postOneOrder(req, res);
+
+const prodUpStub = sinon.createStubInstance(ProductUpdaterClass);
+await prodUpStub.withArgs(req.body, Product, Order, res);
+
+// sinon
+// 	.mock(prodUpStub.orderModel)
+// 	.expects("findOne")
+// 	.withArgs({
+// 		orderid: "order000001"
+// 	})
+// 	.resolves({
+// 		orderid: "order000001",
+// 		users: [
+// 			{
+// 				username: "UserOne",
+// 				products: [
+// 					{
+// 						productname: "Watermelon",
+// 						quantity: 23
+// 					},
+// 					{
+// 						productname: "Strawberries",
+// 						quantity: 23
+// 					}
+// 				]
+// 			}
+// 		],
+// 		shipped: false,
+// 		date: "2022-09-06T21:55:50.076+00:00",
+// 		totalcost: 2000
+// 	});
+
+// prodUpStub.orderExistsCheck.returns({
+// 	orderid: "order000001",
+// 	users: [
+// 		{
+// 			username: "UserOne",
+// 			products: [
+// 				{
+// 					productname: "Watermelon",
+// 					quantity: 23
+// 				},
+// 				{
+// 					productname: "Strawberries",
+// 					quantity: 23
+// 				}
+// 			]
+// 		}
+// 	],
+// 	shipped: false,
+// 	date: "2022-09-06T21:55:50.076+00:00",
+// 	totalcost: 2000
+// });
+
+// const stub = sinon.stub(Order, "findOne").callsFake(() => {
+// 	return {
+// 		orderid: "order000001",
+// 		users: [
+// 			{
+// 				username: "UserOne",
+// 				products: [
+// 					{
+// 						productname: "Watermelon",
+// 						quantity: 23
+// 					},
+// 					{
+// 						productname: "Strawberries",
+// 						quantity: 23
+// 					}
+// 				]
+// 			}
+// 		],
+// 		shipped: false,
+// 		date: "2022-09-06T21:55:50.076+00:00",
+// 		totalcost: 2000
+// 	};
+// });
+
+// console.log(stub);
+
+// expect(stub.calledOnce).to.be.true;
+// mock.verify();
+// stub.restore();
+
+// prodUpStub.createNewOrder.returns({
+// 	orderid: "order000001",
+// 	users: [
+// 		{
+// 			username: "UserOne",
+// 			products: [
+// 				{
+// 					productname: "Watermelon",
+// 					quantity: 23
+// 				},
+// 				{
+// 					productname: "Strawberries",
+// 					quantity: 23
+// 				}
+// 			]
+// 		}
+// 	],
+// 	shipped: false,
+// 	date: "2022-09-06T21:55:50.076+00:00",
+// 	totalcost: 2000
+// });
+
+// ----------HERE------------
+// const stubTest = sinon.stub(Order, "findOne").callsFake((callback) => {
+// 	callback(null, stubvalue);
+// });
+
+// expect(stubTest.calledOnce).to.be.true;
+
+// const mockOrderFindOne = sinon
+// 	.mock(prodUpStub.orderModel)
+// 	.expects("findOne")
+// 	.withArgs({
+// 		orderid: "order000001"
+// 	})
+// 	.resolves(null);
+
+// // ----------HERE------------
+// prodUpStub.orderModel.findOne({
+// 	orderid: "order000001"
+// });
+// mockOrderFindOne.verify();
+// stubTest.restore();
+
+// stub(prodUpdater, "orderExistsCheck").callsFake();
+
+// prodUpdater.orderExistsCheck();
+// const userUpdater = new UserUpdaterClass(req.body, User, Order, res);
+
+// const userClass = sinon.spy(UserUpdaterClass);
+// userClass.withArgs(req.body, User, Order, res);
+
+// const userUpdater = new userClass();
+
+// const existCheckStub = sinon.stub(userUpdater, "usersExistCheck");
+
+// const orderManager = sinon.createStubInstance(OrderManagerClass, {
+// 	determinate: sinon.stub().returnsThis(),
+// 	ordering: sinon.stub().returnsThis(),
+// 	createResponse: sinon.stub().returnsThis(),
+// 	noProducts: sinon.stub().returnsThis(),
+// 	parametersHandling: sinon.stub().returnsThis()
+// });
+// const orderManager = sinon.createStubInstance(OrderManagerClass, {
+// 	determinate: sinon.stub().returnsThis(),
+// 	ordering: sinon.stub().returnsThis(),
+// 	createResponse: sinon.stub().returnsThis(),
+// 	noProducts: sinon.stub().returnsThis(),
+// 	parametersHandling: sinon.stub().returnsThis()
+// });
+
+// const mock = sinon.mock(res);
+// mock.expects("send").withExactArgs(stubvalue);
+
+// prodUpStub.orderExistsCheck.returns(null);
+// const results = prodUpStub.searchProd.returns(
+// 	{ productname: "Watermelon", response: "positive", quantity: 23 },
+// 	{ productname: "Strawberries", response: "positive", quantity: 23 },
+// 	{ productname: "Watermelon", response: "positive", quantity: 23 },
+// 	{ productname: "Strawberries", response: "positive", quantity: 23 }
+// );
+
+// prodUpStub.createResults.returns();
+// prodUpStub.results = prodUpStub.permissions;
+
+// const orderManager = sinon.createStubInstance(OrderManagerClass, {
+// 	determinate: sinon.stub().returnsThis(),
+// 	ordering: sinon.stub().returnsThis(),
+// 	createResponse: sinon.stub().returnsThis(),
+// 	noProducts: sinon.stub().returnsThis(),
+// 	parametersHandling: sinon.stub().returnsThis()
+// });
+// const prodUpStub = sinon.createStubInstance(ProductUpdaterClass);
+
+// const userUpdater = new userClass();
+// ---- adattato a UserUpdaterClass sostituire con -> const prodUpStub = sinon.createStubInstance(ProductUpdaterClass);
+// prodUpStub.withArgs(req.body, Product, Order, res);
+// userUpdater.updateAccountsNewOrder();
+
+// userUpdater.findData();
+// const stubTwo = sinon.stub(userUpdater, "usersExistCheck").resolves();
+// userUpdater.usersExistCheck();
+
+// const resultsCreated = await prodUpdater.createResults();
+// const numOfErrs = await prodUpdater.createNewOrder();
+// const orderUpdater = await userUpdater.updateAccountsNewOrder();
+
+// const mockProdExCh = sinon
+// 	.mock(prodUpStub)
+// 	.expects("updateAccountsDelOrder")
+// 	.resolves(null);
+
+// prodUpStub.orderExistsCheck();
+// mockProdExCh.verify();
+
+// const results = prodUpStub.searchProd.returns(
+// 	{ productname: "Watermelon", response: "positive", quantity: 23 },
+// 	{ productname: "Strawberries", response: "positive", quantity: 23 },
+// 	{
+// 		productname: "Watermelon",
+// 		response: "negative",
+// 		message: "Too little quantity of Strawberries"
+// 	},
+// 	{ productname: "Strawberries", response: "positive", quantity: 23 }
+// );
+
+// prodUpStub.negativeArr = [
+// 	{ message: "Too little quantity of Strawberries" }
+// ];
+
+// for await (let elem of results) {
+// 	prodUpStub.negativeArr.push({
+// 		message: elem["message"]
+// 	});
+// 	// prodUpStub.totalprice = 1000;
+// }
+
+// prodUpStub.createNewOrder.returns({
+// 	message1: `Too little quantity of Strawberries`
+// });
+// prodUpStub.createResults.returns();
+// prodUpStub.results = prodUpStub.permissions;
+// prodUpStub.negativeArr = [];
+// prodUpStub.createNewOrder.returns({
+// 	orderid: "order000001",
+// 	users: [
+// 		{
+// 			username: "UserOne",
+// 			products: [
+// 				{
+// 					productname: "Watermelon",
+// 					quantity: 23
+// 				},
+// 				{
+// 					productname: "Strawberries",
+// 					quantity: 23
+// 				}
+// 			]
+// 		}
+// 	],
+// 	shipped: false,
+// 	date: "2022-09-06T21:55:50.076+00:00",
+// 	totalcost: 2000
+// });
+
+// ----------HERE------------
+// const stubTest = sinon.stub(Order, "findOne").callsFake((callback) => {
+// 	callback(null, stubvalue);
+// });
+
+// expect(stubTest.calledOnce).to.be.true;
+
+// // ----------HERE------------
+
+// // mock.verify();
+// stubTest.restore();
+
+// const existCheckStub = sinon.stub(userUpdater, "usersExistCheck");
+// // stub(prodUpdater, "orderExistsCheck").callsFake();
+
+// // prodUpdater.orderExistsCheck();
+// const userUpdater = new UserUpdaterClass(req.body, User, Order, res);
+// // ---- adattato a UserUpdaterClass sostituire con -> const prodUpStub = sinon.createStubInstance(ProductUpdaterClass);
+// // prodUpStub.withArgs(req.body, Product, Order, res);
+// userUpdater.updateAccountsNewOrder();
+
+// userUpdater.findData();
+// // const stubTwo = sinon.stub(userUpdater, "usersExistCheck").resolves();
+// userUpdater.usersExistCheck();
+
+// const results = await prodUpdater.createResults();
+// const numOfErrs = await prodUpdater.createNewOrder();
+// const orderUpdater = await userUpdater.updateAccountsNewOrder();
+
+// const mock = sinon.mock(res);
+// mock.expects("send").withExactArgs(stubvalue);
+// prodUpStub.orderExistsCheck.returns(null);
+
+// const prodUpdater = new ProductUpdaterClass(
+// 	req.body,
+// 	Product,
+// 	Order,
+// 	res
+// );
+
+// const prodUpStub = sinon.stub(ProductUpdaterClass).callsFake(() => {
+// 	return new ProductUpdaterClass(req.body, Product, Order, res);
+// });
+
+// const req = mockRequest(
+// 	JSON.stringify({
+// 		orderid: "order000001",
+// 		users: [
+// 			{
+// 				username: "UserOne",
+// 				products: [
+// 					{
+// 						productname: "Watermelon",
+// 						quantity: 23
+// 					},
+// 					{
+// 						productname: "Strawberries",
+// 						quantity: 23
+// 					}
+// 				]
+// 			}
+// 		],
+// 		shipped: false,
+// 		date: "2022-09-06T21:55:50.076+00:00",
+// 		totalcost: 2000
+// 	})
+// );
+// const res = mockResponse();
+
+// orderManager.response = res;
+// 			orderManager.data = res;
+// 			orderManager.filterQuery = "productname";
+// 			orderManager.valueQuery = "strawberries";
+// 			orderManager.orderByQuery = "orderid";
+// 			orderManager.sortQuery = undefined;
+// 			// 	res,
+// 			// 	res,
+// 			// 	"productname",
+// 			// 	"strawberries",
+// 			// 	"orderid",
+// 			// 	undefined
+
+// 			orderManager.determinate();
+// 			orderManager.ordering();
+// 			orderManager.createResponse();
+// 			orderManager.noProducts();
+// 			orderManager.parametersHandling();
+
+// 			// orderManager.resolves();
+
+// 			const secondOrderManager = sinon.createStubInstance(OrderManagerClass, {
+// 				determinate: sinon.stub().returnsThis(),
+// 				ordering: sinon.stub().returnsThis(),
+// 				createResponse: sinon.stub().returnsThis(),
+// 				noProducts: sinon.stub().returnsThis(),
+// 				parametersHandling: sinon.stub().returnsThis()
+// 			});
+
+// 			secondOrderManager.response = res;
+// 			secondOrderManager.data = res;
+// 			secondOrderManager.filterQuery = "productname";
+// 			secondOrderManager.valueQuery = "strawberries";
+// 			secondOrderManager.orderByQuery = "orderid";
+// 			secondOrderManager.sortQuery = "decreasing";
+
+// 			secondOrderManager.determinate();
+// 			secondOrderManager.ordering();
+// 			secondOrderManager.createResponse();
+// 			secondOrderManager.noProducts();
+// 			secondOrderManager.parametersHandling();
+
+// 			const thirdOrderManager = sinon.createStubInstance(OrderManagerClass, {
+// 				determinate: sinon.stub().returnsThis(),
+// 				ordering: sinon.stub().returnsThis(),
+// 				createResponse: sinon.stub().returnsThis(),
+// 				noProducts: sinon.stub().returnsThis(),
+// 				parametersHandling: sinon.stub().returnsThis()
+// 			});
+
+// 			thirdOrderManager.response = res;
+// 			thirdOrderManager.data = res;
+// 			thirdOrderManager.filterQuery = undefined;
+// 			thirdOrderManager.valueQuery = undefined;
+// 			thirdOrderManager.orderByQuery = undefined;
+// 			thirdOrderManager.sortQuery = undefined;
+
+// 			thirdOrderManager.determinate();
+// 			thirdOrderManager.ordering();
+// 			thirdOrderManager.createResponse();
+// 			thirdOrderManager.noProducts();
+// 			thirdOrderManager.parametersHandling();
+
+// 			const fourthOrderManager = sinon.createStubInstance(OrderManagerClass, {
+// 				determinate: sinon.stub().returnsThis(),
+// 				ordering: sinon.stub().returnsThis(),
+// 				createResponse: sinon.stub().returnsThis(),
+// 				noProducts: sinon.stub().returnsThis(),
+// 				parametersHandling: sinon.stub().returnsThis()
+// 			});
+
+// 			fourthOrderManager.response = res;
+// 			fourthOrderManager.data = res;
+// 			fourthOrderManager.filterQuery = "date";
+// 			fourthOrderManager.valueQuery = "2022-09-06T21:55:50.076+00:00";
+// 			fourthOrderManager.orderByQuery = "orderid";
+// 			fourthOrderManager.sortQuery = "increasing";
+
+// 			fourthOrderManager.determinate();
+// 			fourthOrderManager.ordering();
+// 			fourthOrderManager.createResponse();
+// 			fourthOrderManager.noProducts();
+// 			fourthOrderManager.parametersHandling();
+
+// 			const fifthOrderManager = sinon.createStubInstance(OrderManagerClass, {
+// 				determinate: sinon.stub().returnsThis(),
+// 				ordering: sinon.stub().returnsThis(),
+// 				createResponse: sinon.stub().returnsThis(),
+// 				noProducts: sinon.stub().returnsThis(),
+// 				parametersHandling: sinon.stub().returnsThis()
+// 			});
+
+// 			fifthOrderManager.response = res;
+// 			fifthOrderManager.data = res;
+// 			fifthOrderManager.filterQuery = "shipped";
+// 			fifthOrderManager.valueQuery = true;
+// 			fifthOrderManager.orderByQuery = "orderid";
+// 			fifthOrderManager.sortQuery = "increasing";
+
+// 			fifthOrderManager.determinate();
+// 			fifthOrderManager.ordering();
+// 			fifthOrderManager.createResponse();
+// 			fifthOrderManager.noProducts();
+// 			fifthOrderManager.parametersHandling();
+
+// 			const sixthOrderManager = sinon.createStubInstance(OrderManagerClass, {
+// 				determinate: sinon.stub().returnsThis(),
+// 				ordering: sinon.stub().returnsThis(),
+// 				createResponse: sinon.stub().returnsThis(),
+// 				noProducts: sinon.stub().returnsThis(),
+// 				parametersHandling: sinon.stub().returnsThis()
+// 			});
+
+// 			sixthOrderManager.response = res;
+// 			sixthOrderManager.data = res;
+// 			sixthOrderManager.filterQuery = "orderid";
+// 			sixthOrderManager.valueQuery = "order00001";
+// 			sixthOrderManager.orderByQuery = "orderid";
+// 			sixthOrderManager.sortQuery = "increasing";
+
+// 			sixthOrderManager.determinate();
+// 			sixthOrderManager.ordering();
+// 			sixthOrderManager.createResponse();
+// 			sixthOrderManager.noProducts();
+// 			sixthOrderManager.parametersHandling();
+
+// 			// const seventhOrderManager = sinon.createStubInstance(OrderManagerClass, {
+// 			// 	determinate: sinon.stub().returnsThis(),
+// 			// 	ordering: sinon.stub().returnsThis(),
+// 			// 	createResponse: sinon.stub().returnsThis(),
+// 			// 	noProducts: sinon.stub().returnsThis(),
+// 			// 	parametersHandling: sinon.stub().returnsThis()
+// 			// });
+
+// 			// seventhOrderManager.response = res;
+// 			// seventhOrderManager.data = res;
+// 			// seventhOrderManager.filterQuery = "orderid";
+// 			// seventhOrderManager.valueQuery = "order00001";
+// 			// seventhOrderManager.orderByQuery = undefined;
+// 			// seventhOrderManager.sortQuery = undefined;
+
+// 			// seventhOrderManager.determinate();
+// 			// seventhOrderManager.ordering();
+// 			// seventhOrderManager.createResponse();
+// 			// seventhOrderManager.noProducts();
+// 			// seventhOrderManager.parametersHandling();
+
+// 			// const eightOrderManager = sinon.createStubInstance(OrderManagerClass, {
+// 			// 	determinate: sinon.stub().returnsThis(),
+// 			// 	ordering: sinon.stub().returnsThis(),
+// 			// 	createResponse: sinon.stub().returnsThis(),
+// 			// 	noProducts: sinon.stub().returnsThis(),
+// 			// 	parametersHandling: sinon.stub().returnsThis()
+// 			// });
+
+// 			// eightOrderManager.response = res;
+// 			// eightOrderManager.data = res;
+// 			// eightOrderManager.filterQuery = "date";
+// 			// eightOrderManager.valueQuery = "2022-09-06T21:55:50.076+00:00";
+// 			// eightOrderManager.orderByQuery = undefined;
+// 			// eightOrderManager.sortQuery = undefined;
+
+// 			// eightOrderManager.determinate();
+// 			// eightOrderManager.ordering();
+// 			// eightOrderManager.createResponse();
+// 			// eightOrderManager.noProducts();
+// 			// eightOrderManager.parametersHandling();
+
+// const mockMongoose = sinon
+// 	.mock(Order)
+// 	.expects("find")
+// 	.withArgs({})
+// 	.resolves([
+// 		{
+// 			orderid: "order000001",
+// 			users: [
+// 				{
+// 					username: "UserOne",
+// 					products: [
+// 						{
+// 							productname: "Watermelon",
+// 							quantity: 23
+// 						},
+// 						{
+// 							productname: "Strawberries",
+// 							quantity: 23
+// 						}
+// 					]
+// 				}
+// 			],
+// 			shipped: false,
+// 			date: "2022-09-06T21:55:50.076+00:00",
+// 			totalcost: 2000
+// 		},
+// 		{
+// 			orderid: "order000002",
+// 			users: [
+// 				{
+// 					username: "UserTwo",
+// 					products: [
+// 						{
+// 							productname: "Watermelon",
+// 							quantity: 23
+// 						},
+// 						{
+// 							productname: "Strawberries",
+// 							quantity: 23
+// 						}
+// 					]
+// 				}
+// 			],
+// 			shipped: false,
+// 			date: "2022-09-06T21:55:50.076+00:00",
+// 			totalcost: 2000
+// 		}
+// 	]);
+
+// describe("Test Testing Class", async () => {
+// 	function testClass() {
+// 		new ProductUpdaterClass(
+// 			JSON.parse({
+// 				orderid: "order000002",
+// 				users: [
+// 					{
+// 						username: "UserOne",
+// 						products: [
+// 							{
+// 								productname: "Watermelon",
+// 								quantity: 23
+// 							},
+// 							{
+// 								productname: "Strawberries",
+// 								quantity: 23
+// 							}
+// 						]
+// 					}
+// 				],
+// 				shipped: false
+// 			}),
+// 			Product,
+// 			Order,
+// 			null
+// 		);
+// 	}
+// });
+
+// describe("Stub router Get /", async () => {
+// 	const req = mockRequest();
+// 	const res = mockResponse();
+// 	before(() => {
+// 		const stub = sinon.stub(router, "get").yields(
+// 			null,
+// 			JSON.stringify({
+// 				message: "Welcome to Planty of Food API."
+// 			})
+// 		);
+// 	});
+// 	it("Stub for router get /", async () => {
+// 		router.get("/", () => {
+// 			//  req = sinon.mock
+// 			expect("Content-Type", /json/);
+// 			expect(200);
+
+// 			// const resStub = sinon.stub(router.get, "res");
+// 			// resStub.status(200).json({ message: "Welcome to Planty of Food API." });
+
+// 			// importante
+// 			sinon.assert.calledWith(router.get, "/");
+// 			// importante
+// 			assert.match(
+// 				res,
+// 				JSON.stringify({
+// 					message: "Welcome to Planty of Food API."
+// 				})
+// 			);
+// 			expect(res.status.calledWith(200));
+// 		});
+// 	});
+// 	after(() => {
+// 		router.get.restore();
+// 	});
+// });
+
+// describe("Testing mongoose Model methods", () => {
+// 	it("Mock Product Model find({}) method", () => {
+// 		const mockProdFind = sinon
+// 			.mock(Product)
+// 			.expects("find")
+// 			.withArgs({})
+// 			.resolves([
+// 				{
+// 					name: "Strawberries",
+// 					quantity: 23000,
+// 					origin: "Italy",
+// 					price: 20.23
+// 				},
+// 				{
+// 					name: "Pineapples",
+// 					quantity: 10000,
+// 					price: 23.23
+// 				},
+// 				{
+// 					name: "Apples",
+// 					quantity: 10000,
+// 					price: 23.32
+// 				}
+// 			]);
+// 		// mockProductFind.resolves();
+// 		Product.find({});
+// 		mockProdFind.verify();
+// 		// mockProdFind.restore();
+// 	});
+
+// 	it("Mock Product Model findOne( { name: } ) method", () => {
+// 		const mockProdFindOne = sinon
+// 			.mock(Product)
+// 			.expects("findOne")
+// 			.withArgs({ name: "Strawberries" })
+// 			.resolves({
+// 				name: "Strawberries",
+// 				quantity: 23000,
+// 				origin: "Italy",
+// 				price: 20.23
+// 			});
+// 		Product.findOne({ name: "Strawberries" });
+// 		mockProdFindOne.verify();
+// 	});
+
+// 	it("Mock Product Model findOneAndUpdate( { name: }, {field: newValue} ) method", () => {
+// 		const mockUserFindUpdate = sinon
+// 			.mock(Product)
+// 			.expects("findOneAndUpdate")
+// 			.withArgs({ name: "Strawberries" }, { quantity: 23 })
+// 			.resolves({
+// 				name: "Strawberries",
+// 				quantity: 23,
+// 				origin: "Italy",
+// 				price: 20.23
+// 			});
+// 		mockUserFindUpdate.resolves();
+// 	});
+
+// 	it("Mock Product Model findOneAndDelete( { name: value } ) method", () => {
+// 		const mockProductFindDelete = sinon
+// 			.mock(Product)
+// 			.expects("findOneAndDelete")
+// 			.withArgs({ name: "Strawberries" })
+// 			.resolves({
+// 				name: "Strawberries",
+// 				quantity: 23000,
+// 				origin: "Italy",
+// 				price: 20.23
+// 			});
+// 		mockProductFindDelete.resolves();
+// 	});
+
+// 	it("Mock User Model find({}) method", () => {
+// 		const mockUserFind = sinon
+// 			.mock(User)
+// 			.expects("find")
+// 			.withArgs({})
+// 			.resolves([
+// 				{
+// 					firstname: "userTestOne",
+// 					lastname: "for Sinon Testing",
+// 					username: "User1",
+// 					address: "test@sinon.com",
+// 					orders: [
+// 						{
+// 							orderid: "00001",
+// 							url: "none"
+// 						}
+// 					]
+// 				},
+// 				{
+// 					firstname: "userTestTwo",
+// 					lastname: "for Sinon Testing",
+// 					username: "User2",
+// 					address: "test@sinon.com",
+// 					orders: [
+// 						{
+// 							orderid: "00002",
+// 							url: "none"
+// 						}
+// 					]
+// 				},
+// 				{
+// 					firstname: "UserFromInsomnia",
+// 					lastname: "for Sinon Testing",
+// 					username: "User3",
+// 					address: "test@sinon.com",
+// 					orders: [
+// 						{
+// 							orderid: "00003",
+// 							url: "none"
+// 						}
+// 					]
+// 				}
+// 			]);
+// 		mockUserFind.resolves();
+// 	});
+
+// 	// it("Mock User Model findOne( { username: value } ) method", () => {
+// 	// 	const mockUserFindOne = sinon
+// 	// 		.mock(User)
+// 	// 		.expects("findOne")
+// 	// 		.withArgs({ username: "UserOne" })
+// 	// 		.resolves({
+// 	// 			firstname: "userTestOne",
+// 	// 			lastname: "for Sinon Testing",
+// 	// 			username: "User1",
+// 	// 			address: "test@sinon.com",
+// 	// 			orders: [
+// 	// 				{
+// 	// 					orderid: "00001",
+// 	// 					url: "none"
+// 	// 				}
+// 	// 			]
+// 	// 		});
+// 	// 	mockUserFindOne.resolves();
+// 	// 	mockUserFindOne.restore();
+// 	// });
+
+// 	// it("Mock User Model findOneAndUpdate ( { username: value } , {value: newValue} ) method", () => {
+// 	// 	sinon
+// 	// 		.mock(User)
+// 	// 		.expects("findOneAndUpdate")
+// 	// 		.withArgs({ username: "UserOne" }, { orders: [] })
+// 	// 		.resolves({
+// 	// 			firstname: "userTestOne",
+// 	// 			lastname: "for Sinon Testing",
+// 	// 			username: "User1",
+// 	// 			address: "test@sinon.com",
+// 	// 			orders: []
+// 	// 		});
+// 	// });
+
+// 	it("Mock User Model findOneAndDelete ( { username: value } ) method", () => {
+// 		const mockUserFindDelete = sinon
+// 			.mock(User)
+// 			.expects("findOneAndDelete")
+// 			.withArgs({ username: "UserOne" })
+// 			.resolves({
+// 				firstname: "userTestOne",
+// 				lastname: "for Sinon Testing",
+// 				username: "User1",
+// 				address: "test@sinon.com",
+// 				orders: []
+// 			});
+// 		mockUserFindDelete.resolves();
+// 	});
+
+// 	it("Mock Order Model find({})", () => {
+// 		sinon
+// 			.mock(Order)
+// 			.expects("find")
+// 			.withArgs({})
+// 			.resolves([
+// 				{
+// 					orderid: "order000001",
+// 					users: [
+// 						{
+// 							username: "UserOne",
+// 							products: [
+// 								{
+// 									productname: "Watermelon",
+// 									quantity: 23
+// 								},
+// 								{
+// 									productname: "Strawberries",
+// 									quantity: 23
+// 								}
+// 							]
+// 						}
+// 					],
+// 					shipped: false,
+// 					date: "2022-09-06T21:55:50.076+00:00",
+// 					totalcost: 2000
+// 				},
+// 				{
+// 					orderid: "order000002",
+// 					users: [
+// 						{
+// 							username: "UserTwo",
+// 							products: [
+// 								{
+// 									productname: "Watermelon",
+// 									quantity: 23
+// 								},
+// 								{
+// 									productname: "Strawberries",
+// 									quantity: 23
+// 								}
+// 							]
+// 						}
+// 					],
+// 					shipped: false,
+// 					date: "2022-09-06T21:55:50.076+00:00",
+// 					totalcost: 2000
+// 				}
+// 			]);
+// 	});
+
+// 	// it("Mock Order Model findOne( { orderid: value } )", () => {
+// 	// 	sinon
+// 	// 		.mock(Order)
+// 	// 		.expects("findOne")
+// 	// 		.withArgs({ orderid: "order000001" })
+// 	// 		.resolves({
+// 	// 			orderid: "order000001",
+// 	// 			users: [
+// 	// 				{
+// 	// 					username: "UserOne",
+// 	// 					products: [
+// 	// 						{
+// 	// 							productname: "Watermelon",
+// 	// 							quantity: 23
+// 	// 						},
+// 	// 						{
+// 	// 							productname: "Strawberries",
+// 	// 							quantity: 23
+// 	// 						}
+// 	// 					]
+// 	// 				}
+// 	// 			],
+// 	// 			shipped: false,
+// 	// 			date: "2022-09-06T21:55:50.076+00:00",
+// 	// 			totalcost: 2000
+// 	// 		});
+// 	// });
+
+// 	// it("Mock Order Model findOneAndUpdate( { orderid: value }, { value: newValue} )", () => {
+// 	// 	sinon
+// 	// 		.mock(Order)
+// 	// 		.expects("findOneAndUpdate")
+// 	// 		.withArgs(
+// 	// 			{
+// 	// 				orderid: "order000001"
+// 	// 			},
+// 	// 			{
+// 	// 				orderid: "order000001",
+// 	// 				users: [
+// 	// 					{
+// 	// 						username: "UserOne",
+// 	// 						products: [
+// 	// 							{
+// 	// 								productname: "Watermelon",
+// 	// 								quantity: 23
+// 	// 							},
+// 	// 							{
+// 	// 								productname: "Strawberries",
+// 	// 								quantity: 23
+// 	// 							}
+// 	// 						]
+// 	// 					}
+// 	// 				],
+// 	// 				shipped: true,
+// 	// 				date: "2022-09-06T21:55:50.076+00:00",
+// 	// 				totalcost: 2000
+// 	// 			}
+// 	// 		)
+// 	// 		.resolves({
+// 	// 			orderid: "order000001",
+// 	// 			users: [
+// 	// 				{
+// 	// 					username: "UserOne",
+// 	// 					products: [
+// 	// 						{
+// 	// 							productname: "Watermelon",
+// 	// 							quantity: 23
+// 	// 						},
+// 	// 						{
+// 	// 							productname: "Strawberries",
+// 	// 							quantity: 23
+// 	// 						}
+// 	// 					]
+// 	// 				}
+// 	// 			],
+// 	// 			shipped: true,
+// 	// 			date: "2022-09-06T21:55:50.076+00:00",
+// 	// 			totalcost: 2000
+// 	// 		});
+// 	// });
+
+// 	// it("Mock Order Model findOneAndDelete( { orderid: value }, { value: newValue} )", () => {
+// 	// 	sinon
+// 	// 		.mock(Order)
+// 	// 		.expects("findOneAndDelete")
+// 	// 		.withArgs({
+// 	// 			orderid: "order000001"
+// 	// 		})
+// 	// 		.resolves({
+// 	// 			orderid: "order000001",
+// 	// 			users: [
+// 	// 				{
+// 	// 					username: "UserOne",
+// 	// 					products: [
+// 	// 						{
+// 	// 							productname: "Watermelon",
+// 	// 							quantity: 23
+// 	// 						},
+// 	// 						{
+// 	// 							productname: "Strawberries",
+// 	// 							quantity: 23
+// 	// 						}
+// 	// 					]
+// 	// 				}
+// 	// 			],
+// 	// 			shipped: true,
+// 	// 			date: "2022-09-06T21:55:50.076+00:00",
+// 	// 			totalcost: 2000
+// 	// 		});
+// 	// });
+// });
+
+// userUpdater.usersUp = ["UserOne", "UserTwo"];
+// userUpdater.usersUp.map((elem) => {
+// 	elem.fieldToUpdate = {
+// 		firstname: "UserFromInsomnia",
+// 		lastname: "from req.body",
+// 		username: "UserOne",
+// 		address: "test@request.com",
+// 		orders: []
+// 	};
+// 	elem.updatedField = {
+// 		orderid: "000002",
+// 		url: `/api/v1/orders-archieve/000002`
+// 	};
+// 	elem.resultUpdate = {
+// 		firstname: "UserFromInsomnia",
+// 		lastname: "from req.body",
+// 		username: "UserOne",
+// 		address: "test@request.com",
+// 		orders: [
+// 			{
+// 				orderid: "000002",
+// 				url: `/api/v1/orders-archieve/000002`
+// 			}
+// 		]
+// 	};
+// });
+
+// ---------------
+
+// const mockUserFindUpdate = sinon
+// 	.mock(userUpdater.userModel)
+// 	.expects("findOneAndUpdate")
+// 	.withArgs(
+// 		{
+// 			username: "UserOne"
+// 		},
+// 		{
+// 			orders: []
+// 		}
+// 	)
+// 	.resolves({
+// 		firstname: "UserFromInsomnia",
+// 		lastname: "from req.body",
+// 		username: "UserOne",
+// 		address: "test@request.com",
+// 		orders: []
+// 	});
+
+// userUpdater.userModel.findOneAndUpdate(
+// 	{
+// 		username: "UserOne"
+// 	},
+// 	{
+// 		orders: []
+// 	}
+// );
+// mockUserFindUpdate.verify();
+
+// userUpdater.updateAccountsDelOrder();
+// const mockTestingTwo = sinon
+// 	.mock(userUpdater)
+// 	.expects("updateAccountsDelOrder")
+// 	.resolves();
+
+// userUpdater.updateAccountsDelOrder();
+// mockTestingTwo.verify();
+
+// userUpdater.users = "UserOne";
+// userUpdater.usersToUpdate = [
+// 	{
+// 		firstname: "UserFromInsomnia",
+// 		lastname: "from req.body",
+// 		username: "UserOne",
+// 		address: "test@request.com",
+// 		orders: []
+// 	}
+// ];
+
+// userUpdater.resolvedUsers = [
+// 	{
+// 		firstname: "UserFromInsomnia",
+// 		lastname: "from req.body",
+// 		username: "UserOne",
+// 		address: "test@request.com",
+// 		orders: []
+// 	}
+// ];
+
+// userUpdater.fieldsToUpdate = [];
+// userUpdater.result = sinon.mock
+
+// const mockUserFindOne = sinon
+// 	.mock(userUpdater.userModel)
+// 	.expects("findOne")
+// 	.withArgs({
+// 		username: userUpdater.users
+// 	})
+// 	.resolves({
+// 		firstname: "UserFromInsomnia",
+// 		lastname: "from req.body",
+// 		username: "UserOne",
+// 		address: "test@request.com",
+// 		orders: [
+// 			{
+// 				orderid: "000001",
+// 				url: "none"
+// 			}
+// 		]
+// 	});
+// userUpdater.userModel.findOne({
+// 	username: userUpdater.users
+// });
+// mockUserFindOne.verify();
+
+// userUpdater.fieldsToUpdate = [];
+
+// const mockProdFindOne = sinon
+// 	.mock(prodUpdater.productModel)
+// 	.expects("findOne")
+// 	.withArgs({
+// 		productname: "Strawberries"
+// 	})
+// 	.resolves({
+// 		name: "Strawberries",
+// 		quantity: 23,
+// 		origin: "Italy",
+// 		price: 23.23
+// 	});
+// prodUpdater.productModel.findOne({
+// 	productname: "Strawberries"
+// });
+// mockProdFindOne.verify();
+
+// sinon
+// 	.mock(prodUpdater.productModel)
+// 	.expects("findOneAndUpdate")
+// 	.withArgs(
+// 		{
+// 			productname: "Strawberries"
+// 		},
+// 		{
+// 			quantity: 32
+// 		}
+// 	)
+// 	.resolves({
+// 		name: "Strawberries",
+// 		quantity: 32,
+// 		origin: "Italy",
+// 		price: 23.23
+// 	});
+
+// prodUpdater.restoreQuantities();
+
+// const mockTesting = sinon
+// 	.mock(prodUpdater)
+// 	.expects("restoreQuantities")
+// 	.resolves();
+
+// prodUpdater.restoreQuantities();
+// mockTesting.verify();
+
+// const mockOrderFindDelete = sinon
+// 	.mock(Order)
+// 	.expects("findOneAndDelete")
+// 	.withArgs({
+// 		orderid: "order000001"
+// 	})
+// 	.resolves({
+// 		orderid: "order00001",
+// 		users: [
+// 			{
+// 				username: "UserOne",
+// 				products: [
+// 					{
+// 						productname: "Watermelon",
+// 						quantity: 23
+// 					},
+// 					{
+// 						productname: "Strawberries",
+// 						quantity: 23
+// 					}
+// 				]
+// 			}
+// 		],
+// 		shipped: true,
+// 		date: "2022-09-06T21:55:50.076+00:00",
+// 		totalcost: 2000
+// 	});
+// Order.findOneAndDelete({
+// 	orderid: "order000001"
+// });
+// mockOrderFindDelete.verify();

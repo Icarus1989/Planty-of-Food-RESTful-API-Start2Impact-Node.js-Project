@@ -1,8 +1,14 @@
 const express = require("express");
 
-const Order = require("../models/Order");
-const Product = require("../models/Product");
+// const Order = require("../models/Order");
+// const Product = require("../models/Product");
 const User = require("../models/User");
+
+// const {
+// 	OrderManagerClass,
+// 	ProductUpdaterClass,
+// 	UserUpdaterClass
+// } = require("../routes/classes");
 
 async function getAllUsers(req, res, next) {
 	try {

@@ -12,6 +12,12 @@ const {
 	deleteOneProduct
 } = require("../controllers/productController");
 
+const {
+	OrderManagerClass,
+	ProductUpdaterClass,
+	UserUpdaterClass
+} = require("../routes/classes");
+
 const router = express.Router();
 // const app = express();
 

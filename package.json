@@ -36,6 +36,7 @@
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.19",
-		"nyc": "^15.1.0"
+		"nyc": "^15.1.0",
+		"sinon-express-mock": "^2.2.1"
 	}
 }

@@ -89,25 +89,6 @@ async function postOneOrder(req, res, next) {
 }
 
 async function putOneOrder(req, res, next) {
-	// 	async (req, res, next) => {
-	// 		try {
-	// const data = await req.body;
-	// 			const orderNumber = await req.params.ordNum;
-	// 			const orderId = `order${String(orderNumber)}`;
-
-	// 			const orderChanged = await Order.findOneAndUpdate(
-	// 				{ orderId: orderId },
-	// 				data,
-	// 				{
-	// 					new: true
-	// 				}
-	// 			);
-
-	// 			res.status(200).json(orderChanged);
-	// 		} catch (error) {
-	// 			next(error);
-	// 		}
-	// 	}
 	try {
 		const data = await req.body;
 		const orderNumber = await req.params.ordNum;

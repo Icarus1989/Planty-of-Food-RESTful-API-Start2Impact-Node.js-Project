@@ -1,14 +1,8 @@
 const express = require("express");
 
-const Order = require("../models/Order");
+// const Order = require("../models/Order");
 const Product = require("../models/Product");
-const User = require("../models/User");
-
-const {
-	OrderManagerClass,
-	ProductUpdaterClass,
-	UserUpdaterClass
-} = require("../routes/classes");
+// const User = require("../models/User");
 
 async function getAllProducts(req, res, next) {
 	try {
@@ -19,29 +13,6 @@ async function getAllProducts(req, res, next) {
 	}
 }
 
-// async function getOneOrder(req, res, next) {
-// 	try {
-// 		const orderNumber = req.params.ordNum;
-// 		const orderId = `order${String(orderNumber)}`;
-// 		Order.findOne({ orderid: orderId }, (err, data) => {
-// 			if (err) {
-// 				res.status(200).json({
-// 					message: `Error in searching ${orderId}`
-// 				});
-// 			} else if (data == null) {
-// 				res.status(200).json({
-// 					message: `${orderId} not exists`
-// 				});
-// 			} else {
-// 				res.status(200).json(data);
-// 			}
-// 		});
-// 	} catch (error) {
-// 		next(error);
-// 	}
-// }
-
-// searching bug...
 async function getOneProduct(req, res, next) {
 	try {
 		const prodId = await req.params.prodId;

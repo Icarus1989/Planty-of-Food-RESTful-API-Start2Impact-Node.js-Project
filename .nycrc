@@ -1,5 +1,6 @@
 {
 	"all": true,
+	"check-coverage": true,
 	"include": [
 		"test/**.js",
 		"src/**.js",
@@ -11,6 +12,7 @@
 	"exclude": [
 		"src/server.js",
 		"test/test-setup.spec.js",
+		"test/oldIndex.js",
 		"test/sinon-mongoose.js",
 		"src/api/routes/notes.js",
 		"src/api/routes/garbage.js"

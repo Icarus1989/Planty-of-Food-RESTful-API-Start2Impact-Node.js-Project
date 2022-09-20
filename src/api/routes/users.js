@@ -2,10 +2,14 @@ const express = require("express");
 const api = require("../../api");
 const monk = require("monk");
 const mongoose = require("mongoose");
-const User = require("../models/User");
+// const User = require("../models/User");
 const { celebrate, Joi, errors, Segments } = require("celebrate");
 const router = express.Router();
 // const app = express();
+
+const Order = require("../models/Order");
+const Product = require("../models/Product");
+const User = require("../models/User");
 
 // mongoose.connect(
 // 	`mongodb://localhost:27017/PoFTestDatabase`,
@@ -16,6 +20,12 @@ const router = express.Router();
 // 		console.log(error);
 // 	}
 // );
+
+const {
+	OrderManagerClass,
+	ProductUpdaterClass,
+	UserUpdaterClass
+} = require("../routes/classes");
 
 const {
 	getAllUsers,
