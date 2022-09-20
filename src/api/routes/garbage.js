@@ -3300,3 +3300,23 @@ await prodUpStub.withArgs(req.body, Product, Order, res);
 // 	orderid: "order000001"
 // });
 // mockOrderFindDelete.verify();
+
+// prodUpStub.restore();
+// prodUpdater.withArgs(req.body, Product, Order, res);
+
+// const mockTesting = sinon
+// 	.mock(prodUpdater)
+// 	.expects("restoreQuantities")
+// 	.resolves();
+
+// prodUpdater.restoreQuantities();
+// mockTesting.verify();
+// const stub = sinon.stub(prodUpdater, restoreQuantities);
+// stub.restore();
+// const prodUpdater = sinon.createStubInstance(ProductUpdaterClass);
+
+// const prodUpdater = sinon.createStubInstance(ProductUpdaterClass);
+// prodUpdater.withArgs(req.body, Product, Order, res);
+// deleteOneOrder(req, res, next);
+
+// const userUpdater = new UserUpdaterClass(req.body, User, Order, res);
