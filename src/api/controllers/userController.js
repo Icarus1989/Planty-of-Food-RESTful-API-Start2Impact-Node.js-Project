@@ -13,7 +13,7 @@ const User = require("../models/User");
 async function getAllUsers(req, res, next) {
 	try {
 		const accounts = await User.find({});
-		res.json(accounts);
+		res.status(200).json(accounts);
 	} catch (error) {
 		next(error);
 	}
@@ -45,7 +45,7 @@ async function postOneUser(req, res, next) {
 				if (err) {
 					console.log(err);
 				}
-				res.json(newUser);
+				res.status(200).json(newUser);
 			});
 		} else {
 			res.json({

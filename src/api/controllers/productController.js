@@ -32,6 +32,7 @@ async function getOneProduct(req, res, next) {
 			res.status(200).json(prodFound);
 		}
 	} catch (error) {
+		// res.status(500) ?
 		next(error);
 	}
 }
