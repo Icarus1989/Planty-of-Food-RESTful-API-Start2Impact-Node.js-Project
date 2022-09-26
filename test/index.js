@@ -116,20 +116,20 @@ describe("Stub router product Get All", async () => {
 // 		mockProdFind.verify();
 // 	});
 
-// 	it("Mock Product Model findOne( { name: } ) method", () => {
-// 		const mockProdFindOne = sinon
-// 			.mock(Product)
-// 			.expects("findOne")
-// 			.withArgs({ name: "Strawberries" })
-// 			.resolves({
-// 				name: "Strawberries",
-// 				quantity: 23000,
-// 				origin: "Italy",
-// 				price: 20.23
-// 			});
-// 		Product.findOne({ name: "Strawberries" });
-// 		mockProdFindOne.verify();
-// 	});
+// it("Mock Product Model findOne( { name: } ) method", () => {
+// 	const mockProdFindOne = sinon
+// 		.mock(Product)
+// 		.expects("findOne")
+// 		.withArgs({ name: "Strawberries" })
+// 		.resolves({
+// 			name: "Strawberries",
+// 			quantity: 23000,
+// 			origin: "Italy",
+// 			price: 20.23
+// 		});
+// 	Product.findOne({ name: "Strawberries" });
+// 	mockProdFindOne.verify();
+// });
 
 // 	// it("Mock Product Model findOneAndUpdate( { name: }, {field: newValue} ) method", () => {
 // 	// 	const mockProdFindUpdate = sinon
@@ -461,9 +461,9 @@ describe("Stub router product Get All", async () => {
 
 // ----------- Product tests
 
-const testProdPut = "Strawberries";
-const newQuantity = 23;
-const testProdDelete = "Strawberries";
+// const testProdPut = "Strawberries";
+// const newQuantity = 23;
+// const testProdDelete = "Strawberries";
 
 describe("Stub router product Get All", async () => {
 	before(() => {
@@ -581,15 +581,31 @@ describe("Stub router product Get One", () => {
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
 			const stubMethod = sinon.stub(getOneProduct);
-			getOneProduct(reqMock, resMock, next);
+			stubMethod(reqMock, resMock, next);
 			// stubMethod.restore();
+
+			// const mockProdFindOne = sinon
+			// 	.mock(Product)
+			// 	.expects("findOne")
+			// 	.withArgs({ name: "Strawberries" })
+			// 	.resolves({
+			// 		name: "Strawberries",
+			// 		quantity: 23000,
+			// 		origin: "Italy",
+			// 		price: 20.23
+			// 	});
+			// const prodFound = Product.findOne({ name: "Strawberries" });
+			// mockProdFindOne.verify();
+
+			// // const prodFound = Product.findOne({ name: label });
+			// console.log(prodFound);
 
 			const label = `${String(testProdGet)[0].toUpperCase()}${String(
 				testProdGet
 			).slice(1)}`;
 
 			resMock.status(200).json({
-				name: testProdGet,
+				name: label,
 				quantity: 23,
 				origin: "Italy",
 				price: 20.23
@@ -597,8 +613,8 @@ describe("Stub router product Get One", () => {
 
 			// <-------- problem here
 
-			assert.match(JSON.parse(res), {
-				name: "strawberries",
+			assert.match(JSON.parse(resMock), {
+				name: label,
 				quantity: 23,
 				origin: "Italy",
 				price: 20.23
@@ -606,10 +622,10 @@ describe("Stub router product Get One", () => {
 
 			// expect(resMock.statusCode).to.equal(200);
 
-			expect(JSON.parse(res)).to.have.property("name");
-			expect(JSON.parse(res)).to.have.property("quantity");
-			expect(JSON.parse(res)).to.have.property("origin");
-			expect(JSON.parse(res)).to.have.property("price");
+			// expect(JSON.parse(res)).to.have.property("name");
+			// expect(JSON.parse(res)).to.have.property("quantity");
+			// expect(JSON.parse(res)).to.have.property("origin");
+			// expect(JSON.parse(res)).to.have.property("price");
 		});
 	});
 	it("Stub for product router get (one) - Handle Error", async () => {
@@ -690,19 +706,19 @@ describe("Stub router product Post", async () => {
 	before(() => {
 		const stub = sinon.stub(router, "post").yields(
 			{
-				body: JSON.stringify({
+				body: {
 					name: "Strawberries",
 					quantity: 23,
 					origin: "Italy",
 					price: 10.23
-				})
+				}
 			},
-			JSON.stringify({
+			{
 				name: "Strawberries",
 				quantity: 23,
 				origin: "Italy",
 				price: 10.23
-			}),
+			},
 			null
 		);
 	});
@@ -716,6 +732,21 @@ describe("Stub router product Post", async () => {
 			const resMock = mockRes(res);
 			const stubMethod = sinon.stub(postOneProduct);
 			stubMethod(reqMock, resMock, next);
+
+			const saveStub = sinon.stub(Product.prototype, "save").returnsThis();
+
+			const newProduct = new Product(reqMock.body);
+			// console.log(newUser);
+			const result = newProduct.save();
+			// console.log(result);
+			// expect(saveStub.calledOnce).to.be.true;
+
+			assert.strictEqual(JSON.stringify(result), JSON.stringify(newProduct));
+			// User.save();
+			// saveStub.restore();
+
+			resMock.status(200).json(result);
+			// expect(result).to.have.property("name");
 
 			// const stubProductModel = sinon.stub(Product);
 			// const newProdStub = new stubProductModel(req.body);
@@ -736,19 +767,19 @@ describe("Stub router product Post", async () => {
 			// });
 			// mockProdSave.verify();
 
-			resMock.status(200).json({
-				name: testProdPut,
-				quantity: newQuantity,
-				origin: "Italy",
-				price: 10.23
-			});
+			// resMock.status(200).json({
+			// 	name: testProdPut,
+			// 	quantity: newQuantity,
+			// 	origin: "Italy",
+			// 	price: 10.23
+			// });
 
-			assert.match(JSON.parse(res), {
-				name: "Strawberries",
-				quantity: 23,
-				origin: "Italy",
-				price: 10.23
-			});
+			// assert.match(JSON.parse(res), {
+			// 	name: "Strawberries",
+			// 	quantity: 23,
+			// 	origin: "Italy",
+			// 	price: 10.23
+			// });
 			// expect(res).to.have.property("name");
 			// expect(res).to.have.property("quantity");
 			// expect(res).to.have.property("origin");
@@ -777,7 +808,9 @@ describe("Stub router product Put", async () => {
 				params: testProdPut,
 				body: {
 					name: testProdPut,
-					quantity: newQuantity
+					quantity: newQuantity,
+					origin: "Italy",
+					price: 20.23
 				}
 			},
 			JSON.stringify({
@@ -875,18 +908,18 @@ describe("Stub router product Delete One", async () => {
 			const stubMethod = sinon.stub(deleteOneProduct);
 			stubMethod(reqMock, resMock, next);
 
-			// const mockProductFindDelete = sinon
-			// 	.mock(Product)
-			// 	.expects("findOneAndDelete")
-			// 	.withArgs({ name: "Strawberries" })
-			// 	.resolves({
-			// 		name: "Strawberries",
-			// 		quantity: 23000,
-			// 		origin: "Italy",
-			// 		price: 20.23
-			// 	});
-			// Product.findOneAndDelete({ name: "Strawberries" });
-			// mockProductFindDelete.verify();
+			const mockProductFindDelete = sinon
+				.mock(Product)
+				.expects("findOneAndDelete")
+				.withArgs({ name: "Strawberries" })
+				.resolves({
+					name: "Strawberries",
+					quantity: 23000,
+					origin: "Italy",
+					price: 20.23
+				});
+			Product.findOneAndDelete({ name: "Strawberries" });
+			mockProductFindDelete.verify();
 
 			// <----- forse aumento coverage
 
@@ -982,10 +1015,10 @@ describe("Stub router user Get All", async () => {
 				.expects("find")
 				.withArgs({})
 				.resolves(body);
-			User.find({});
+			const result = User.find({});
 			mockUserFind.verify();
 
-			resMock.status(200).json(body);
+			resMock.status(200).json(result);
 			assert.isArray(JSON.parse(res).body);
 			assert.match(
 				JSON.parse(res).body,
@@ -1151,7 +1184,7 @@ describe("Stub router user Post", async () => {
 	before(() => {
 		const stub = sinon.stub(router, "post").yields(
 			{
-				body: JSON.stringify({
+				body: {
 					firstname: "userTestOne",
 					lastname: "for Sinon Testing",
 					username: "User1",
@@ -1162,7 +1195,7 @@ describe("Stub router user Post", async () => {
 							url: "none"
 						}
 					]
-				})
+				}
 			},
 			JSON.stringify({
 				firstname: "userTestOne",
@@ -1185,19 +1218,6 @@ describe("Stub router user Post", async () => {
 			expect(200);
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
-
-			resMock.status(200).json({
-				firstname: "userTestOne",
-				lastname: "for Sinon Testing",
-				username: "User1",
-				address: "test@sinon.com",
-				orders: [
-					{
-						orderid: "00001",
-						url: "none"
-					}
-				]
-			});
 
 			// const fakeSave = new User({
 			// 	firstname: "userTestOne",
@@ -1258,36 +1278,50 @@ describe("Stub router user Post", async () => {
 			// User.save();
 			// mockTesting.verify();
 
-			assert.match(JSON.parse(res), {
-				firstname: "userTestOne",
-				lastname: "for Sinon Testing",
-				username: "User1",
-				address: "test@sinon.com",
-				orders: [
-					{
-						orderid: "00001",
-						url: "none"
-					}
-				]
-			});
+			const saveStub = sinon.stub(User.prototype, "save").returnsThis();
 
-			sinon.assert.match(JSON.parse(res), {
-				firstname: "userTestOne",
-				lastname: "for Sinon Testing",
-				username: "User1",
-				address: "test@sinon.com",
-				orders: [
-					{
-						orderid: "00001",
-						url: "none"
-					}
-				]
-			});
-			expect(JSON.parse(res)).to.have.property("firstname");
-			expect(JSON.parse(res)).to.have.property("lastname");
-			expect(JSON.parse(res)).to.have.property("username");
-			expect(JSON.parse(res)).to.have.property("address");
-			expect(JSON.parse(res)).to.have.property("orders");
+			const newUser = new User(reqMock.body);
+			console.log(newUser);
+			const result = newUser.save();
+			console.log(result);
+			expect(saveStub.calledOnce).to.be.true;
+
+			assert.strictEqual(JSON.stringify(result), JSON.stringify(newUser));
+			// User.save();
+			// saveStub.restore();
+
+			resMock.status(200).json(result);
+
+			// assert.match(JSON.parse(res), {
+			// 	firstname: "userTestOne",
+			// 	lastname: "for Sinon Testing",
+			// 	username: "User1",
+			// 	address: "test@sinon.com",
+			// 	orders: [
+			// 		{
+			// 			orderid: "00001",
+			// 			url: "none"
+			// 		}
+			// 	]
+			// });
+
+			// sinon.assert.match(JSON.parse(res), {
+			// 	firstname: "userTestOne",
+			// 	lastname: "for Sinon Testing",
+			// 	username: "User1",
+			// 	address: "test@sinon.com",
+			// 	orders: [
+			// 		{
+			// 			orderid: "00001",
+			// 			url: "none"
+			// 		}
+			// 	]
+			// });
+			// expect(JSON.parse(res)).to.have.property("firstname");
+			// expect(JSON.parse(res)).to.have.property("lastname");
+			// expect(JSON.parse(res)).to.have.property("username");
+			// expect(JSON.parse(res)).to.have.property("address");
+			// expect(JSON.parse(res)).to.have.property("orders");
 		});
 	});
 	it("Stub for user router post - Handle Error", async () => {
@@ -1666,6 +1700,744 @@ describe("Stub router user Delete ", async () => {
 // });
 
 describe("Stub router order Get All", async () => {
+	const results = [
+		{
+			orderid: "order000001",
+			users: [
+				{
+					username: "UserOne",
+					products: [
+						{
+							productname: "Watermelon",
+							quantity: 23
+						},
+						{
+							productname: "Strawberries",
+							quantity: 23
+						}
+					]
+				}
+			],
+			shipped: false,
+			date: "2022-09-06T21:55:50.076+00:00",
+			totalcost: 2000
+		},
+		{
+			orderid: "order000002",
+			users: [
+				{
+					username: "UserTwo",
+					products: [
+						{
+							productname: "Watermelon",
+							quantity: 23
+						},
+						{
+							productname: "Strawberries",
+							quantity: 23
+						}
+					]
+				}
+			],
+			shipped: false,
+			date: "2022-09-06T21:55:50.076+00:00",
+			totalcost: 2000
+		}
+	];
+	before(() => {
+		const stub = sinon.stub(router, "get").yields(
+			{
+				params: {
+					filter: "orderid",
+					value: "order00001",
+					orderBy: undefined,
+					sort: undefined
+				}
+			},
+			JSON.stringify({
+				body: results
+			}),
+			null
+		);
+	});
+
+	it("Stub for router order get (all)", async () => {
+		router.get("/orders-archieve/", async (req, res, next) => {
+			const reqMock = mockReq(req);
+			const resMock = mockRes(res);
+			getAllOrders(reqMock, resMock, next);
+
+			const eightOrderStub = sinon.createStubInstance(OrderManagerClass, {
+				determinate: sinon.stub().returnsThis(),
+				ordering: sinon.stub().returnsThis(),
+				createResponse: sinon.stub().returnsThis(),
+				noProducts: sinon.stub().returnsThis(),
+				parametersHandling: sinon.stub().returnsThis()
+			});
+
+			const eightOrderManager = new OrderManagerClass();
+
+			eightOrderManager.response = JSON.parse(res).body;
+			eightOrderManager.data = JSON.parse(res).body;
+			eightOrderManager.filterQuery = "date";
+			eightOrderManager.valueQuery = "2022-09-06T21:55:50.076+00:00";
+			eightOrderManager.orderByQuery = undefined;
+			eightOrderManager.sortQuery = undefined;
+
+			eightOrderManager.determinate();
+			eightOrderManager.ordering();
+			eightOrderManager.createResponse();
+			eightOrderManager.noProducts();
+			eightOrderManager.parametersHandling();
+
+			// console.log(thirdOrderStub);
+
+			// secondOrderManager.determinate().then((result) => console.log(result));
+
+			// console.log(secondOrderStub.determinate());
+			// console.log(secondOrderStub.ordering());
+
+			// expect(secondOrderStub.determinate()).to.be.equal(results);
+			// expect(thirdOrderManager.determinate().response).to.be.a("array");
+			// return secondOrderStub.determinate().should.eventually.equal(results);
+			// assert(secondOrderStub.determinate()).returns(results);
+		});
+	});
+
+	it("Stub for router order get (all) - Handle Error", async () => {
+		router.get(`/orders-archieve/`, async (req, res, next) => {
+			expect(500);
+			const reqMock = mockReq(req);
+			const resMock = new Error();
+			getAllOrders(reqMock, resMock, next);
+		});
+	});
+
+	after(() => {
+		router.get.restore();
+	});
+});
+
+describe("Stub router order Get All", async () => {
+	const results = [
+		{
+			orderid: "order000001",
+			users: [
+				{
+					username: "UserOne",
+					products: [
+						{
+							productname: "Watermelon",
+							quantity: 23
+						},
+						{
+							productname: "Strawberries",
+							quantity: 23
+						}
+					]
+				}
+			],
+			shipped: false,
+			date: "2022-09-06T21:55:50.076+00:00",
+			totalcost: 2000
+		},
+		{
+			orderid: "order000002",
+			users: [
+				{
+					username: "UserTwo",
+					products: [
+						{
+							productname: "Watermelon",
+							quantity: 23
+						},
+						{
+							productname: "Strawberries",
+							quantity: 23
+						}
+					]
+				}
+			],
+			shipped: false,
+			date: "2022-09-06T21:55:50.076+00:00",
+			totalcost: 2000
+		}
+	];
+	before(() => {
+		const stub = sinon.stub(router, "get").yields(
+			{
+				params: {
+					filter: "orderid",
+					value: "order00001",
+					orderBy: undefined,
+					sort: undefined
+				}
+			},
+			JSON.stringify({
+				body: results
+			}),
+			null
+		);
+	});
+
+	it("Stub for router order get (all)", async () => {
+		router.get("/orders-archieve/", async (req, res, next) => {
+			const reqMock = mockReq(req);
+			const resMock = mockRes(res);
+			getAllOrders(reqMock, resMock, next);
+
+			const seventhOrderStub = sinon.createStubInstance(OrderManagerClass, {
+				determinate: sinon.stub().returnsThis(),
+				ordering: sinon.stub().returnsThis(),
+				createResponse: sinon.stub().returnsThis(),
+				noProducts: sinon.stub().returnsThis(),
+				parametersHandling: sinon.stub().returnsThis()
+			});
+
+			const seventhOrderManager = new OrderManagerClass();
+
+			seventhOrderManager.response = JSON.parse(res).body;
+			seventhOrderManager.data = JSON.parse(res).body;
+			seventhOrderManager.filterQuery = "orderid";
+			seventhOrderManager.valueQuery = "order00001";
+			seventhOrderManager.orderByQuery = undefined;
+			seventhOrderManager.sortQuery = undefined;
+
+			seventhOrderManager.determinate();
+			seventhOrderManager.ordering();
+			seventhOrderManager.createResponse();
+			seventhOrderManager.noProducts();
+			seventhOrderManager.parametersHandling();
+
+			// console.log(thirdOrderStub);
+
+			// secondOrderManager.determinate().then((result) => console.log(result));
+
+			// console.log(secondOrderStub.determinate());
+			// console.log(secondOrderStub.ordering());
+
+			// expect(secondOrderStub.determinate()).to.be.equal(results);
+			// expect(thirdOrderManager.determinate().response).to.be.a("array");
+			// return secondOrderStub.determinate().should.eventually.equal(results);
+			// assert(secondOrderStub.determinate()).returns(results);
+		});
+	});
+
+	it("Stub for router order get (all) - Handle Error", async () => {
+		router.get(`/orders-archieve/`, async (req, res, next) => {
+			expect(500);
+			const reqMock = mockReq(req);
+			const resMock = new Error();
+			getAllOrders(reqMock, resMock, next);
+		});
+	});
+
+	after(() => {
+		router.get.restore();
+	});
+});
+
+describe("Stub router order Get All", async () => {
+	const results = [
+		{
+			orderid: "order000001",
+			users: [
+				{
+					username: "UserOne",
+					products: [
+						{
+							productname: "Watermelon",
+							quantity: 23
+						},
+						{
+							productname: "Strawberries",
+							quantity: 23
+						}
+					]
+				}
+			],
+			shipped: false,
+			date: "2022-09-06T21:55:50.076+00:00",
+			totalcost: 2000
+		},
+		{
+			orderid: "order000002",
+			users: [
+				{
+					username: "UserTwo",
+					products: [
+						{
+							productname: "Watermelon",
+							quantity: 23
+						},
+						{
+							productname: "Strawberries",
+							quantity: 23
+						}
+					]
+				}
+			],
+			shipped: false,
+			date: "2022-09-06T21:55:50.076+00:00",
+			totalcost: 2000
+		}
+	];
+	before(() => {
+		const stub = sinon.stub(router, "get").yields(
+			{
+				params: {
+					filter: "orderid",
+					value: "order00001",
+					orderBy: "orderid",
+					sort: "increasing"
+				}
+			},
+			JSON.stringify({
+				body: results
+			}),
+			null
+		);
+	});
+
+	it("Stub for router order get (all)", async () => {
+		router.get("/orders-archieve/", async (req, res, next) => {
+			const reqMock = mockReq(req);
+			const resMock = mockRes(res);
+			getAllOrders(reqMock, resMock, next);
+
+			const sixthOrderStub = sinon.createStubInstance(OrderManagerClass, {
+				determinate: sinon.stub().returnsThis(),
+				ordering: sinon.stub().returnsThis(),
+				createResponse: sinon.stub().returnsThis(),
+				noProducts: sinon.stub().returnsThis(),
+				parametersHandling: sinon.stub().returnsThis()
+			});
+
+			const sixthOrderManager = new OrderManagerClass();
+
+			sixthOrderManager.response = JSON.parse(res).body;
+			sixthOrderManager.data = JSON.parse(res).body;
+			sixthOrderManager.filterQuery = "orderid";
+			sixthOrderManager.valueQuery = "order00001";
+			sixthOrderManager.orderByQuery = "orderid";
+			sixthOrderManager.sortQuery = "increasing";
+
+			sixthOrderManager.determinate();
+			sixthOrderManager.ordering();
+			sixthOrderManager.createResponse();
+			sixthOrderManager.noProducts();
+			sixthOrderManager.parametersHandling();
+
+			// console.log(thirdOrderStub);
+
+			// secondOrderManager.determinate().then((result) => console.log(result));
+
+			// console.log(secondOrderStub.determinate());
+			// console.log(secondOrderStub.ordering());
+
+			// expect(secondOrderStub.determinate()).to.be.equal(results);
+			// expect(thirdOrderManager.determinate().response).to.be.a("array");
+			// return secondOrderStub.determinate().should.eventually.equal(results);
+			// assert(secondOrderStub.determinate()).returns(results);
+		});
+	});
+
+	it("Stub for router order get (all) - Handle Error", async () => {
+		router.get(`/orders-archieve/`, async (req, res, next) => {
+			expect(500);
+			const reqMock = mockReq(req);
+			const resMock = new Error();
+			getAllOrders(reqMock, resMock, next);
+		});
+	});
+
+	after(() => {
+		router.get.restore();
+	});
+});
+
+describe("Stub router order Get All", async () => {
+	const results = [
+		{
+			orderid: "order000001",
+			users: [
+				{
+					username: "UserOne",
+					products: [
+						{
+							productname: "Watermelon",
+							quantity: 23
+						},
+						{
+							productname: "Strawberries",
+							quantity: 23
+						}
+					]
+				}
+			],
+			shipped: false,
+			date: "2022-09-06T21:55:50.076+00:00",
+			totalcost: 2000
+		},
+		{
+			orderid: "order000002",
+			users: [
+				{
+					username: "UserTwo",
+					products: [
+						{
+							productname: "Watermelon",
+							quantity: 23
+						},
+						{
+							productname: "Strawberries",
+							quantity: 23
+						}
+					]
+				}
+			],
+			shipped: false,
+			date: "2022-09-06T21:55:50.076+00:00",
+			totalcost: 2000
+		}
+	];
+	before(() => {
+		const stub = sinon.stub(router, "get").yields(
+			{
+				params: {
+					filter: "shipped",
+					value: true,
+					orderBy: "orderid",
+					sort: "increasing"
+				}
+			},
+			JSON.stringify({
+				body: results
+			}),
+			null
+		);
+	});
+
+	it("Stub for router order get (all)", async () => {
+		router.get("/orders-archieve/", async (req, res, next) => {
+			const reqMock = mockReq(req);
+			const resMock = mockRes(res);
+			getAllOrders(reqMock, resMock, next);
+
+			const fifthOrderStub = sinon.createStubInstance(OrderManagerClass, {
+				determinate: sinon.stub().returnsThis(),
+				ordering: sinon.stub().returnsThis(),
+				createResponse: sinon.stub().returnsThis(),
+				noProducts: sinon.stub().returnsThis(),
+				parametersHandling: sinon.stub().returnsThis()
+			});
+
+			const fifthOrderManager = new OrderManagerClass();
+
+			fifthOrderManager.response = JSON.parse(res).body;
+			fifthOrderManager.data = JSON.parse(res).body;
+			fifthOrderManager.filterQuery = "shipped";
+			fifthOrderManager.valueQuery = true;
+			fifthOrderManager.orderByQuery = "orderid";
+			fifthOrderManager.sortQuery = "increasing";
+
+			fifthOrderManager.determinate();
+			fifthOrderManager.ordering();
+			fifthOrderManager.createResponse();
+			fifthOrderManager.noProducts();
+			fifthOrderManager.parametersHandling();
+
+			// console.log(thirdOrderStub);
+
+			// secondOrderManager.determinate().then((result) => console.log(result));
+
+			// console.log(secondOrderStub.determinate());
+			// console.log(secondOrderStub.ordering());
+
+			// expect(secondOrderStub.determinate()).to.be.equal(results);
+			// expect(thirdOrderManager.determinate().response).to.be.a("array");
+			// return secondOrderStub.determinate().should.eventually.equal(results);
+			// assert(secondOrderStub.determinate()).returns(results);
+		});
+	});
+
+	after(() => {
+		router.get.restore();
+	});
+});
+
+describe("Stub router order Get All", async () => {
+	const results = [
+		{
+			orderid: "order000001",
+			users: [
+				{
+					username: "UserOne",
+					products: [
+						{
+							productname: "Watermelon",
+							quantity: 23
+						},
+						{
+							productname: "Strawberries",
+							quantity: 23
+						}
+					]
+				}
+			],
+			shipped: false,
+			date: "2022-09-06T21:55:50.076+00:00",
+			totalcost: 2000
+		},
+		{
+			orderid: "order000002",
+			users: [
+				{
+					username: "UserTwo",
+					products: [
+						{
+							productname: "Watermelon",
+							quantity: 23
+						},
+						{
+							productname: "Strawberries",
+							quantity: 23
+						}
+					]
+				}
+			],
+			shipped: false,
+			date: "2022-09-06T21:55:50.076+00:00",
+			totalcost: 2000
+		}
+	];
+	before(() => {
+		const stub = sinon.stub(router, "get").yields(
+			{
+				params: {
+					filter: "date",
+					value: "2022-09-06T21:55:50.076+00:00",
+					orderBy: "orderid",
+					sort: "increasing"
+				}
+			},
+			JSON.stringify({
+				body: results
+			}),
+			null
+		);
+	});
+
+	it("Stub for router order get (all)", async () => {
+		router.get("/orders-archieve/", async (req, res, next) => {
+			const reqMock = mockReq(req);
+			const resMock = mockRes(res);
+			getAllOrders(reqMock, resMock, next);
+
+			const fourthOrderStub = sinon.createStubInstance(OrderManagerClass, {
+				determinate: sinon.stub().returnsThis(),
+				ordering: sinon.stub().returnsThis(),
+				createResponse: sinon.stub().returnsThis(),
+				noProducts: sinon.stub().returnsThis(),
+				parametersHandling: sinon.stub().returnsThis()
+			});
+
+			const fourthOrderManager = new OrderManagerClass();
+
+			fourthOrderManager.response = JSON.parse(res).body;
+			fourthOrderManager.data = JSON.parse(res).body;
+			fourthOrderManager.filterQuery = "date";
+			fourthOrderManager.valueQuery = "2022-09-06T21:55:50.076+00:00";
+			fourthOrderManager.orderByQuery = "orderid";
+			fourthOrderManager.sortQuery = "increasing";
+
+			fourthOrderManager.determinate();
+			fourthOrderManager.ordering();
+			fourthOrderManager.createResponse();
+			fourthOrderManager.noProducts();
+			fourthOrderManager.parametersHandling();
+
+			// console.log(thirdOrderStub);
+
+			// secondOrderManager.determinate().then((result) => console.log(result));
+
+			// console.log(secondOrderStub.determinate());
+			// console.log(secondOrderStub.ordering());
+
+			// expect(secondOrderStub.determinate()).to.be.equal(results);
+			// expect(thirdOrderManager.determinate().response).to.be.a("array");
+			// return secondOrderStub.determinate().should.eventually.equal(results);
+			// assert(secondOrderStub.determinate()).returns(results);
+		});
+	});
+
+	it("Stub for router order get (all) - Handle Error", async () => {
+		router.get(`/orders-archieve/`, async (req, res, next) => {
+			expect(500);
+			const reqMock = mockReq(req);
+			const resMock = new Error();
+			getAllOrders(reqMock, resMock, next);
+		});
+	});
+
+	after(() => {
+		router.get.restore();
+	});
+});
+
+describe("Stub router order Get All", async () => {
+	const results = [
+		{
+			orderid: "order000001",
+			users: [
+				{
+					username: "UserOne",
+					products: [
+						{
+							productname: "Watermelon",
+							quantity: 23
+						},
+						{
+							productname: "Strawberries",
+							quantity: 23
+						}
+					]
+				}
+			],
+			shipped: false,
+			date: "2022-09-06T21:55:50.076+00:00",
+			totalcost: 2000
+		},
+		{
+			orderid: "order000002",
+			users: [
+				{
+					username: "UserTwo",
+					products: [
+						{
+							productname: "Watermelon",
+							quantity: 23
+						},
+						{
+							productname: "Strawberries",
+							quantity: 23
+						}
+					]
+				}
+			],
+			shipped: false,
+			date: "2022-09-06T21:55:50.076+00:00",
+			totalcost: 2000
+		}
+	];
+	before(() => {
+		const stub = sinon.stub(router, "get").yields(
+			{
+				params: {
+					filter: undefined,
+					value: undefined,
+					orderBy: undefined,
+					sort: undefined
+				}
+			},
+			JSON.stringify({
+				body: results
+			}),
+			null
+		);
+	});
+
+	it("Stub for router order get (all)", async () => {
+		router.get("/orders-archieve/", async (req, res, next) => {
+			const reqMock = mockReq(req);
+			const resMock = mockRes(res);
+			getAllOrders(reqMock, resMock, next);
+
+			const thirdOrderStub = sinon.createStubInstance(OrderManagerClass, {
+				determinate: sinon.stub().returnsThis(),
+				ordering: sinon.stub().returnsThis(),
+				createResponse: sinon.stub().returnsThis(),
+				noProducts: sinon.stub().returnsThis(),
+				parametersHandling: sinon.stub().returnsThis()
+			});
+
+			const thirdOrderManager = new OrderManagerClass();
+
+			thirdOrderManager.response = JSON.parse(res).body;
+			thirdOrderManager.data = JSON.parse(res).body;
+			thirdOrderManager.filterQuery = undefined;
+			thirdOrderManager.valueQuery = undefined;
+			thirdOrderManager.orderByQuery = undefined;
+			thirdOrderManager.sortQuery = undefined;
+
+			thirdOrderManager.determinate();
+			thirdOrderManager.ordering();
+			thirdOrderManager.createResponse();
+			thirdOrderManager.noProducts();
+			thirdOrderManager.parametersHandling();
+
+			resMock.status(200).json(results);
+		});
+	});
+
+	it("Stub for router order get (all) - Handle Error", async () => {
+		router.get(`/orders-archieve/`, async (req, res, next) => {
+			expect(500);
+			const reqMock = mockReq(req);
+			const resMock = new Error();
+			getAllOrders(reqMock, resMock, next);
+		});
+	});
+
+	after(() => {
+		router.get.restore();
+	});
+});
+describe("Stub router order Get All", async () => {
+	const results = [
+		{
+			orderid: "order000001",
+			users: [
+				{
+					username: "UserOne",
+					products: [
+						{
+							productname: "Watermelon",
+							quantity: 23
+						},
+						{
+							productname: "Strawberries",
+							quantity: 23
+						}
+					]
+				}
+			],
+			shipped: false,
+			date: "2022-09-06T21:55:50.076+00:00",
+			totalcost: 2000
+		},
+		{
+			orderid: "order000002",
+			users: [
+				{
+					username: "UserTwo",
+					products: [
+						{
+							productname: "Watermelon",
+							quantity: 23
+						},
+						{
+							productname: "Strawberries",
+							quantity: 23
+						}
+					]
+				}
+			],
+			shipped: false,
+			date: "2022-09-06T21:55:50.076+00:00",
+			totalcost: 2000
+		}
+	];
 	before(() => {
 		const stub = sinon.stub(router, "get").yields(
 			{
@@ -1674,6 +2446,85 @@ describe("Stub router order Get All", async () => {
 					value: "strawberries",
 					orderBy: "orderid",
 					sort: undefined
+				}
+			},
+			JSON.stringify({
+				body: results
+			}),
+			null
+		);
+	});
+
+	it("Stub for router order get (all) - miss sort param", () => {
+		router.get("/orders-archieve/", async (req, res, next) => {
+			//
+
+			const reqMock = mockReq(req);
+			const resMock = mockRes(res);
+
+			const orderManagerStub = sinon.createStubInstance(OrderManagerClass, {
+				determinate: sinon.stub().returnsThis(),
+				ordering: sinon.stub().returnsThis(),
+				createResponse: sinon.stub().returnsThis(),
+				noProducts: sinon.stub().returnsThis(),
+				parametersHandling: sinon.stub().returnsThis()
+			});
+
+			const orderManager = new OrderManagerClass();
+
+			orderManager.response = JSON.parse(res).body;
+			orderManager.data = JSON.parse(res).body;
+			orderManager.filterQuery = "productname";
+			orderManager.valueQuery = "strawberries";
+			orderManager.orderByQuery = "orderid";
+			orderManager.sortQuery = undefined;
+
+			orderManager.determinate();
+			orderManager.ordering();
+			orderManager.createResponse();
+			orderManager.noProducts();
+			orderManager.parametersHandling();
+
+			// expect.fail(orderManager.parametersHandling(), {
+			// 	message: `Need a &sort= parameter for search...`
+			// });
+
+			resMock.status(200).json({
+				message: `Need a &sort= parameter for search...`
+			});
+
+			expect(orderManager.parametersHandling(), {
+				message: `Need a &sort= parameter for search...`
+			});
+			sinon.assert.match(JSON.parse(resMock), {
+				message: `Need a &sort= parameter for search...`
+			});
+		});
+	});
+
+	it("Stub for router order get (all) - Handle Error", async () => {
+		router.get(`/orders-archieve/`, async (req, res, next) => {
+			expect(500);
+			const reqMock = mockReq(req);
+			const resMock = new Error();
+			getAllOrders(reqMock, resMock, next);
+		});
+	});
+
+	after(() => {
+		router.get.restore();
+	});
+});
+
+describe("Stub router order Get All", async () => {
+	before(() => {
+		const stub = sinon.stub(router, "get").yields(
+			{
+				params: {
+					filter: "productname",
+					value: "strawberries",
+					orderBy: "orderid",
+					sort: "decreasing"
 				}
 			},
 			JSON.stringify({
@@ -1851,110 +2702,24 @@ describe("Stub router order Get All", async () => {
 			secondOrderStub.noProducts();
 			secondOrderStub.parametersHandling();
 
-			// secondOrderManager.determinate().then((result) => console.log(result));
-
-			// console.log(secondOrderStub.determinate());
-			// console.log(secondOrderStub.ordering());
-
-			// expect(secondOrderStub.determinate()).to.be.equal(results);
 			expect(secondOrderStub.determinate().response).to.be.a("array");
-			// return secondOrderStub.determinate().should.eventually.equal(results);
-			// assert(secondOrderStub.determinate()).returns(results);
+
+			expect("Content-Type", /json/);
+			expect(200);
+
+			assert.isArray(JSON.parse(res).body);
+			const orders = JSON.parse(res).body;
+			orders.map((order) => {
+				expect(order).to.have.property("orderid");
+				expect(order).to.have.property("users");
+				expect(order).to.have.property("shipped");
+				expect(order).to.have.property("date");
+				expect(order).to.have.property("totalcost");
+			});
+			resMock.status(200).json(results);
 		});
 	});
-	it("Stub for router order get (all) - miss sort param", () => {
-		// Problema qui
-		const results = [
-			{
-				orderid: "order000001",
-				users: [
-					{
-						username: "UserOne",
-						products: [
-							{
-								productname: "Watermelon",
-								quantity: 23
-							},
-							{
-								productname: "Strawberries",
-								quantity: 23
-							}
-						]
-					}
-				],
-				shipped: false,
-				date: "2022-09-06T21:55:50.076+00:00",
-				totalcost: 2000
-			},
-			{
-				orderid: "order000002",
-				users: [
-					{
-						username: "UserTwo",
-						products: [
-							{
-								productname: "Watermelon",
-								quantity: 23
-							},
-							{
-								productname: "Strawberries",
-								quantity: 23
-							}
-						]
-					}
-				],
-				shipped: false,
-				date: "2022-09-06T21:55:50.076+00:00",
-				totalcost: 2000
-			}
-		];
-		router.get("/orders-archieve/", async (req, res, next) => {
-			//
 
-			const reqMock = mockReq(req);
-			const resMock = mockRes(res);
-
-			const orderManagerStub = sinon.createStubInstance(OrderManagerClass, {
-				determinate: sinon.stub().returnsThis(),
-				ordering: sinon.stub().returnsThis(),
-				createResponse: sinon.stub().returnsThis(),
-				noProducts: sinon.stub().returnsThis(),
-				parametersHandling: sinon.stub().returns({
-					message: `Need a &sort= parameter for search...`
-				})
-			});
-
-			const orderManager = new OrderManagerClass();
-
-			orderManager.response = JSON.parse(res).body;
-			orderManager.data = JSON.parse(res).body;
-			orderManager.filterQuery = "productname";
-			orderManager.valueQuery = "strawberries";
-			orderManager.orderByQuery = "orderid";
-			orderManager.sortQuery = undefined;
-
-			orderManager.determinate();
-			orderManager.ordering();
-			orderManager.createResponse();
-			orderManager.noProducts();
-			orderManager.parametersHandling();
-
-			// expect.fail(orderManager.parametersHandling(), {
-			// 	message: `Need a &sort= parameter for search...`
-			// });
-
-			resMock.status(200).json({
-				message: `Need a &sort= parameter for search...`
-			});
-
-			expect(orderManager.parametersHandling(), {
-				message: `Need a &sort= parameter for search...`
-			});
-			sinon.assert.match(JSON.parse(resMock), {
-				message: `Need a &sort= parameter for search...`
-			});
-		});
-	});
 	it("Stub for router order get (all) - Handle Error", async () => {
 		router.get(`/orders-archieve/`, async (req, res, next) => {
 			expect(500);
@@ -1964,281 +2729,6 @@ describe("Stub router order Get All", async () => {
 		});
 	});
 
-	it("Stub for router order get (all)", async () => {
-		// const results = [
-		// 	{
-		// 		orderid: "order000001",
-		// 		users: [
-		// 			{
-		// 				username: "UserOne",
-		// 				products: [
-		// 					{
-		// 						productname: "Watermelon",
-		// 						quantity: 23
-		// 					},
-		// 					{
-		// 						productname: "Strawberries",
-		// 						quantity: 23
-		// 					}
-		// 				]
-		// 			}
-		// 		],
-		// 		shipped: false,
-		// 		date: "2022-09-06T21:55:50.076+00:00",
-		// 		totalcost: 2000
-		// 	},
-		// 	{
-		// 		orderid: "order000002",
-		// 		users: [
-		// 			{
-		// 				username: "UserTwo",
-		// 				products: [
-		// 					{
-		// 						productname: "Watermelon",
-		// 						quantity: 23
-		// 					},
-		// 					{
-		// 						productname: "Strawberries",
-		// 						quantity: 23
-		// 					}
-		// 				]
-		// 			}
-		// 		],
-		// 		shipped: false,
-		// 		date: "2022-09-06T21:55:50.076+00:00",
-		// 		totalcost: 2000
-		// 	}
-		// ];
-		router.get("/orders-archieve/", (req, res, next) => {
-			const reqMock = mockReq(req);
-			const resMock = mockRes(res);
-
-			const thirdOrderStub = sinon.createStubInstance(OrderManagerClass, {
-				determinate: sinon.stub().returnsThis(),
-				ordering: sinon.stub().returnsThis(),
-				createResponse: sinon.stub().returnsThis(),
-				noProducts: sinon.stub().returnsThis(),
-				parametersHandling: sinon.stub().returnsThis()
-			});
-
-			const thirdOrderManager = new OrderManagerClass();
-
-			thirdOrderManager.response = JSON.parse(res).body;
-			thirdOrderManager.data = JSON.parse(res).body;
-			thirdOrderManager.filterQuery = undefined;
-			thirdOrderManager.valueQuery = undefined;
-			thirdOrderManager.orderByQuery = undefined;
-			thirdOrderManager.sortQuery = undefined;
-
-			thirdOrderManager.determinate();
-			thirdOrderManager.ordering();
-			thirdOrderManager.createResponse();
-			thirdOrderManager.noProducts();
-			thirdOrderManager.parametersHandling();
-
-			// console.log(thirdOrderStub);
-
-			// secondOrderManager.determinate().then((result) => console.log(result));
-
-			// console.log(secondOrderStub.determinate());
-			// console.log(secondOrderStub.ordering());
-
-			// expect(secondOrderStub.determinate()).to.be.equal(results);
-			// expect(thirdOrderManager.determinate().response).to.be.a("array");
-			// return secondOrderStub.determinate().should.eventually.equal(results);
-			// assert(secondOrderStub.determinate()).returns(results);
-		});
-	});
-	it("Stub for router order get (all)", async () => {
-		router.get("/orders-archieve/", (req, res, next) => {
-			// orderManagerStub.resolves();
-
-			const reqMock = mockReq(req);
-			const resMock = mockRes(res);
-
-			const fourthOrderStub = sinon.createStubInstance(OrderManagerClass, {
-				determinate: sinon.stub().returnsThis(),
-				ordering: sinon.stub().returnsThis(),
-				createResponse: sinon.stub().returnsThis(),
-				noProducts: sinon.stub().returnsThis(),
-				parametersHandling: sinon.stub().returnsThis()
-			});
-
-			const fourthOrderManager = new OrderManagerClass();
-
-			fourthOrderManager.response = JSON.parse(res).body;
-			fourthOrderManager.data = JSON.parse(res).body;
-			fourthOrderManager.filterQuery = "date";
-			fourthOrderManager.valueQuery = "2022-09-06T21:55:50.076+00:00";
-			fourthOrderManager.orderByQuery = "orderid";
-			fourthOrderManager.sortQuery = "increasing";
-
-			fourthOrderManager.determinate();
-			fourthOrderManager.ordering();
-			fourthOrderManager.createResponse();
-			fourthOrderManager.noProducts();
-			fourthOrderManager.parametersHandling();
-
-			const fifthOrderStub = sinon.createStubInstance(OrderManagerClass, {
-				determinate: sinon.stub().returnsThis(),
-				ordering: sinon.stub().returnsThis(),
-				createResponse: sinon.stub().returnsThis(),
-				noProducts: sinon.stub().returnsThis(),
-				parametersHandling: sinon.stub().returnsThis()
-			});
-
-			const fifthOrderManager = new OrderManagerClass();
-
-			fifthOrderManager.response = JSON.parse(res).body;
-			fifthOrderManager.data = JSON.parse(res).body;
-			fifthOrderManager.filterQuery = "shipped";
-			fifthOrderManager.valueQuery = true;
-			fifthOrderManager.orderByQuery = "orderid";
-			fifthOrderManager.sortQuery = "increasing";
-
-			fifthOrderManager.determinate();
-			fifthOrderManager.ordering();
-			fifthOrderManager.createResponse();
-			fifthOrderManager.noProducts();
-			fifthOrderManager.parametersHandling();
-
-			const sixthOrderStub = sinon.createStubInstance(OrderManagerClass, {
-				determinate: sinon.stub().returnsThis(),
-				ordering: sinon.stub().returnsThis(),
-				createResponse: sinon.stub().returnsThis(),
-				noProducts: sinon.stub().returnsThis(),
-				parametersHandling: sinon.stub().returnsThis()
-			});
-
-			const sixthOrderManager = new OrderManagerClass();
-
-			sixthOrderManager.response = JSON.parse(res).body;
-			sixthOrderManager.data = JSON.parse(res).body;
-			sixthOrderManager.filterQuery = "orderid";
-			sixthOrderManager.valueQuery = "order00001";
-			sixthOrderManager.orderByQuery = "orderid";
-			sixthOrderManager.sortQuery = "increasing";
-
-			sixthOrderManager.determinate();
-			sixthOrderManager.ordering();
-			sixthOrderManager.createResponse();
-			sixthOrderManager.noProducts();
-			sixthOrderManager.parametersHandling();
-
-			const seventhOrderStub = sinon.createStubInstance(OrderManagerClass, {
-				determinate: sinon.stub().returnsThis(),
-				ordering: sinon.stub().returnsThis(),
-				createResponse: sinon.stub().returnsThis(),
-				noProducts: sinon.stub().returnsThis(),
-				parametersHandling: sinon.stub().returnsThis()
-			});
-
-			const seventhOrderManager = new OrderManagerClass();
-
-			seventhOrderManager.response = JSON.parse(res).body;
-			seventhOrderManager.data = JSON.parse(res).body;
-			seventhOrderManager.filterQuery = "orderid";
-			seventhOrderManager.valueQuery = "order00001";
-			seventhOrderManager.orderByQuery = undefined;
-			seventhOrderManager.sortQuery = undefined;
-
-			seventhOrderManager.determinate();
-			seventhOrderManager.ordering();
-			seventhOrderManager.createResponse();
-			seventhOrderManager.noProducts();
-			seventhOrderManager.parametersHandling();
-
-			const eightOrderStub = sinon.createStubInstance(OrderManagerClass, {
-				determinate: sinon.stub().returnsThis(),
-				ordering: sinon.stub().returnsThis(),
-				createResponse: sinon.stub().returnsThis(),
-				noProducts: sinon.stub().returnsThis(),
-				parametersHandling: sinon.stub().returnsThis()
-			});
-
-			const eightOrderManager = new OrderManagerClass();
-
-			eightOrderManager.response = JSON.parse(res).body;
-			eightOrderManager.data = JSON.parse(res).body;
-			eightOrderManager.filterQuery = "date";
-			eightOrderManager.valueQuery = "2022-09-06T21:55:50.076+00:00";
-			eightOrderManager.orderByQuery = undefined;
-			eightOrderManager.sortQuery = undefined;
-
-			eightOrderManager.determinate();
-			eightOrderManager.ordering();
-			eightOrderManager.createResponse();
-			eightOrderManager.noProducts();
-			eightOrderManager.parametersHandling();
-
-			expect("Content-Type", /json/);
-			expect(200);
-			// expect(res.statusCode).to.equal(200);
-
-			// const stub = sinon.stub(getAllOrders);
-			// getAllOrders(reqMock, resMock, next);
-
-			assert.isArray(JSON.parse(res).body);
-			assert.match(
-				JSON.parse(res).body,
-				String({
-					body: [
-						{
-							orderid: "order000001",
-							users: [
-								{
-									username: "UserOne",
-									products: [
-										{
-											productname: "Watermelon",
-											quantity: 23
-										},
-										{
-											productname: "Strawberries",
-											quantity: 23
-										}
-									]
-								}
-							],
-							shipped: false,
-							date: "2022-09-06T21:55:50.076+00:00",
-							totalcost: 2000
-						},
-						{
-							orderid: "order000002",
-							users: [
-								{
-									username: "UserTwo",
-									products: [
-										{
-											productname: "Watermelon",
-											quantity: 23
-										},
-										{
-											productname: "Strawberries",
-											quantity: 23
-										}
-									]
-								}
-							],
-							shipped: false,
-							date: "2022-09-06T21:55:50.076+00:00",
-							totalcost: 2000
-						}
-					]
-				})
-			);
-			const orders = JSON.parse(res).body;
-			orders.map((order) => {
-				expect(order).to.have.property("orderid");
-				expect(order).to.have.property("users");
-				expect(order).to.have.property("shipped");
-				expect(order).to.have.property("date");
-				expect(order).to.have.property("totalcost");
-				// ...
-			});
-		});
-	});
 	after(() => {
 		router.get.restore();
 	});
@@ -2281,8 +2771,8 @@ describe("Stub router order Get One", async () => {
 
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
-			const stubMethod = sinon.stub(getOneOrder);
-			stubMethod(reqMock, resMock, next);
+			// const stubMethod = sinon.stub(getOneOrder);
+			getOneOrder(reqMock, resMock, next);
 
 			// resMock.status(200).json({
 			// 	orderid: testOrderGet,
@@ -2356,22 +2846,6 @@ describe("Stub router order Get One", async () => {
 			expect(JSON.parse(res)).to.have.property("totalcost");
 		});
 	});
-	// it("Stub for router order get (one) - Handle Error", async () => {
-	// 	router.get(`/orders-archieve/${testOrderGet}`, async (req, res, next) => {
-	// 		expect(500);
-	// 		const reqMock = mockReq(req);
-	// 		const resMock = new Error();
-	// 		getOneOrder(reqMock, resMock, next);
-	// 	});
-	// });
-	// it("Stub for router order get (all) - Handle Error", async () => {
-	// 	router.get(`/orders-archieve/${testOrderGet}`, async (req, res, next) => {
-	// 		expect(500);
-	// 		const reqMock = mockReq(req);
-	// 		const resMock = new Error();
-	// 		getOneOrder(reqMock, resMock, next);
-	// 	});
-	// });
 
 	after(() => {
 		router.get.restore();
@@ -2417,7 +2891,7 @@ describe("Stub router order Post", async () => {
 
 			// const stubMethod = sinon.stub(postOneOrder);
 			// stubMethod(req, res, next);
-			// postOneOrder(reqMock, resMock, next);
+			postOneOrder(reqMock, resMock, next);
 
 			const prodUpStub = sinon.createStubInstance(ProductUpdaterClass, {
 				orderExistsCheck: sinon.stub().returns(null),
@@ -2651,7 +3125,7 @@ describe("Stub router order Post - not enought products", async () => {
 			const resMock = mockRes(res);
 			// const stubMethod = sinon.stub(postOneOrder);
 			// stubMethod(req, res, next);
-			// stubMethod(reqMock, resMock, next);
+			postOneOrder(reqMock, resMock, next);
 
 			const prodUpStub = sinon.createStubInstance(ProductUpdaterClass, {
 				orderExistsCheck: sinon.stub().returns(null),
@@ -2864,7 +3338,7 @@ describe("Stub router order Post - order just exists", async () => {
 
 			userUpdaterStub.findData();
 			const existCheck = userUpdater.usersExistCheck();
-			console.log(existCheck);
+			// console.log(existCheck);
 
 			userUpdaterStub.updateAccountsNewOrder();
 			userUpdaterStub.updateAccountsDelOrder();
@@ -3165,24 +3639,7 @@ describe("Stub router order Delete One", async () => {
 		const stub = sinon.stub(router, "delete").yields(
 			{ params: testOrderDelete },
 			JSON.stringify({
-				orderid: "order000002",
-				users: [
-					{
-						username: "UserOne",
-						products: [
-							{
-								productname: "Watermelon",
-								quantity: 23
-							},
-							{
-								productname: "Strawberries",
-								quantity: 23
-							}
-						]
-					}
-				],
-				shipped: false,
-				totalcost: 2000
+				message: "Order delete."
 			}),
 			null
 		);
@@ -3233,6 +3690,41 @@ describe("Stub router order Delete One", async () => {
 				// this.fieldsToUpdate = this.resolvedUsers.map((elem) => {
 				// 	return elem["orders"];
 
+				const mockOrderFindDel = sinon
+					.mock(Order)
+					.expects("findOneAndDelete")
+					.withArgs({
+						orderid: "order000002"
+					})
+					.resolves({
+						orderid: "order000002",
+						users: [
+							{
+								username: "UserOne",
+								products: [
+									{
+										productname: "Watermelon",
+										quantity: 23
+									},
+									{
+										productname: "Strawberries",
+										quantity: 23
+									}
+								]
+							}
+						],
+						shipped: false,
+						totalcost: 2000
+					});
+				// const stubOrderFindDel = sinon.stub(
+				// 	Order.prototype,
+				// 	"findOneAndDelete"
+				// );
+				const orderRemoved = await Order.findOneAndDelete({
+					orderid: "order000002"
+				});
+				// console.log(orderRemoved);
+
 				const userUpdaterStub = sinon.createStubInstance(UserUpdaterClass, {
 					findData: sinon.stub().returnsThis(),
 					usersExistCheck: sinon.stub().returnsThis(),
@@ -3242,7 +3734,7 @@ describe("Stub router order Delete One", async () => {
 
 				const userUpdater = new UserUpdaterClass();
 
-				userUpdater.data = JSON.parse(res);
+				userUpdater.data = orderRemoved;
 				userUpdater.userModel = User;
 				userUpdater.orderModel = Order;
 				userUpdater.response = JSON.parse(res);
@@ -3257,7 +3749,7 @@ describe("Stub router order Delete One", async () => {
 
 				const prodUdManager = new ProductUpdaterClass();
 
-				prodUdManager.data = JSON.parse(res);
+				prodUdManager.data = orderRemoved;
 				prodUdManager.productModel = Product;
 				prodUdManager.orderModel = Order;
 				prodUdManager.response = JSON.parse(res);
@@ -3272,6 +3764,8 @@ describe("Stub router order Delete One", async () => {
 				prodUdManager.createResults();
 				prodUdManager.createNewOrder();
 				prodUdManager.restoreQuantities();
+
+				mockOrderFindDel.verify();
 
 				// userUpdater.usersToUpdate = {
 				// 	firstname: "UserFromInsomnia",
@@ -3308,57 +3802,8 @@ describe("Stub router order Delete One", async () => {
 
 				// console.log(userUpdater.fieldsToUpdate)
 
-				// const mockOrderFindDel = sinon
-				// 	.mock(Order)
-				// 	.expects("findOneAndDelete")
-				// 	.withArgs({
-				// 		orderid: "order000002"
-				// 	})
-				// 	.resolves({
-				// 		orderid: "order000002",
-				// 		users: [
-				// 			{
-				// 				username: "UserOne",
-				// 				products: [
-				// 					{
-				// 						productname: "Watermelon",
-				// 						quantity: 23
-				// 					},
-				// 					{
-				// 						productname: "Strawberries",
-				// 						quantity: 23
-				// 					}
-				// 				]
-				// 			}
-				// 		],
-				// 		shipped: false,
-				// 		totalcost: 2000
-				// 	});
-				// const orderRemoved = Order.findOneAndDelete({
-				// 	orderid: "order000002"
-				// });
-				// console.log(orderRemoved);
-				// mockOrderFindDel.verify();
-
 				resMock.status(200).json({
-					orderid: "order000001",
-					users: [
-						{
-							username: "UserOne",
-							products: [
-								{
-									productname: "Watermelon",
-									quantity: 23
-								},
-								{
-									productname: "Strawberries",
-									quantity: 23
-								}
-							]
-						}
-					],
-					shipped: false,
-					totalcost: 2000
+					message: "Order delete."
 				});
 
 				// console.log(result);
@@ -3366,30 +3811,30 @@ describe("Stub router order Delete One", async () => {
 				expect("Content-Type", /json/);
 				expect(200);
 
-				assert.match(JSON.parse(res), {
-					orderid: "order000002",
-					users: [
-						{
-							username: "UserOne",
-							products: [
-								{
-									productname: "Watermelon",
-									quantity: 23
-								},
-								{
-									productname: "Strawberries",
-									quantity: 23
-								}
-							]
-						}
-					],
-					shipped: false,
-					totalcost: 2000
-				});
-				expect(JSON.parse(res)).to.have.property("orderid");
-				expect(JSON.parse(res)).to.have.property("users");
-				expect(JSON.parse(res)).to.have.property("shipped");
-				expect(JSON.parse(res)).to.have.property("totalcost");
+				// assert.match(JSON.parse(res), {
+				// 	orderid: "order000002",
+				// 	users: [
+				// 		{
+				// 			username: "UserOne",
+				// 			products: [
+				// 				{
+				// 					productname: "Watermelon",
+				// 					quantity: 23
+				// 				},
+				// 				{
+				// 					productname: "Strawberries",
+				// 					quantity: 23
+				// 				}
+				// 			]
+				// 		}
+				// 	],
+				// 	shipped: false,
+				// 	totalcost: 2000
+				// });
+				expect(JSON.parse(res)).to.have.property("message");
+				// expect(JSON.parse(res)).to.have.property("users");
+				// expect(JSON.parse(res)).to.have.property("shipped");
+				// expect(JSON.parse(res)).to.have.property("totalcost");
 
 				// expect(res).to.be.equal(
 				// assert.match(JSON.parse(res), {
