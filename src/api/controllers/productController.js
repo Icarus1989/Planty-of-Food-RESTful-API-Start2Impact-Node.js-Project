@@ -46,12 +46,7 @@ async function postOneProduct(req, res, next) {
 		});
 		if (productExists == null) {
 			const newProduct = new Product(await data);
-			newProduct.save((err, doc) => {
-				if (err) {
-					console.log(err);
-				}
-				console.log("Data entered");
-			});
+			const savedProduct = await newProduct.save();
 			res.status(200).json(newProduct);
 		} else {
 			res.status(200).json({
@@ -59,6 +54,7 @@ async function postOneProduct(req, res, next) {
 			});
 		}
 	} catch (error) {
+		res.status(500).json({ message: "Error during Product saving..." });
 		next(error);
 	}
 }

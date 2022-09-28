@@ -23,11 +23,13 @@ async function getOneUser(req, res, next) {
 	try {
 		const username = await req.params.userid;
 		// console.log(username);
-		User.find({ username: username }, (err, data) => {
-			// gestire error
-			// console.log(data);
-			res.status(200).json(data);
-		});
+		// User.findOne({ username: username }, (err, data) => {
+		// 	// gestire error
+		// 	// console.log(data);
+		// 	res.status(200).json(data);
+		// });
+		const result = await User.findOne({ username: username });
+		res.status(200).json(result);
 	} catch (error) {
 		next(error);
 	}
@@ -41,12 +43,14 @@ async function postOneUser(req, res, next) {
 		});
 		if (userExists == null) {
 			const newUser = new User(await data);
-			newUser.save((err, doc) => {
-				if (err) {
-					console.log(err);
-				}
-				res.status(200).json(newUser);
-			});
+			// newUser.save((err, doc) => {
+			// 	if (err) {
+			// 		console.log(err);
+			// 	}
+			// 	res.status(200).json(newUser);
+			// });
+			const savedUser = await newUser.save();
+			res.status(200).json(newUser);
 		} else {
 			res.json({
 				message: `The user ${data["username"]} already exists.`

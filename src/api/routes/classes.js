@@ -258,12 +258,14 @@ class ProductUpdaterClass {
 			}
 			this.newOrder.totalcost = Number(this.totalprice.toFixed(2));
 
-			this.newOrder.save((err, savedData) => {
-				if (err) {
-					console.log(err);
-				}
-				this.response.status(200).json(savedData);
-			});
+			// this.newOrder.save((err, savedData) => {
+			// 	if (err) {
+			// 		console.log(err);
+			// 	}
+			// 	this.response.status(200).json(savedData);
+			// });
+			this.savedData = await this.newOrder.save();
+			this.response.status(200).json(this.savedData);
 		} else if (this.negativeArr.length > 0) {
 			this.negInfo = {};
 			this.negativeArr.map((elem) => {
