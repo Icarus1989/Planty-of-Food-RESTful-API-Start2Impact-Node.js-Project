@@ -34,22 +34,18 @@ async function getOneOrder(req, res, next) {
 	try {
 		const orderNumber = req.params.ordNum;
 		const orderId = `order${String(orderNumber)}`;
-		Order.findOne({ orderid: orderId }, (err, data) => {
-			// console.log(data);
-			// to fix --> test ok data null
-			if (err) {
-				res.status(200).json({
-					message: `Error in searching ${orderId}`
-				});
-			} else if (data == null) {
-				res.status(200).json({
-					message: `${orderId} not exists`
-				});
-			} else {
-				res.status(200).json(data);
-			}
-		});
+		const data = await Order.findOne({ orderid: orderId });
+		if (data == null) {
+			res.status(200).json({
+				message: `${orderId} not exists`
+			});
+		} else {
+			res.status(200).json(data);
+		}
 	} catch (error) {
+		res.status(500).json({
+			message: `Error in searching order`
+		});
 		next(error);
 	}
 }
@@ -126,10 +122,10 @@ async function deleteOneOrder(req, res, next) {
 			res
 		);
 		const updates = await userUpdater.updateAccountsDelOrder();
-		const restores = await prodUpdater.restoreQuantities();
-		res.status(200).json({
-			message: "Order delete."
-		});
+		// const restores = await prodUpdater.restoreQuantities();
+		// res.status(200).json({
+		// 	message: "Order delete."
+		// });
 	} catch (error) {
 		next(error);
 	}

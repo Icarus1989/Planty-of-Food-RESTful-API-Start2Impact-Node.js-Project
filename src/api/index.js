@@ -6,7 +6,7 @@ const orders = require("./routes/orders");
 
 const router = express.Router();
 router.get("/", (req, res) => {
-	res.json({
+	res.status(200).json({
 		message: "Welcome to Planty of Food API."
 	});
 });

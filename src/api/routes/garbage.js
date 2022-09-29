@@ -4640,3 +4640,126 @@ await prodUpStub.withArgs(req.body, Product, Order, res);
 // 	}
 // );
 // mockUserFindUp.verify();
+
+// const stubOrderFindOne = sinon
+// 	.stub(Order, "findOne")
+// 	.withArgs({ orderid: testOrderGet })
+// 	.returns({
+// 		orderid: "order000001",
+// 		users: [
+// 			{
+// 				username: "UserOne",
+// 				products: [
+// 					{
+// 						productname: "Watermelon",
+// 						quantity: 23
+// 					},
+// 					{
+// 						productname: "Strawberries",
+// 						quantity: 23
+// 					}
+// 				]
+// 			}
+// 		],
+// 		shipped: false,
+// 		date: "2022-09-06T21:55:50.076+00:00",
+// 		totalcost: 2000
+// 	});
+// const result = Order.findOne({ orderid: "order000001" });
+
+// resMock.status(200).json(result);
+
+// resMock.status(200).json({
+// 	orderid: testOrderGet,
+// 	users: [
+// 		{
+// 			username: "UserOne",
+// 			products: [
+// 				{
+// 					productname: "Watermelon",
+// 					quantity: 23
+// 				},
+// 				{
+// 					productname: "Strawberries",
+// 					quantity: 23
+// 				}
+// 			]
+// 		}
+// 	],
+// 	shipped: false,
+// 	date: "2022-09-06T21:55:50.076+00:00",
+// 	totalcost: 2000
+// });
+
+// resMock.statusCode(200).json({
+// 	orderid: "order00001",
+// 	users: [
+// 		{
+// 			username: "UserOne",
+// 			products: [
+// 				{
+// 					productname: "Watermelon",
+// 					quantity: 23
+// 				},
+// 				{
+// 					productname: "Strawberries",
+// 					quantity: 23
+// 				}
+// 			]
+// 		}
+// 	],
+// 	shipped: false,
+// 	date: "2022-09-06T21:55:50.076+00:00",
+// 	totalcost: 2000
+// });
+
+// resMock.status(200).json({
+// 	orderid: testOrderGet,
+// 	users: [
+// 		{
+// 			username: "UserOne",
+// 			products: [
+// 				{
+// 					productname: "Watermelon",
+// 					quantity: 23
+// 				},
+// 				{
+// 					productname: "Strawberries",
+// 					quantity: 23
+// 				}
+// 			]
+// 		}
+// 	],
+// 	shipped: false,
+// 	date: "2022-09-06T21:55:50.076+00:00",
+// 	totalcost: 2000
+// });
+
+// cambiare questo --->>>
+
+// const userUpdaterStub = sinon.createStubInstance(UserUpdaterClass, {
+// 	findData: sinon.stub().returnsThis(),
+// 	usersExistCheck: sinon.stub().returnsThis(),
+// 	updateAccountsNewOrder: sinon.stub().returnsThis(),
+// 	updateAccountsDelOrder: sinon.stub().returnsThis()
+// });
+
+// const stubUserFindOneUp = sinon.stub(User, )
+
+// Da ordercontroller
+
+// Order.findOne({ orderid: orderId }, (err, data) => {
+// 	// console.log(data);
+// 	// Modifica - test
+// 	if (err) {
+// 		res.status(200).json({
+// 			message: `Error in searching ${orderId}`
+// 		});
+// 	} else if (data == null) {
+// 		res.status(200).json({
+// 			message: `${orderId} not exists`
+// 		});
+// 	} else {
+// 		res.status(200).json(data);
+// 	}
+// });

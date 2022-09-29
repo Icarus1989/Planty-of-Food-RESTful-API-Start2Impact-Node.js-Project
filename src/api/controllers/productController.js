@@ -54,7 +54,7 @@ async function postOneProduct(req, res, next) {
 			});
 		}
 	} catch (error) {
-		res.status(500).json({ message: "Error during Product saving..." });
+		// res.status(500).json({ message: "Error during Product saving..." });
 		next(error);
 	}
 }
