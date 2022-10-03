@@ -3,11 +3,16 @@ const sinon = require("sinon");
 require("./sinon-mongoose");
 const referee = require("@sinonjs/referee");
 const assert = referee.assert;
+const mongoose = require("mongoose");
+const express = require("express");
+
+const chai = require("chai");
 const { expect } = require("chai");
 const { mockReq, mockRes } = require("sinon-express-mock");
 
-const mongoose = require("mongoose");
-const express = require("express");
+// const sinonChai = require("sinon-chai");
+
+// chai.use(sinonChai);
 
 const Order = require("../src/api/models/Order");
 const Product = require("../src/api/models/Product");
@@ -43,55 +48,156 @@ const {
 	deleteOneUser
 } = require("../src/api/controllers/userController");
 
-describe("Stub router Base", async () => {
-	before(() => {
-		const stub = sinon.stub(router, "get").yields(null, {
-			message: "Welcome to Planty of Food API."
-		});
-	});
-	it("Stub for router get /", async () => {
-		router.get("/", (req, res) => {
-			// importante
+// describe("GET /api/v1", () => {
+// 	it("responds with a json message", (done) => {
+// 		request(app)
+// 			.get("/api/v1")
+// 			.set("Accept", "application/json")
+// 			.expect("Content-Type", /json/)
+// 			.expect(
+// 				200,
+// 				{
+// 					message: "API - 👋🌎🌍🌏"
+// 				},
+// 				done
+// 			);
+// 	});
+// });
 
-			// res.status(200).json({
+describe("Stub router Base", () => {
+	before(() => {
+		const stubRouterGet = sinon.stub(router, "get").yields(null, {
+			status: sinon.stub().callsFake(function (code) {
+				this.status = code;
+				return this;
+			}),
+			json: sinon.stub().callsFake(function (json) {
+				// this.body = json;
+				this.body = JSON.stringify(json);
+				return this;
+			})
+		});
+	}); // stringify
+	it("Stub for router get /", () => {
+		router.get((req, res) => {
+			// const resMock = mockRes(res.body);
+			console.log(res);
+			// 	.set(() => {
+			// 	// resMock.status = 200;
+			// resMock.body = {
+			// 	message: "Welcome to Planty of Food API."
+			// };
+			// });
+			res.status(200).json({
+				message: "Welcome to Planty of Food API."
+			});
+
+			console.log(res);
+
+			// sinon.assert.match(res.status, 200);
+
+			// sinon.assert.calledWith(res.json, {
 			// 	message: "Welcome to Planty of Food API."
 			// });
-			const reqMock = mockReq(req);
-			const resMock = mockRes(res);
-
-			// console.log(resMock);
-
-			resMock.status(200).json({
-				message: "Welcome to Planty of Food API."
-			});
-			expect("Content-Type", /json/);
-			expect(200);
-			// importante
-			sinon.assert.calledWith(router.get, "/");
-			sinon.assert.match(resMock, {
-				message: "Welcome to Planty of Food API."
-			});
+			expect(res.status).to.equal(200);
+			expect(res.body).to.equal(
+				JSON.stringify({
+					message: "Welcome to Planty of Food API."
+				})
+			);
 		});
 	});
-	it("Stub for router Base - Handle Error", async () => {
-		router.get(`/`, async (req, res) => {
-			expect(500);
-			// const reqMock = mockReq(req);
-			// const resMock = new Error();
-			// getAllProducts(reqMock, resMock, next);
-		});
-	});
-
 	after(() => {
 		router.get.restore();
 	});
 });
+
+// describe("Stub router Base", () => {
+// 	before(() => {
+// 		const stub = sinon.stub(router, "get").yields(null, {
+// 			message: "Welcome to Planty of Food API."
+// 		});
+// 	});
+// 	it("Stub for router get /", () => {
+// 		router.get("/", (req, res) => {
+// 			// importante
+// 			// res.status(200).json({
+// 			// 	message: "Welcome to Planty of Food API."
+// 			// });
+// 			// const reqMock = mockReq(req);
+// 			// sinon.stub(res, "status");
+// 			// sinon.stub(res, "json");
+// 			const resMock = mockRes(res);
+// 			// req.setStatus(200);
+// 			// console.log(resMock);
+// 			resMock.status(200).json({
+// 				message: "Welcome to Planty of Food API."
+// 			});
+
+// 			// expect(resMock).to.be.calledOnce;
+// 			// sinon.assert.calledOnce(resMock.status);
+// 			// sinon.assert.calledOnce(resMock.json);
+
+// 			sinon.assert.calledWith(resMock.status, 200);
+// 			sinon.assert.calledWith(resMock.json, {
+// 				message: "Welcome to Planty of Food API."
+// 			});
+
+// 			// resMock.verify();
+
+// 			// expect(resMock.status).toHaveBeenCalled;
+// 			// done();
+// 			// done();
+// 			// expect("Content-Type", /json/);
+// 			// expect(resMock.json).to.be.calledWith({
+// 			// 	message: "Welcome to Planty of Food API."
+// 			// });
+// 			// expect(200);
+// 			// expect({
+// 			// 	message: "Welcome to Planty of Food API."
+// 			// });
+// 			// chai
+// 			// 	.request(router)
+// 			// 	.get("/")
+// 			// 	.set("Accept", "application/json")
+// 			// 	.expect("Content-Type", /json/)
+// 			// 	.expect(
+// 			// 		200,
+// 			// 		{
+// 			// 			message: "Welcome to Planty of Food API."
+// 			// 		},
+// 			// 		done
+// 			// 	);
+// 			// expect(done);
+// 			// sinon.assert.calledWith(router.get, "/");
+// 			// importante
+// 			// sinon.assert.match(res, {
+// 			// 	message: "Welcome to Planty of Food API."
+// 			// });
+// 		});
+// 		// done();
+// 	});
+// 	// it("Stub for router Base - Handle Error", async () => {
+// 	// 	router.get(`/`, async (req, res) => {
+// 	// 		expect(500);
+// 	// 		// const reqMock = mockReq(req);
+// 	// 		// const resMock = new Error();
+// 	// 		// getAllProducts(reqMock, resMock, next);
+// 	// 	});
+// 	// });
+
+// 	after(() => {
+// 		router.get.restore();
+// 	});
+// });
 
 // ----------- Product tests
 
 // const testProdPut = "Strawberries";
 // const newQuantity = 23;
 // const testProdDelete = "Strawberries";
+
+const stubGetAllProducts = sinon.stub(getAllProducts);
 
 describe("Stub router product Get All", async () => {
 	before(() => {
@@ -123,7 +229,7 @@ describe("Stub router product Get All", async () => {
 		);
 	});
 	it("Stub for product router get (all)", async () => {
-		router.get("/products-storage/", (req, res, next) => {
+		router.get("/products-storage/", async (req, res, next) => {
 			expect("Content-Type", /json/);
 			expect(200);
 			// importante
@@ -131,25 +237,53 @@ describe("Stub router product Get All", async () => {
 			// importante
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
-			const stubMethod = sinon.stub(getAllProducts);
-			stubMethod(reqMock, resMock, next);
+			stubGetAllProducts(reqMock, resMock, next);
 
-			// const stubProductFind = sinon
-			// 	.stub(Product, "find")
-			// 	.withArgs({})
-			// 	.returns(res.body);
-			// const result = Product.find({});
+			const stubProductFind = sinon
+				.stub(Product, "find")
+				.withArgs({})
+				.returns([
+					{
+						name: "Strawberries",
+						quantity: 23000,
+						origin: "Italy",
+						price: 20.23
+					},
+					{
+						name: "Pineapples",
+						quantity: 10000,
+						origin: "Italy",
+						price: 23.23
+					},
+					{
+						name: "Apples",
+						quantity: 10000,
+						origin: "Italy",
+						price: 23.32
+					}
+				]);
+			const result = await Product.find({});
 
-			// // console.log(result);
+			// console.log(result);
 			// console.log(res.body);
 
 			resMock.status(200).json(res.body);
 
+			sinon.assert.calledWith(resMock.status, 200);
+			sinon.assert.match(result, resMock.body);
+
+			// res.calledWith(200).should.be.ok;
+
+			// console.log(JSON.parse(result));
+
 			// aggiungere resMock.status(200).json...
 
-			assert.isArray(resMock.body);
+			// assert.isArray(result);
 			// assert.match(res.body, result);
-			const elements = res.body;
+			const elements = result;
+			// console.log(elements);
+
+			// Arrsivati qui --->
 			elements.map((elem) => {
 				expect(elem).to.have.property("name");
 				expect(elem).to.have.property("quantity");
@@ -163,7 +297,8 @@ describe("Stub router product Get All", async () => {
 			expect(500);
 			const reqMock = mockReq(req);
 			const resMock = new Error();
-			getAllProducts(reqMock, resMock, next);
+			stubGetAllProducts(reqMock, resMock, next);
+			assert.isFalse(next(new Error()));
 		});
 	});
 
@@ -177,17 +312,21 @@ const stubGetOneProduct = sinon.stub(getOneProduct);
 const saveStubProd = sinon.stub(Product.prototype, "save");
 const stubPostOneProduct = sinon.stub(postOneProduct);
 
+// const stubRouterProductGet = sinon.stub(router, "get")
+
 describe("Stub router product Get One", () => {
 	const testProdGet = "strawberries";
 	before(() => {
 		const stub = sinon.stub(router, "get").yields(
 			{ params: testProdGet },
-			JSON.stringify({
-				name: testProdGet,
-				quantity: 23,
-				origin: "Italy",
-				price: 20.23
-			}),
+			{
+				body: {
+					name: "Strawberries",
+					quantity: 23,
+					origin: "Italy",
+					price: 20.23
+				}
+			},
 			null
 		);
 	});
@@ -206,20 +345,17 @@ describe("Stub router product Get One", () => {
 				testProdGet
 			).slice(1)}`;
 
-			stubProductFindOne.withArgs({ name: label }).returns({
-				name: "Strawberries",
-				quantity: 23,
-				origin: "Italy",
-				price: 20.23
-			});
-			const existence = Product.findOne({ name: "Strawberries" });
+			stubProductFindOne.withArgs({ name: "Strawberries" }).returns(res);
+			const result = await Product.findOne({ name: "Strawberries" });
 
+			stubProductFindOne.restore();
+			// console.log(resMock);
 			// if (existence !== null) {
-			resMock.status(200).json(existence);
+			resMock.status(200).json(result);
 			// }
 
-			assert.match(JSON.parse(resMock), {
-				name: label,
+			assert.match(res.body, {
+				name: "Strawberries",
 				quantity: 23,
 				origin: "Italy",
 				price: 20.23
@@ -227,18 +363,22 @@ describe("Stub router product Get One", () => {
 
 			// expect(resMock.statusCode).to.equal(200);
 
-			// expect(JSON.parse(res)).to.have.property("name");
+			// expect(JSON.parse(res).body).to.have.property("name");
 			// expect(JSON.parse(res)).to.have.property("quantity");
 			// expect(JSON.parse(res)).to.have.property("origin");
 			// expect(JSON.parse(res)).to.have.property("price");
+			// expect(resMock.status).to.equal(200);
 		});
 	});
+
 	it("Stub for product router get (one) - Handle Error", async () => {
 		router.get(`/products-storage/${testProdGet}`, async (req, res, next) => {
 			expect(500);
 			const reqMock = mockReq(req);
 			const resMock = new Error();
-			getOneProduct(reqMock, resMock, next);
+			stubGetOneProduct(reqMock, resMock, next);
+			assert.isFalse(next(new Error()));
+
 			// resMock.status(500).json({...});
 		});
 	});
@@ -276,13 +416,12 @@ describe("Stub router product Get One - Product not found", () => {
 			).slice(1)}`;
 
 			stubProductFindOne.withArgs({ name: label }).returns(null);
-			const existence = Product.findOne({ name: "Strawberries" });
+			const existence = await Product.findOne({ name: label });
+			// console.log(existence);
 
-			if (existence == null) {
-				resMock.status(200).json({
-					message: `${label} not exists`
-				});
-			}
+			resMock.status(200).json({
+				message: `Strawberries not exists`
+			});
 
 			// <-------- problem here
 
@@ -292,7 +431,9 @@ describe("Stub router product Get One - Product not found", () => {
 
 			// expect(resMock.statusCode).to.equal(200);
 
-			expect(JSON.parse(resMock)).to.have.property("message");
+			// expect(resMock).to.have.property("message");
+			// assert.isFalse(next(err));
+
 			// expect(JSON.parse(res)).to.have.property("quantity");
 			// expect(JSON.parse(res)).to.have.property("origin");
 			// expect(JSON.parse(res)).to.have.property("price");
@@ -303,11 +444,13 @@ describe("Stub router product Get One - Product not found", () => {
 			expect(500);
 			const reqMock = mockReq(req);
 			const resMock = new Error();
-			getOneProduct(reqMock, resMock, next);
+			stubGetOneProduct(reqMock, resMock, next);
 			// resMock.status(500).json({...});
 		});
 	});
 	after(() => {
+		stubProductFindOne.restore();
+
 		router.get.restore();
 	});
 });
@@ -342,7 +485,10 @@ describe("Stub router product Post - Not Exist in DB - Saved", async () => {
 			const resMock = mockRes(res);
 			stubPostOneProduct(reqMock, resMock, next);
 
-			stubProductFindOne.withArgs({ name: "Strawberries" }).returns(null);
+			const stubProductFindOne = sinon
+				.stub(Product, "findOne")
+				.withArgs({ name: "Strawberries" })
+				.returns(null);
 			const existence = Product.findOne({ name: "Strawberries" });
 
 			saveStubProd.returnsThis();
@@ -352,7 +498,7 @@ describe("Stub router product Post - Not Exist in DB - Saved", async () => {
 
 			// if (existence == null) {
 			const result = await newProduct.save();
-			resMock.status(200).json(newProduct);
+			resMock.status(200).json(result);
 			expect(saveStubProd.calledOnce).to.be.true;
 			assert.strictEqual(JSON.stringify(result), JSON.stringify(newProduct));
 			// const newProduct = new Product(reqMock.body);
@@ -367,35 +513,38 @@ describe("Stub router product Post - Not Exist in DB - Saved", async () => {
 
 	it("Stub for product router post - Not Exist in DB - Error during saving", async () => {
 		router.post("/products-storage/", async (req, res, next) => {
-			try {
-				sinon.assert.calledWith(router.post, "/products-storage/");
+			// try {
+			sinon.assert.calledWith(router.post, "/products-storage/");
 
-				const reqMock = mockReq(req);
-				const resMock = mockRes(res);
-				// const stubMethod = sinon.stub(postOneProduct);
-				stubPostOneProduct(reqMock, resMock, next);
+			const reqMock = mockReq(req);
+			const resMock = mockRes(res);
+			// const stubMethod = sinon.stub(postOneProduct);
+			stubPostOneProduct(reqMock, resMock, next);
 
-				// PERFEZIONARE QUESTO.
+			// PERFEZIONARE QUESTO.
 
-				stubProductFindOne.withArgs({ name: "Strawberries" }).returns(null);
-				const existence = Product.findOne({ name: "Strawberries" });
+			stubProductFindOne.withArgs({ name: "Strawberries" }).returns(null);
+			const existence = Product.findOne({ name: "Strawberries" });
 
-				saveStubProd.withArgs(new Error(), existence).returnsThis();
-				// saveStubProd.returnsThis();
+			console.log(existence);
 
-				const newProduct = new Product(reqMock.body);
-				const result = newProduct.save();
-				console.log(result); //<--- result da controllare
-				// expect(saveStub.calledOnce).to.be.true;
+			saveStubProd.withArgs(new Error(), existence).rejects();
+			// saveStubProd.returnsThis();
 
-				// assert.strictEqual(JSON.stringify(result), JSON.stringify(newProduct));
-			} catch (err) {
-				// expect("Content-Type", /json/);
-				// expect(500);
-				resMock.status(500).json({ message: "Error during Product saving..." });
-				assert.isFalse(next(err));
-				// sinon.assert.failException;
-			}
+			const newProduct = new Product(reqMock.body);
+			const result = newProduct.save();
+			// console.log(result); //<--- result da controllare
+			// expect(saveStub.calledOnce).to.be.true;
+
+			// assert.strictEqual(JSON.stringify(result), JSON.stringify(newProduct));
+			// } catch (err) {
+			// 	// expect("Content-Type", /json/);
+			// 	// expect(500);
+			resMock.status(500).json({ message: "Error during Product saving..." });
+			assert.isFalse(next(new Error()));
+			// 	// sinon.assert.failException;
+
+			// }
 		});
 	});
 	it("Stub for product router post - Handle Error", async () => {
@@ -404,9 +553,14 @@ describe("Stub router product Post - Not Exist in DB - Saved", async () => {
 			const reqMock = mockReq(req);
 			const resMock = new Error();
 			stubPostOneProduct(reqMock, resMock, next);
+			assert.isFalse(next(new Error()));
 		});
 	});
 	after(() => {
+		stubProductFindOne.restore();
+		// soluzione ad inghippo usare .restore prima di creare un altro stub
+		// come questo sopra e subito sotto stubProductFindOne
+		saveStubProd.restore();
 		router.post.restore();
 	});
 });
@@ -422,49 +576,59 @@ describe("Stub router product Post - Exist in DB - Not Saved", async () => {
 					price: 10.23
 				}
 			},
-			JSON.stringify({
+			{
 				message: `The product Strawberries already exists.`
-			}),
+			},
 			null
 		);
 	});
 	it("Stub for product router post - Exist in DB - Not Saved", async () => {
 		router.post("/products-storage/", async (req, res, next) => {
-			try {
-				sinon.assert.calledWith(router.post, "/products-storage/");
-				expect("Content-Type", /json/);
-				expect(200);
+			// try {
+			sinon.assert.calledWith(router.post, "/products-storage/");
+			expect("Content-Type", /json/);
+			expect(200);
 
-				const reqMock = mockReq(req);
-				const resMock = mockRes(res);
-				// const stubMethod = sinon.stub(postOneProduct);
-				stubPostOneProduct(reqMock, resMock, next);
+			const reqMock = mockReq(req);
+			const resMock = mockRes(res);
+			// const stubMethod = sinon.stub(postOneProduct);
+			stubPostOneProduct(reqMock, resMock, next);
 
-				stubProductFindOne.withArgs({ name: "Strawberries" }).returns({
+			const stubProductFindOne = sinon
+				.stub(Product, "findOne")
+				.withArgs({ name: "Strawberries" })
+				.returns({
 					name: "Strawberries",
 					quantity: 23,
 					origin: "Italy",
 					price: 10.23
 				});
-				const existence = Product.findOne({ name: "Strawberries" });
+			const existence = Product.findOne({ name: "Strawberries" });
 
-				if (existence == null) {
-					// const result = await newProduct.save();
-					resMock.status(200).json({
-						name: "Strawberries",
-						quantity: 23,
-						origin: "Italy",
-						price: 10.23
-					});
-					// expect(saveStub.calledOnce).to.be.true;
-					// const newProduct = new Product(reqMock.body);
-					// const result = await newProduct.save();
-				} else {
-					resMock.status(200).json(resMock);
-				}
-			} catch (err) {
-				assert.isFalse(next(err));
-			}
+			console.log(existence);
+
+			// if (existence == null) {
+			// 	// const result = await newProduct.save();
+			// 	resMock.status(200).json({
+			// 		name: "Strawberries",
+			// 		quantity: 23,
+			// 		origin: "Italy",
+			// 		price: 10.23
+			// 	});
+			// expect(saveStub.calledOnce).to.be.false;
+			// const newProduct = new Product(reqMock.body);
+			// const result = await newProduct.save();
+			// } else {
+			resMock.status(200).json(res);
+
+			assert.strictEqual(res, {
+				message: `The product Strawberries already exists.`
+			});
+
+			// assert.isFalse(next(err));
+			// }
+			// } catch (err) {
+			// }
 		});
 	});
 	it("Stub for product router post - Handle Error", async () => {
@@ -473,9 +637,12 @@ describe("Stub router product Post - Exist in DB - Not Saved", async () => {
 			const reqMock = mockReq(req);
 			const resMock = new Error();
 			stubPostOneProduct(reqMock, resMock, next);
+			assert.isFalse(next(new Error()));
 		});
 	});
 	after(() => {
+		stubProductFindOne.restore();
+
 		router.post.restore();
 	});
 });
@@ -536,6 +703,8 @@ describe("Stub router product Put", async () => {
 				{ quantity: 23 }
 			);
 
+			// console.log(result);
+
 			resMock.status(200).json(result);
 
 			const label = `${String(testProdPut)[0].toUpperCase()}${String(
@@ -566,6 +735,8 @@ describe("Stub router product Put", async () => {
 	});
 });
 
+const stubdeleteOneProduct = sinon.stub(deleteOneProduct);
+
 describe("Stub router product Delete One", async () => {
 	const testProdDelete = "Strawberries";
 
@@ -581,7 +752,7 @@ describe("Stub router product Delete One", async () => {
 		);
 	});
 	it("Stub for product router delete", () => {
-		router.delete("/products-storage/Strawberries", (req, res, next) => {
+		router.delete("/products-storage/Strawberries", async (req, res, next) => {
 			sinon.assert.calledWith(
 				router.delete,
 				`/products-storage/${testProdDelete}`
@@ -591,8 +762,7 @@ describe("Stub router product Delete One", async () => {
 
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
-			const stubMethod = sinon.stub(deleteOneProduct);
-			stubMethod(reqMock, resMock, next);
+			stubdeleteOneProduct(reqMock, resMock, next);
 
 			const stubProductFindDelete = sinon
 				.stub(Product, "findOneAndDelete")
@@ -602,7 +772,7 @@ describe("Stub router product Delete One", async () => {
 					origin: "Italy",
 					price: 20.23
 				});
-			Product.findOneAndDelete({ name: "Strawberries" });
+			const result = await Product.findOneAndDelete({ name: "Strawberries" });
 
 			// <----- forse aumento coverage
 
@@ -622,7 +792,7 @@ describe("Stub router product Delete One", async () => {
 				expect(500);
 				const reqMock = mockReq(req);
 				const resMock = new Error();
-				deleteOneProduct(reqMock, resMock, next);
+				stubdeleteOneProduct(reqMock, resMock, next);
 			}
 		);
 	});
@@ -635,6 +805,8 @@ describe("Stub router product Delete One", async () => {
 // ----------- Product tests
 
 // ----------- User tests
+
+const stubGetAllUsers = sinon.stub(getAllUsers);
 
 describe("Stub router user Get All", async () => {
 	const body = [
@@ -690,8 +862,7 @@ describe("Stub router user Get All", async () => {
 			expect(200);
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
-			const stubMethod = sinon.stub(getAllUsers);
-			getAllUsers(reqMock, resMock, next);
+			stubGetAllUsers(reqMock, resMock, next);
 
 			const mockUserFind = sinon
 				.mock(User)
@@ -763,7 +934,8 @@ describe("Stub router user Get All", async () => {
 			const reqMock = mockReq(req);
 			const resMock = new Error();
 			// const stubMethod = sinon.stub(getAllUsers);
-			getAllUsers(reqMock, resMock, next);
+			// getAllUsers(reqMock, resMock, next);
+			stubGetAllUsers(reqMock, resMock, next);
 		});
 	});
 	after(() => {
@@ -772,6 +944,7 @@ describe("Stub router user Get All", async () => {
 });
 
 const stubUserFindOne = sinon.stub(User, "findOne");
+const stubGetOneUser = sinon.stub(getOneUser);
 
 describe("Stub router user Get One", async () => {
 	const testUserGet = "User1";
@@ -797,8 +970,7 @@ describe("Stub router user Get One", async () => {
 		router.get(`/users/${testUserGet}`, async (req, res, next) => {
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
-			const stubMethod = sinon.stub(getOneUser);
-			stubMethod(req, res, next);
+			stubGetOneUser(req, res, next);
 
 			stubUserFindOne.withArgs({ username: "User1" }).returns({
 				firstname: "userTestOne",
@@ -812,7 +984,7 @@ describe("Stub router user Get One", async () => {
 					}
 				]
 			});
-			const existence = User.findOne({ username: "User1" });
+			const existence = await User.findOne({ username: "User1" });
 
 			// console.log(res);
 
@@ -821,18 +993,7 @@ describe("Stub router user Get One", async () => {
 			// CONTINUARE CON TEST STUB TUTTI I METODI FIND...
 			// E ALTERNARE ATTIVO/DISATTIVO PER VEDERE COPERTURA LINEE
 
-			resMock.status(200).json({
-				firstname: "userTestOne",
-				lastname: "for Sinon Testing",
-				username: testUserGet,
-				address: "test@sinon.com",
-				orders: [
-					{
-						orderid: "00001",
-						url: "none"
-					}
-				]
-			});
+			resMock.status(200).json(existence);
 			expect("Content-Type", /json/);
 			expect(200);
 			assert.match(JSON.parse(res), {
@@ -859,7 +1020,7 @@ describe("Stub router user Get One", async () => {
 			expect(500);
 			const reqMock = mockReq(req);
 			const resMock = new Error();
-			getOneUser(reqMock, resMock, next);
+			stubGetOneUser(req, res, next);
 		});
 	});
 	after(() => {
@@ -903,39 +1064,47 @@ describe("Stub router user Post - Not Exist in DB - Saved", async () => {
 	});
 	it("Stub for user router post - Not Exist in DB - Saved ", async () => {
 		router.post("/users/", async (req, res, next) => {
-			try {
-				expect("Content-Type", /json/);
-				expect(200);
-				const reqMock = mockReq(req);
-				const resMock = mockRes(res);
-				stubPostOneUser(req, res, next);
-				// postOneUser.restore();
+			// try {
+			expect("Content-Type", /json/);
+			expect(200);
+			const reqMock = mockReq(req);
+			const resMock = mockRes(res);
+			stubPostOneUser(req, res, next);
+			// postOneUser.restore();
 
-				stubUserFindOne.withArgs({ username: "User1" }).returns(null);
-				const existence = await User.findOne({ username: "User1" });
+			stubUserFindOne.withArgs({ username: "User1" }).returns(null);
+			const existence = await User.findOne({ username: "User1" });
 
-				// const mockUserFindOne = sinon
-				// 	.mock(User)
-				// 	.expects("findOne")
-				// 	.withArgs({ username: "UserOne" })
-				// 	.resolves(null);
-				// User.findOne({ username: "UserOne" });
-				// mockUserFindOne.verify();
+			// const mockUserFindOne = sinon
+			// 	.mock(User)
+			// 	.expects("findOne")
+			// 	.withArgs({ username: "UserOne" })
+			// 	.resolves(null);
+			// User.findOne({ username: "UserOne" });
+			// mockUserFindOne.verify();
 
-				const saveStub = sinon.stub(User.prototype, "save").returnsThis();
+			const saveStub = sinon.stub(User.prototype, "save").returnsThis();
 
-				const newUser = new User(req.body);
-				// console.log(newUser);
-				const result = await newUser.save();
-				// console.log(result);
-				expect(saveStub.calledOnce).to.be.true;
-				expect(result).to.eql(res);
+			const newUser = new User(req.body);
+			// console.log(newUser);
+			const result = await newUser.save();
 
-				assert.strictEqual(JSON.stringify(result), JSON.stringify(newUser));
-				resMock.status(200).json(result);
-			} catch (err) {
-				assert.isFalse(next(err));
-			}
+			// console.log(result);
+			expect(saveStub.calledOnce).to.be.true;
+			expect(result).to.eql(res);
+
+			// resMock.status(200).json(result);
+
+			// resMock;
+
+			// Valutare
+			// assert.strictEqual(result, newUser);
+			// resMock.status(200).json(result);
+			// Valutare
+
+			// } catch (err) {
+			// 	assert.isFalse(next(err));
+			// }
 			// assert.isFalse(
 			// 	resMock.status(200).json({ message: `The user User1 already exists.` })
 			// );
@@ -949,7 +1118,8 @@ describe("Stub router user Post - Not Exist in DB - Saved", async () => {
 			expect(500);
 			const reqMock = mockReq(req);
 			const resMock = new Error();
-			postOneUser(reqMock, resMock, next);
+			stubPostOneUser(reqMock, resMock, next);
+			assert.isFalse(next(resMock));
 		});
 	});
 	after(() => {
@@ -982,50 +1152,50 @@ describe("Stub router user Post - Exist in DB - Not Saved", async () => {
 	});
 	it("Stub for user router post - Exist in DB - Not Saved ", async () => {
 		router.post("/users/", async (req, res, next) => {
-			try {
-				expect("Content-Type", /json/);
-				expect(200);
-				const reqMock = mockReq(req);
-				const resMock = mockRes(res);
-				// const stubMethod = sinon.stub(postOneUser);
-				stubPostOneUser(reqMock, resMock, next);
-				// postOneUser.restore();
+			// try {
+			expect("Content-Type", /json/);
+			expect(200);
+			const reqMock = mockReq(req);
+			const resMock = mockRes(res);
+			// const stubMethod = sinon.stub(postOneUser);
+			stubPostOneUser(reqMock, resMock, next);
+			// postOneUser.restore();
 
-				// const stubMethod = sinon.stub(postOneUser);
-				// postOneUser(reqMock, resMock, next);
-				// postOneUser.restore();
+			// const stubMethod = sinon.stub(postOneUser);
+			// postOneUser(reqMock, resMock, next);
+			// postOneUser.restore();
 
-				// ----- valutare se inserire o no ---------
-				stubUserFindOne.withArgs({ username: "User1" }).returns({
-					firstname: "userTestOne",
-					lastname: "for Sinon Testing",
-					username: "User1",
-					address: "test@sinon.com",
-					orders: [
-						{
-							orderid: "00001",
-							url: "none"
-						}
-					]
-				});
-				const existence = await User.findOne({ username: "User1" });
-				// ----- valutare se inserire o no ---------
+			// ----- valutare se inserire o no ---------
+			stubUserFindOne.withArgs({ username: "User1" }).returns({
+				firstname: "userTestOne",
+				lastname: "for Sinon Testing",
+				username: "User1",
+				address: "test@sinon.com",
+				orders: [
+					{
+						orderid: "00001",
+						url: "none"
+					}
+				]
+			});
+			const existence = await User.findOne({ username: "User1" });
+			// ----- valutare se inserire o no ---------
 
-				// stubProductFindOne.restore();
+			// stubProductFindOne.restore();
 
-				resMock.status(200).json({
-					message: `The user User1 already exists.`
-				});
+			resMock.status(200).json({
+				message: `The user User1 already exists.`
+			});
 
-				// assert.match(JSON.parse(res), {
-				// 	message: `The user User1 already exists.`
-				// });
-				// // assert.match(JSON.parse(res), { username: "User1" });
-				// expect(JSON.parse(res)).to.have.property("message");
-				// resMock.status(200).json({ message: `The user User1 already exists.` });
-			} catch (err) {
-				assert.isFalse(next(err));
-			}
+			// assert.match(JSON.parse(res), {
+			// 	message: `The user User1 already exists.`
+			// });
+			// // assert.match(JSON.parse(res), { username: "User1" });
+			// expect(JSON.parse(res)).to.have.property("message");
+			// resMock.status(200).json({ message: `The user User1 already exists.` });
+			// } catch (err) {
+			// assert.isFalse(next(err));
+			// }
 
 			// const mockUserFindOne = sinon
 			// 	.mock(User)
@@ -1073,7 +1243,8 @@ describe("Stub router user Post - Exist in DB - Not Saved", async () => {
 			expect(500);
 			const reqMock = mockReq(req);
 			const resMock = new Error();
-			postOneUser(reqMock, resMock, next);
+			stubPostOneUser(reqMock, resMock, next);
+			assert.isFalse(next(resMock));
 		});
 	});
 	after(() => {
@@ -1082,6 +1253,8 @@ describe("Stub router user Post - Exist in DB - Not Saved", async () => {
 });
 
 const stubUserFindUp = sinon.stub(User, "findOneAndUpdate");
+
+const stubPutOneUser = sinon.stub(putOneUser);
 
 describe("Stub router user Put", async () => {
 	const testUserPut = "User1";
@@ -1126,8 +1299,7 @@ describe("Stub router user Put", async () => {
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
 
-			const stubMethod = sinon.stub(putOneUser);
-			stubMethod(req, res, next);
+			stubPutOneUser(req, res, next);
 
 			// sistemare ---> qualcosa di non rilevato abbassa coverage ----> cerca in giù -> doppio stub ->
 			// -> unire mettendo const all'esterno ------ HERE ------
@@ -1184,13 +1356,16 @@ describe("Stub router user Put", async () => {
 			expect(500);
 			const reqMock = mockReq(req);
 			const resMock = new Error();
-			putOneUser(reqMock, resMock, next);
+			stubPutOneUser(reqMock, resMock, next);
 		});
 	});
 	after(() => {
 		router.put.restore();
 	});
 });
+
+const stubDeleteOneUser = sinon.stub(deleteOneUser);
+const stubProductFindOneDelete = sinon.stub(User, "findOneAndDelete");
 
 describe("Stub router user Delete ", async () => {
 	const testUserDelete = "User1";
@@ -1203,77 +1378,76 @@ describe("Stub router user Delete ", async () => {
 			null
 		);
 	});
-	it("Stub for user router delete", () => {
-		router.delete(`/products-storage/${testUserDelete}`, (req, res, next) => {
-			expect("Content-Type", /json/);
-			expect(200);
-			const reqMock = mockReq(req);
-			const resMock = mockRes(res);
-			const stubMethod = sinon.stub(deleteOneUser);
-			stubMethod(req, res, next);
+	it("Stub for user router delete", async () => {
+		router.delete(
+			`/products-storage/${testUserDelete}`,
+			async (req, res, next) => {
+				expect("Content-Type", /json/);
+				expect(200);
+				const reqMock = mockReq(req);
+				const resMock = mockRes(res);
+				stubDeleteOneUser(req, res, next);
 
-			const mockUserFindDelete = sinon
-				.mock(User)
-				.expects("findOneAndDelete")
-				.withArgs({ username: "User1" })
-				.resolves({
+				// const mockUserFindDelete = sinon
+				// 	.mock(User)
+				// 	.expects("findOneAndDelete")
+				// 	.withArgs({ username: "User1" })
+				// 	.resolves({
+				// 		firstname: "userTestOne",
+				// 		lastname: "for Sinon Testing",
+				// 		username: "User1",
+				// 		address: "test@sinon.com",
+				// 		orders: []
+				// 	});
+				// User.findOneAndDelete({ username: "User1" });
+				// mockUserFindDelete.verify();
+
+				stubProductFindOneDelete.withArgs({ username: "User1" }).returns({
 					firstname: "userTestOne",
 					lastname: "for Sinon Testing",
 					username: "User1",
 					address: "test@sinon.com",
 					orders: []
 				});
-			User.findOneAndDelete({ username: "User1" });
-			mockUserFindDelete.verify();
+				const result = await User.findOneAndDelete({ username: "User1" });
 
-			// const stubProductFindOneDelete = sinon
-			// 	.stub(User, "findOneAndDelete")
-			// 	.withArgs({ username: "User1" })
-			// 	.returns({
-			// 		firstname: "userTestOne",
-			// 		lastname: "for Sinon Testing",
-			// 		username: "User1",
-			// 		address: "test@sinon.com",
-			// 		orders: []
-			// 	});
-			// User.findOneAndDelete({ username: "User1" });
+				// const stubFindOne = sinon
+				// 	.stub(User.findOneAndDelete({ username: "User1" }))
+				// 	.returns({
+				// 		firstname: "userTestOne",
+				// 		lastname: "for Sinon Testing",
+				// 		username: "User1",
+				// 		address: "test@sinon.com",
+				// 		orders: [
+				// 			{
+				// 				orderid: "00001",
+				// 				url: "none"
+				// 			}
+				// 		]
+				// 	});
+				// User.findOneAndDelete({ username: "User1" });
 
-			// const stubFindOne = sinon
-			// 	.stub(User.findOneAndDelete({ username: "User1" }))
-			// 	.returns({
-			// 		firstname: "userTestOne",
-			// 		lastname: "for Sinon Testing",
-			// 		username: "User1",
-			// 		address: "test@sinon.com",
-			// 		orders: [
-			// 			{
-			// 				orderid: "00001",
-			// 				url: "none"
-			// 			}
-			// 		]
-			// 	});
-			// User.findOneAndDelete({ username: "User1" });
-
-			resMock.status(200).json({
-				message: "User delete."
-			});
-			assert.match(JSON.parse(res), {
-				message: "User delete."
-			});
-			expect(JSON.parse(res)).to.have.property("message");
-			// expect(res).to.be.equal(
-			// 	JSON.stringify({
-			// 		message: "User delete."
-			// 	})
-			// );
-		});
+				resMock.status(200).json({
+					message: "User delete."
+				});
+				assert.match(JSON.parse(res), {
+					message: "User delete."
+				});
+				expect(JSON.parse(res)).to.have.property("message");
+				// expect(res).to.be.equal(
+				// 	JSON.stringify({
+				// 		message: "User delete."
+				// 	})
+				// );
+			}
+		);
 	});
 	it("Stub for user router delete - Handle Error", async () => {
 		router.delete(`/users/${testUserDelete}`, async (req, res, next) => {
 			expect(500);
 			const reqMock = mockReq(req);
 			const resMock = new Error();
-			deleteOneUser(reqMock, resMock, next);
+			stubDeleteOneUser(reqMock, resMock, next);
 		});
 	});
 
@@ -1405,6 +1579,9 @@ describe("Stub router order Get All", async () => {
 			const reqMock = mockReq(req);
 			const resMock = new Error();
 			stubGetAllOrders(reqMock, resMock, next);
+			next(new Error());
+			// expect(next).to.be.calledOnce
+			// sinon.assert.calledOnce(next);
 		});
 	});
 
@@ -1524,6 +1701,7 @@ describe("Stub router order Get All", async () => {
 			const reqMock = mockReq(req);
 			const resMock = new Error();
 			stubGetAllOrders(reqMock, resMock, next);
+			next(new Error());
 		});
 	});
 
@@ -1643,6 +1821,7 @@ describe("Stub router order Get All", async () => {
 			const reqMock = mockReq(req);
 			const resMock = new Error();
 			stubGetAllOrders(reqMock, resMock, next);
+			next(new Error());
 		});
 	});
 
@@ -1762,6 +1941,7 @@ describe("Stub router order Get All", async () => {
 			const reqMock = mockReq(req);
 			const resMock = new Error();
 			stubGetAllOrders(reqMock, resMock, next);
+			next(new Error());
 		});
 	});
 
@@ -1881,6 +2061,7 @@ describe("Stub router order Get All", async () => {
 			const reqMock = mockReq(req);
 			const resMock = new Error();
 			stubGetAllOrders(reqMock, resMock, next);
+			next(new Error());
 		});
 	});
 
@@ -1957,57 +2138,6 @@ describe("Stub router order Get All", async () => {
 			const resMock = mockRes(res);
 			stubGetAllOrders(reqMock, resMock, next);
 
-			// const mockOrderFind = sinon
-			// 	.mock(Order)
-			// 	.expects("find")
-			// 	.withArgs({})
-			// 	.resolves([
-			// 		{
-			// 			orderid: "order000001",
-			// 			users: [
-			// 				{
-			// 					username: "UserOne",
-			// 					products: [
-			// 						{
-			// 							productname: "Watermelon",
-			// 							quantity: 23
-			// 						},
-			// 						{
-			// 							productname: "Strawberries",
-			// 							quantity: 23
-			// 						}
-			// 					]
-			// 				}
-			// 			],
-			// 			shipped: false,
-			// 			date: "2022-09-06T21:55:50.076+00:00",
-			// 			totalcost: 2000
-			// 		},
-			// 		{
-			// 			orderid: "order000002",
-			// 			users: [
-			// 				{
-			// 					username: "UserTwo",
-			// 					products: [
-			// 						{
-			// 							productname: "Watermelon",
-			// 							quantity: 23
-			// 						},
-			// 						{
-			// 							productname: "Strawberries",
-			// 							quantity: 23
-			// 						}
-			// 					]
-			// 				}
-			// 			],
-			// 			shipped: false,
-			// 			date: "2022-09-06T21:55:50.076+00:00",
-			// 			totalcost: 2000
-			// 		}
-			// 	]);
-			// const result = await Order.find({});
-			// mockOrderFind.verify();
-
 			const thirdOrderStub = sinon.createStubInstance(OrderManagerClass, {
 				determinate: sinon.stub().returnsThis(),
 				ordering: sinon.stub().returnsThis(),
@@ -2041,6 +2171,7 @@ describe("Stub router order Get All", async () => {
 			const reqMock = mockReq(req);
 			const resMock = new Error();
 			stubGetAllOrders(reqMock, resMock, next);
+			next(new Error());
 		});
 	});
 
@@ -2164,6 +2295,7 @@ describe("Stub router order Get All", async () => {
 			const reqMock = mockReq(req);
 			const resMock = new Error();
 			stubGetAllOrders(reqMock, resMock, next);
+			next(new Error());
 		});
 	});
 
@@ -2296,16 +2428,10 @@ describe("Stub router order Get All", async () => {
 			// const stubGetAllOrders = sinon.stub(getAllOrders);
 			stubGetAllOrders(reqMock, resMock, next);
 
-			// const stubOrderFind = sinon.stub(Order, "find").returns(resMock.body);
-			// const findArr = Order.find({});
-
-			// resMock.status(200).json(findArr);
-
-			const mockOrderFind = sinon
-				.mock(Order)
-				.expects("find")
+			const stubOrderFind = sinon
+				.stub(Order, "find")
 				.withArgs({})
-				.resolves([
+				.returns([
 					{
 						orderid: "order000001",
 						users: [
@@ -2349,10 +2475,62 @@ describe("Stub router order Get All", async () => {
 						totalcost: 2000
 					}
 				]);
+			// const findArr = Order.find({});
+
+			// resMock.status(200).json(findArr);
+
+			// const mockOrderFind = sinon
+			// 	.mock(Order)
+			// 	.expects("find")
+			// 	.withArgs({})
+			// 	.resolves([
+			// 		{
+			// 			orderid: "order000001",
+			// 			users: [
+			// 				{
+			// 					username: "UserOne",
+			// 					products: [
+			// 						{
+			// 							productname: "Watermelon",
+			// 							quantity: 23
+			// 						},
+			// 						{
+			// 							productname: "Strawberries",
+			// 							quantity: 23
+			// 						}
+			// 					]
+			// 				}
+			// 			],
+			// 			shipped: false,
+			// 			date: "2022-09-06T21:55:50.076+00:00",
+			// 			totalcost: 2000
+			// 		},
+			// 		{
+			// 			orderid: "order000002",
+			// 			users: [
+			// 				{
+			// 					username: "UserTwo",
+			// 					products: [
+			// 						{
+			// 							productname: "Watermelon",
+			// 							quantity: 23
+			// 						},
+			// 						{
+			// 							productname: "Strawberries",
+			// 							quantity: 23
+			// 						}
+			// 					]
+			// 				}
+			// 			],
+			// 			shipped: false,
+			// 			date: "2022-09-06T21:55:50.076+00:00",
+			// 			totalcost: 2000
+			// 		}
+			// 	]);
 			const result = await Order.find({});
-			mockOrderFind.verify();
+			// mockOrderFind.verify();
 			// provare ad applicare anche ad altri con await result anche sotto
-			console.log(result);
+			// console.log(req.params);
 
 			// const stubProductFindOne = sinon
 			// 	.stub(Order, "find")
@@ -2407,10 +2585,10 @@ describe("Stub router order Get All", async () => {
 
 			secondOrderStub.response = await result;
 			secondOrderStub.data = await result;
-			secondOrderStub.filterQuery = "productname";
-			secondOrderStub.valueQuery = "strawberries";
-			secondOrderStub.orderByQuery = "orderid";
-			secondOrderStub.sortQuery = "decreasing";
+			secondOrderStub.filterQuery = reqMock.params.filter;
+			secondOrderStub.valueQuery = reqMock.params.value;
+			secondOrderStub.orderByQuery = reqMock.params.orderBy;
+			secondOrderStub.sortQuery = reqMock.params.sort;
 
 			secondOrderStub.determinate();
 			secondOrderStub.ordering();
@@ -2660,7 +2838,6 @@ describe("Stub router order Post", async () => {
 		);
 	});
 	it("Stub for order router post", async () => {
-		const stubvalue = null;
 		router.post("/orders-archieve/", async (req, res, next) => {
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
@@ -2772,6 +2949,15 @@ describe("Stub router order Post", async () => {
 			);
 
 			resMock.status(200).json(result);
+
+			// userUpdaterStub.resultUpdate = await this.userModel.findOneAndUpdate(
+			// 	{
+			// 		username: elem
+			// 	},
+			// 	{
+			// 		orders: this.updatedField
+			// 	}
+			// );
 
 			expect("Content-Type", /json/);
 			expect(200);
@@ -2994,7 +3180,7 @@ describe("Stub router order Post - order just exists", async () => {
 			prodUpManager.orderModel = Order;
 			prodUpManager.response = resMock;
 
-			const orderExists = prodUpStub.orderExistsCheck();
+			const orderExists = prodUpManager.orderExistsCheck();
 
 			// per riaumentare di 0.05 coverage riattivare 4 linee sottostanti  --->
 			prodUpManager.searchProd();
@@ -3038,25 +3224,25 @@ describe("Stub router order Post - order just exists", async () => {
 
 			const userUpdater = new UserUpdaterClass();
 
-			userUpdaterStub.data = req.body;
-			userUpdaterStub.userModel = User;
-			userUpdaterStub.orderModel = Order;
-			userUpdaterStub.response = res;
+			userUpdater.data = req.body;
+			userUpdater.userModel = User;
+			userUpdater.orderModel = Order;
+			userUpdater.response = res;
 
-			userUpdaterStub.findData();
+			userUpdater.findData();
 			const existCheck = userUpdater.usersExistCheck();
 			// console.log(existCheck);
 
-			userUpdaterStub.updateAccountsNewOrder();
-			userUpdaterStub.updateAccountsDelOrder();
+			userUpdater.updateAccountsNewOrder();
+			// userUpdaterStub.updateAccountsDelOrder();
 
-			if (Object.keys(existCheck).length > 0) {
-				resMock.statusCode(200).json(existCheck);
-			} else if (orderExists !== null) {
-				resMock.status(200).json({
-					message: "OrderId already exists"
-				});
-			}
+			// if (Object.keys(existCheck).length > 0) {
+			// 	resMock.statusCode(200).json(existCheck);
+			// } else if (orderExists !== null) {
+			resMock.status(200).json({
+				message: "OrderId already exists"
+			});
+			// }
 
 			// aggiungere
 			expect("Content-Type", /json/);
@@ -3081,6 +3267,8 @@ describe("Stub router order Post - order just exists", async () => {
 		router.post.restore();
 	});
 });
+
+const stubPutOneOrder = sinon.stub(putOneOrder);
 
 describe("Stub router order Put", async () => {
 	const testOrderPut = "order00001";
@@ -3116,9 +3304,8 @@ describe("Stub router order Put", async () => {
 		router.put(`/orders-archieve/${testOrderPut}`, async (req, res, next) => {
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
-			const stubMethod = sinon.stub(putOneOrder);
 
-			stubMethod(reqMock, resMock, next);
+			stubPutOneOrder(reqMock, resMock, next);
 
 			const stubUserFindUp = sinon
 				.stub(Order, "findOneAndUpdate")
@@ -3144,7 +3331,7 @@ describe("Stub router order Put", async () => {
 					date: "2022-09-06T21:55:50.076+00:00",
 					totalcost: 2000
 				});
-			const result = User.findOneAndUpdate({ orderid: testOrderPut });
+			const result = await User.findOneAndUpdate({ orderid: testOrderPut });
 
 			// testing
 			resMock.status(200).json(result);
@@ -3163,7 +3350,7 @@ describe("Stub router order Put", async () => {
 			expect(500);
 			const reqMock = mockReq(req);
 			const resMock = new Error();
-			putOneOrder(reqMock, resMock, next);
+			stubPutOneOrder(reqMock, resMock, next);
 		});
 	});
 
@@ -3171,6 +3358,8 @@ describe("Stub router order Put", async () => {
 		router.put.restore();
 	});
 });
+
+const stubDeleteOneOrder = sinon.stub(deleteOneOrder);
 
 describe("Stub router order Delete One", async () => {
 	const testOrderDelete = "order00001";
@@ -3191,8 +3380,7 @@ describe("Stub router order Delete One", async () => {
 			async (req, res, next) => {
 				const reqMock = mockReq(req);
 				const resMock = mockRes(res);
-				const stubMethod = sinon.stub(deleteOneOrder);
-				stubMethod(req, res, next);
+				stubDeleteOneOrder(req, res, next);
 
 				const stubOrderFindDel = sinon
 					.stub(Order, "findOneAndDelete")
@@ -3229,40 +3417,6 @@ describe("Stub router order Delete One", async () => {
 					usersExistCheck: sinon.stub().returnsThis(),
 					updateAccountsNewOrder: sinon.stub().returns(null),
 					updateAccountsDelOrder: sinon.stub().returnsThis()
-					// async () => {
-					// userUpdater.users = orderRemoved["users"].map((user) => {
-					// 	return user["username"];
-					// });
-					// userUpdater.usersToUpdate = userUpdater.users.map(async (elem) => {
-					// 	return await User.findOne({
-					// 		username: elem
-					// 	});
-					// });
-					// userUpdater.resolvedUsers = await Promise.all(
-					// 	userUpdater.usersToUpdate
-					// );
-					// userUpdater.fieldsToUpdate = userUpdater.resolvedUsers.map(
-					// 	(elem) => {
-					// 		return elem["orders"];
-					// 	}
-					// );
-					// for await (let orders of userUpdater.fieldsToUpdate) {
-					// 	userUpdater.dataUpdated = await orders.filter((elem) => {
-					// 		return elem["orderid"] !== orderRemoved["orderid"];
-					// 	});
-					// 	userUpdater.result = await User.findOneAndUpdate(
-					// 		{
-					// 			username:
-					// 				userUpdater.resolvedUsers[
-					// 					userUpdater.fieldsToUpdate.indexOf(orders)
-					// 				]["username"]
-					// 		},
-					// 		{
-					// 			orders: userUpdater.dataUpdated
-					// 		}
-					// 	);
-					// }
-					// }
 				});
 
 				const userUpdater = new UserUpdaterClass();
@@ -3298,6 +3452,9 @@ describe("Stub router order Delete One", async () => {
 				prodUdManager.createNewOrder();
 				prodUdManager.restoreQuantities();
 
+				// for (let orders of userUpdater.fieldsToUpdate) {
+
+				// }
 				resMock.status(200).json({
 					message: "Order delete."
 				});
@@ -3318,7 +3475,7 @@ describe("Stub router order Delete One", async () => {
 				expect(500);
 				const reqMock = mockReq(req);
 				const resMock = new Error();
-				deleteOneOrder(reqMock, resMock, next);
+				stubDeleteOneOrder(reqMock, resMock, next);
 			}
 		);
 	});

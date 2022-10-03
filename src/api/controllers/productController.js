@@ -24,12 +24,12 @@ async function getOneProduct(req, res, next) {
 		// console.log(prodFound);
 		// to fix --> test ok data null
 
-		if (prodFound == null) {
+		if (prodFound !== null) {
+			res.status(200).json(prodFound);
+		} else {
 			res.status(200).json({
 				message: `${prodId} not exists`
 			});
-		} else {
-			res.status(200).json(prodFound);
 		}
 	} catch (error) {
 		// res.status(500) ?

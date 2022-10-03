@@ -219,20 +219,12 @@ class ProductUpdaterClass {
 				this.totalprice =
 					this.totalprice + this.updatingProduct["price"] * elem["quantity"];
 				// test with await... -->
-				this.productModel.findOneAndUpdate(
+				await this.productModel.findOneAndUpdate(
 					{
 						name: elem["productname"]
 					},
 					{
 						quantity: this.updatingProduct["quantity"] - elem["quantity"]
-					},
-					(err, docs) => {
-						if (err) {
-							// this.response.status(200).json({
-							// 	message: "Error in quantity updating"
-							// });
-							console.log("Error in quantity updating");
-						}
 					}
 				);
 				// <--- test with await...
@@ -275,7 +267,7 @@ class ProductUpdaterClass {
 			this.response.status(200).json(this.negInfo);
 		}
 		return this.negativeArr.length;
-	}
+	} // <-- tutto questo
 
 	async restoreQuantities() {
 		for await (let user of this.data["users"]) {
@@ -317,6 +309,7 @@ class UserUpdaterClass {
 				});
 			} catch (error) {
 				this.usersArr.push({
+					// <--- questa
 					name: user["username"],
 					data: null
 				});

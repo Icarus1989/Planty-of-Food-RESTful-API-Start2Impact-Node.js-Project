@@ -52,7 +52,7 @@ async function postOneUser(req, res, next) {
 			const savedUser = await newUser.save();
 			res.status(200).json(newUser);
 		} else {
-			res.json({
+			res.status(200).json({
 				message: `The user ${data["username"]} already exists.`
 			});
 		}

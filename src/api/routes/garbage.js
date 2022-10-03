@@ -4746,6 +4746,166 @@ await prodUpStub.withArgs(req.body, Product, Order, res);
 
 // const stubUserFindOneUp = sinon.stub(User, )
 
+// const mockOrderFind = sinon
+// 	.mock(Order)
+// 	.expects("find")
+// 	.withArgs({})
+// 	.resolves([
+// 		{
+// 			orderid: "order000001",
+// 			users: [
+// 				{
+// 					username: "UserOne",
+// 					products: [
+// 						{
+// 							productname: "Watermelon",
+// 							quantity: 23
+// 						},
+// 						{
+// 							productname: "Strawberries",
+// 							quantity: 23
+// 						}
+// 					]
+// 				}
+// 			],
+// 			shipped: false,
+// 			date: "2022-09-06T21:55:50.076+00:00",
+// 			totalcost: 2000
+// 		},
+// 		{
+// 			orderid: "order000002",
+// 			users: [
+// 				{
+// 					username: "UserTwo",
+// 					products: [
+// 						{
+// 							productname: "Watermelon",
+// 							quantity: 23
+// 						},
+// 						{
+// 							productname: "Strawberries",
+// 							quantity: 23
+// 						}
+// 					]
+// 				}
+// 			],
+// 			shipped: false,
+// 			date: "2022-09-06T21:55:50.076+00:00",
+// 			totalcost: 2000
+// 		}
+// 	]);
+// const result = await Order.find({});
+// mockOrderFind.verify();
+
+// const userUpdaterStub = sinon.createStubInstance(UserUpdaterClass, {
+// 	findData: sinon.stub().callsFake(async () => {
+// 		userUpdaterStub.usersArr = [];
+
+// 		for (let user of userUpdaterStub.data["users"]) {
+// 			try {
+// 				userUpdaterStub.usersArr.push({
+// 					name: user["username"],
+// 					data: await User.findOne({
+// 						username: user["username"]
+// 					})
+// 				});
+// 			} catch (error) {
+// 				userUpdaterStub.usersArr.push({
+// 					name: user["username"],
+// 					data: null
+// 				});
+// 			}
+// 		}
+// 		return userUpdaterStub.usersArr;
+// 	}),
+// 	usersExistCheck: sinon.stub().callsFake(async () => {
+// 		userUpdaterStub.existArray = await userUpdaterStub.findData();
+// 		userUpdaterStub.message = {};
+// 		for (let elem of userUpdaterStub.existArray) {
+// 			if (elem["data"] == null) {
+// 				userUpdaterStub.message[
+// 					`message${userUpdaterStub.usersArr.indexOf(elem)}`
+// 				] = `${elem["name"]} not exist.`;
+// 			}
+// 		}
+// 		return userUpdaterStub.message;
+// 	}),
+// 	updateAccountsNewOrder: sinon.stub().returns(null),
+// 	updateAccountsDelOrder: sinon.stub().callsFake(async () => {
+// 		userUpdaterStub.users = userUpdaterStub.data["users"].map(
+// 			(user) => {
+// 				return user["username"];
+// 			}
+// 		);
+// 		userUpdaterStub.usersToUpdate = userUpdaterStub.users.map(
+// 			async (elem) => {
+// 				return await User.findOne({
+// 					username: elem
+// 				});
+// 			}
+// 		);
+// 		userUpdaterStub.resolvedUsers = await Promise.all(
+// 			userUpdaterStub.usersToUpdate
+// 		);
+// 		userUpdaterStub.fieldsToUpdate = userUpdaterStub.resolvedUsers.map(
+// 			(elem) => {
+// 				return elem["orders"];
+// 			}
+// 		);
+
+// 		for await (let orders of userUpdaterStub.fieldsToUpdate) {
+// 			userUpdaterStub.dataUpdated = await orders.filter((elem) => {
+// 				return elem["orderid"] !== userUpdaterStub.data["orderid"];
+// 			});
+// 			userUpdaterStub.result = await User.findOneAndUpdate(
+// 				{
+// 					username:
+// 						userUpdaterStub.resolvedUsers[
+// 							userUpdaterStub.fieldsToUpdate.indexOf(orders)
+// 						]["username"]
+// 				},
+// 				{
+// 					orders: userUpdaterStub.dataUpdated
+// 				}
+// 			);
+// 		}
+// 	})
+// 	// async () => {
+// 	// userUpdater.users = orderRemoved["users"].map((user) => {
+// 	// 	return user["username"];
+// 	// });
+// 	// userUpdater.usersToUpdate = userUpdater.users.map(async (elem) => {
+// 	// 	return await User.findOne({
+// 	// 		username: elem
+// 	// 	});
+// 	// });
+// 	// userUpdater.resolvedUsers = await Promise.all(
+// 	// 	userUpdater.usersToUpdate
+// 	// );
+// 	// userUpdater.fieldsToUpdate = userUpdater.resolvedUsers.map(
+// 	// 	(elem) => {
+// 	// 		return elem["orders"];
+// 	// 	}
+// 	// );
+// 	// for await (let orders of userUpdater.fieldsToUpdate) {
+// 	// 	userUpdater.dataUpdated = await orders.filter((elem) => {
+// 	// 		return elem["orderid"] !== orderRemoved["orderid"];
+// 	// 	});
+// 	// 	userUpdater.result = await User.findOneAndUpdate(
+// 	// 		{
+// 	// 			username:
+// 	// 				userUpdater.resolvedUsers[
+// 	// 					userUpdater.fieldsToUpdate.indexOf(orders)
+// 	// 				]["username"]
+// 	// 		},
+// 	// 		{
+// 	// 			orders: userUpdater.dataUpdated
+// 	// 		}
+// 	// 	);
+// 	// }
+// 	// }
+// });
+
 // Da ordercontroller
 
 // Order.findOne({ orderid: orderId }, (err, data) => {
@@ -4762,4 +4922,132 @@ await prodUpStub.withArgs(req.body, Product, Order, res);
 // 	} else {
 // 		res.status(200).json(data);
 // 	}
+// });
+
+// --------------
+// async () => {
+// userUpdater.users = orderRemoved["users"].map((user) => {
+// 	return user["username"];
+// });
+// userUpdater.usersToUpdate = userUpdater.users.map(async (elem) => {
+// 	return await User.findOne({
+// 		username: elem
+// 	});
+// });
+// userUpdater.resolvedUsers = await Promise.all(
+// 	userUpdater.usersToUpdate
+// );
+// userUpdater.fieldsToUpdate = userUpdater.resolvedUsers.map(
+// 	(elem) => {
+// 		return elem["orders"];
+// 	}
+// );
+// for await (let orders of userUpdater.fieldsToUpdate) {
+// 	userUpdater.dataUpdated = await orders.filter((elem) => {
+// 		return elem["orderid"] !== orderRemoved["orderid"];
+// 	});
+// 	userUpdater.result = await User.findOneAndUpdate(
+// 		{
+// 			username:
+// 				userUpdater.resolvedUsers[
+// 					userUpdater.fieldsToUpdate.indexOf(orders)
+// 				]["username"]
+// 		},
+// 		{
+// 			orders: userUpdater.dataUpdated
+// 		}
+// 	);
+// }
+// }
+
+// testing RES sperimental
+// describe("Stub router product Get All", async () => {
+// 	const resBody = [
+// 		{
+// 			name: "Strawberries",
+// 			quantity: 23000,
+// 			origin: "Italy",
+// 			price: 20.23
+// 		},
+// 		{
+// 			name: "Pineapples",
+// 			quantity: 10000,
+// 			origin: "Italy",
+// 			price: 23.23
+// 		},
+// 		{
+// 			name: "Apples",
+// 			quantity: 10000,
+// 			origin: "Italy",
+// 			price: 23.32
+// 		}
+// 	];
+// 	before(() => {
+// 		const stub = sinon.stub(router, "get").yields(null, {
+// 			status: sinon.stub().callsFake(function (code) {
+// 				this.status = code;
+// 				return this;
+// 			}),
+// 			json: sinon.stub().callsFake(function (json) {
+// 				// this.body = json;
+// 				this.body = JSON.stringify(json);
+// 				return this;
+// 			})
+// 		});
+// 	});
+// 	it("Stub for product router get (all)", async () => {
+// 		router.get("/products-storage/", (req, res, next) => {
+// 			expect("Content-Type", /json/);
+// 			expect(200);
+// 			// importante
+// 			sinon.assert.calledWith(router.get, "/products-storage/");
+// 			// importante
+// 			// const reqMock = mockReq(req);
+// 			// const resMock = mockRes(res);
+// 			stubGetAllProducts(req, res, next);
+
+// 			// const stubProductFind = sinon
+// 			// 	.stub(Product, "find")
+// 			// 	.withArgs({})
+// 			// 	.returns(res.body);
+// 			// const result = Product.find({});
+
+// 			// // console.log(result);
+// 			// console.log(res.body);
+
+// 			res.status(200).json(resBody);
+
+// 			sinon.assert.match(res.status, 200);
+// 			// sinon.assert.calledWith(res.json, res.body);
+// 			expect(res.status).to.equal(200);
+// 			// expect(JSON.parse(res.body)).to.equal(resBody);
+
+// 			// res.calledWith(200).should.be.ok;
+
+// 			// aggiungere resMock.status(200).json...
+
+// 			assert.isArray(JSON.parse(res.body));
+// 			// assert.match(res.body, result);
+// 			const elements = JSON.parse(res.body);
+// 			elements.map((elem) => {
+// 				expect(elem).to.have.property("name");
+// 				expect(elem).to.have.property("quantity");
+// 				expect(elem).to.have.property("origin");
+// 				expect(elem).to.have.property("price");
+// 			});
+// 		});
+// 	});
+// 	it("Stub for product router get (all) - Handle Error", async () => {
+// 		router.get(`/products-storage/`, async (req, res, next) => {
+// 			expect(500);
+// 			const reqMock = mockReq(req);
+// 			const resMock = new Error();
+// 			stubGetAllProducts(reqMock, resMock, next);
+// 			assert.isFalse(next(new Error()));
+// 		});
+// 	});
+
+// 	after(() => {
+// 		router.get.restore();
+// 	});
 // });
