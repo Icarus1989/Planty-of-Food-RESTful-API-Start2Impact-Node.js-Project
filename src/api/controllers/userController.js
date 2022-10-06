@@ -43,12 +43,6 @@ async function postOneUser(req, res, next) {
 		});
 		if (userExists == null) {
 			const newUser = new User(await data);
-			// newUser.save((err, doc) => {
-			// 	if (err) {
-			// 		console.log(err);
-			// 	}
-			// 	res.status(200).json(newUser);
-			// });
 			const savedUser = await newUser.save();
 			res.status(200).json(newUser);
 		} else {

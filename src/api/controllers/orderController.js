@@ -13,7 +13,7 @@ const {
 async function getAllOrders(req, res, next) {
 	try {
 		const query = req.query;
-		let savedOrders = await Order.find({});
+		const savedOrders = await Order.find({});
 
 		const orderManager = new OrderManagerClass(
 			res,
@@ -23,7 +23,6 @@ async function getAllOrders(req, res, next) {
 			query.orderby,
 			query.sort
 		);
-
 		orderManager.parametersHandling();
 	} catch (error) {
 		next(error);
@@ -35,18 +34,18 @@ async function getOneOrder(req, res, next) {
 		const orderNumber = req.params.ordNum;
 		const orderId = `order${String(orderNumber)}`;
 		const data = await Order.findOne({ orderid: orderId });
-		if (data == null) {
+		if (data !== null) {
+			res.status(200).json(data);
+		} else {
 			res.status(200).json({
 				message: `${orderId} not exists`
 			});
-		} else {
-			res.status(200).json(data);
 		}
 	} catch (error) {
-		res.status(500).json({
-			message: `Error in searching order`
-		});
 		next(error);
+		// res.status(500).json({
+		// 	message: `Error in searching order`
+		// });
 	}
 }
 
@@ -121,6 +120,7 @@ async function deleteOneOrder(req, res, next) {
 			Order,
 			res
 		);
+		// verificare effettivo utilizzo di prodUpdater
 		const updates = await userUpdater.updateAccountsDelOrder();
 		// const restores = await prodUpdater.restoreQuantities();
 		// res.status(200).json({
