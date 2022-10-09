@@ -258,7 +258,7 @@ class ProductUpdaterClass {
 			// });
 			this.savedData = await this.newOrder.save();
 			this.response.status(200).json(this.savedData);
-		} else if (this.negativeArr.length > 0) {
+		} else {
 			this.negInfo = {};
 			this.negativeArr.map((elem) => {
 				this.negInfo[`message${this.negativeArr.indexOf(elem)}`] =
@@ -307,7 +307,7 @@ class UserUpdaterClass {
 						username: user["username"]
 					})
 				});
-			} catch (error) {
+			} catch {
 				this.usersArr.push({
 					// <--- questa
 					name: user["username"],
