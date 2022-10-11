@@ -5051,3 +5051,195 @@ await prodUpStub.withArgs(req.body, Product, Order, res);
 // 		router.get.restore();
 // 	});
 // });
+
+// describe("Stub router Base", () => {
+// 	const msg = {
+// 		message: "Welcome to Planty of Food API."
+// 	};
+// 	before(() => {
+// 		const stub = sinon.stub(router, "get").yields(null, {
+// 			status: sinon.stub().returnsThis(),
+// 			json: sinon.stub().withArgs(msg).resolves(JSON.stringify(msg))
+// 		});
+// 	});
+
+// 	// let status, json, res;
+// 	// before(() => {
+// 	// 	status = sinon.stub().returnsThis();
+// 	// 	json = sinon.spy();
+// 	// 	res = { json, status };
+// 	// const stubBaseRouter = sinon.stub(router, "get");
+// 	// status.returns(res);
+// 	// const fakeGet = sinon.fake;
+// 	// const fake = sinon.fake.returns(
+// 	// 	res.status(200).json({ message: "Welcome to Planty of Food API." })
+// 	// );
+// 	// sinon.replace(router, "get", fake);
+// 	// assert.equals(fake.callCount, 1);
+// 	// const stubRouterGet = sinon.stub(router, "get").yields(null, {
+// 	// body: { message: "Welcome to Planty of Food API." },
+// 	// status: sinon.stub().callsFake(function (code) {
+// 	// 	this.status = code;
+// 	// 	return this;
+// 	// }),
+// 	// json: sinon.stub().callsFake(function (json) {
+// 	// 	// this.body = json;
+// 	// 	this.body = json;
+// 	// 	return this;
+// 	// })
+// 	// });
+// 	// }); // stringify
+
+// 	// beforeEach(() => get({ query: { example: true } }, res));
+// 	// it("calls status with code 200", () => status.calledWith(200).should.be.ok);
+// 	// it("calls json with success: true", () =>
+// 	// json.calledWith({ success: true }).should.be.ok);
+// 	it("Stub for router get /", () => {
+// 		// router.get("/", (req, res) => {
+// 		// 	const resMock = mockRes(res);
+
+// 		// 	// const fake = sinon.replace(res, "status", sinon.fake(res.status));
+// 		// 	// 	.set(() => {
+// 		// 	// 	// resMock.status = 200;
+// 		// 	// resMock.body = {
+// 		// 	// 	message: "Welcome to Planty of Food API."
+// 		// 	// };
+// 		// 	// });
+// 		// 	sinon.assert.match(res.body, resMock.body);
+
+// 		// 	resMock.status(200).json(res.body);
+
+// 		// 	// sinon.assert.calledWith(resMock.status, 200);
+// 		// 	console.log(res.status(200));
+
+// 		// 	// expect(resMock.status).to.equal(200);
+// 		// 	// expect(resMock.body).to.equal(
+// 		// 	// 	JSON.stringify({
+// 		// 	// 		message: "Welcome to Planty of Food API."
+// 		// 	// 	})
+// 		// 	// );
+
+// 		// 	// console.log(res);
+
+// 		// 	// sinon.assert.match(res.status, 200);
+
+// 		// 	// sinon.assert.calledWith(res.json, {
+// 		// 	// 	message: "Welcome to Planty of Food API."
+// 		// 	// });
+// 		// });
+
+// 		// expect(router.get)
+
+// 		// const request = null;
+// 		// const response = {
+// 		// 	status: sinon.stub().returnsThis(),
+// 		// 	json: sinon.spy()
+// 		// };
+
+// 		// const req = null;
+// 		// router.get("/", (request, response) => {
+// 		// 	request = req;
+// 		// 	response = res;
+// 		// 	console.log(response);
+// 		// 	response.status(200).json({
+// 		// 		message: "Welcome to Planty of Food API."
+// 		// 	});
+// 		// });
+// 		router.get("/", (req, res) => {
+// 			console.log(res.status(200));
+// 			// req = request;
+// 			// res = response;
+// 			res.status(200).json({ message: "Welcome to Planty of Food API." });
+// 			expect(res.status.calledWith(200)).to.be.ok;
+// 			expect(res.json.calledWith({ message: "Welcome to Planty of Food API." }))
+// 				.to.be.ok;
+// 		});
+// 		// expect(
+// 		// 	res.json.calledWith({
+// 		// 		message: "Welcome to Planty of Food API."
+// 		// 	})
+// 		// ).to.be.ok;
+// 	});
+// 	after(() => {
+// 		router.get.restore();
+// 	});
+// });
+
+// describe("Stub router Base", () => {
+// 	before(() => {
+// 		const stub = sinon.stub(router, "get").yields(null, {
+// 			message: "Welcome to Planty of Food API."
+// 		});
+// 	});
+// 	it("Stub for router get /", () => {
+// 		router.get("/", (req, res) => {
+// 			// importante
+// 			// res.status(200).json({
+// 			// 	message: "Welcome to Planty of Food API."
+// 			// });
+// 			// const reqMock = mockReq(req);
+// 			// sinon.stub(res, "status");
+// 			// sinon.stub(res, "json");
+// 			const resMock = mockRes(res);
+// 			// req.setStatus(200);
+// 			// console.log(resMock);
+// 			resMock.status(200).json({
+// 				message: "Welcome to Planty of Food API."
+// 			});
+
+// 			// expect(resMock).to.be.calledOnce;
+// 			// sinon.assert.calledOnce(resMock.status);
+// 			// sinon.assert.calledOnce(resMock.json);
+
+// 			sinon.assert.calledWith(resMock.status, 200);
+// 			sinon.assert.calledWith(resMock.json, {
+// 				message: "Welcome to Planty of Food API."
+// 			});
+
+// 			// resMock.verify();
+
+// 			// expect(resMock.status).toHaveBeenCalled;
+// 			// done();
+// 			// done();
+// 			// expect("Content-Type", /json/);
+// 			// expect(resMock.json).to.be.calledWith({
+// 			// 	message: "Welcome to Planty of Food API."
+// 			// });
+// 			// expect(200);
+// 			// expect({
+// 			// 	message: "Welcome to Planty of Food API."
+// 			// });
+// 			// chai
+// 			// 	.request(router)
+// 			// 	.get("/")
+// 			// 	.set("Accept", "application/json")
+// 			// 	.expect("Content-Type", /json/)
+// 			// 	.expect(
+// 			// 		200,
+// 			// 		{
+// 			// 			message: "Welcome to Planty of Food API."
+// 			// 		},
+// 			// 		done
+// 			// 	);
+// 			// expect(done);
+// 			// sinon.assert.calledWith(router.get, "/");
+// 			// importante
+// 			// sinon.assert.match(res, {
+// 			// 	message: "Welcome to Planty of Food API."
+// 			// });
+// 		});
+// 		// done();
+// 	});
+// 	// it("Stub for router Base - Handle Error", async () => {
+// 	// 	router.get(`/`, async (req, res) => {
+// 	// 		expect(500);
+// 	// 		// const reqMock = mockReq(req);
+// 	// 		// const resMock = new Error();
+// 	// 		// getAllProducts(reqMock, resMock, next);
+// 	// 	});
+// 	// });
+
+// 	after(() => {
+// 		router.get.restore();
+// 	});
+// });

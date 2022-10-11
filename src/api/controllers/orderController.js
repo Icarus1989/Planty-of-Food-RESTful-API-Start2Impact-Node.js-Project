@@ -71,9 +71,13 @@ async function postOneOrder(req, res, next) {
 			const numOfErrs = await prodUpdater.createNewOrder();
 			if (numOfErrs == 0) {
 				await userUpdater.updateAccountsNewOrder();
-			} else if (numOfErrs > 0) {
+			} else {
+				// <--- test
 				return;
 			}
+			// else if (numOfErrs > 0) {
+			// 	return;
+			// }
 		}
 
 		// Qui possibile Ric...
