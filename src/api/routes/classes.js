@@ -176,31 +176,40 @@ class ProductUpdaterClass {
 	async searchProd() {
 		this.permissions = [];
 		for await (let userSection of this.data["users"]) {
+			this.prodsToUpArray = [];
 			for await (let user of userSection["products"]) {
-				this.prodsToUp = await this.productModel.find({
+				this.prodsToUp = await this.productModel.findOne({
 					name: user["productname"]
 				});
-				for (let i = 0; i < this.prodsToUp.length; i++) {
-					if ((await this.prodsToUp[i]["quantity"]) < user["quantity"]) {
-						this.permissions.push({
-							productname: user["productname"],
-							response: "negative",
-							message: `Too little quantity of ${await this.prodsToUp[i][
-								"name"
-							]}`
-						});
-					} else {
-						this.permissions.push({
-							productname: user["productname"],
-							response: "positive",
-							quantity: user["quantity"]
-						});
-					}
+				// console.log(this.prodsToUp);
+
+				this.prodsToUpArray.push(this.prodsToUp);
+			}
+			// console.log(this.prodsToUpArray); // problema QUI
+
+			for (let i = 0; i < this.prodsToUpArray.length; i++) {
+				if (
+					(await this.prodsToUpArray[i]["quantity"]) <
+					userSection["products"][i]["quantity"]
+				) {
+					this.permissions.push({
+						productname: userSection["products"][i]["productname"],
+						response: "negative",
+						message: `Too little quantity of ${await this.prodsToUpArray[i][
+							"name"
+						]}`
+					});
+				} else {
+					this.permissions.push({
+						productname: userSection["products"][i]["productname"],
+						response: "positive",
+						quantity: userSection["products"][i]["quantity"]
+					});
 				}
 			}
 		}
+		// console.log("Perm");
 		// console.log(this.permissions);
-
 		return this.permissions;
 	}
 	async createResults() {
@@ -212,7 +221,10 @@ class ProductUpdaterClass {
 				this.negativeArr.push({
 					message: elem["message"]
 				});
-			} else if (elem["response"] == "positive") {
+			} else if (
+				elem["response"] == "positive" &&
+				this.negativeArr.length == 0 // provare questo con Insomnia
+			) {
 				this.updatingProduct = await this.productModel.findOne({
 					name: elem["productname"]
 				});
@@ -320,12 +332,14 @@ class UserUpdaterClass {
 
 	async usersExistCheck() {
 		this.existArray = await this.findData();
+		// this.messages = [];
 		this.message = {};
 		for (let elem of this.existArray) {
 			if (elem["data"] == null) {
 				this.message[
 					`message${this.usersArr.indexOf(elem)}`
 				] = `${elem["name"]} not exist.`;
+				// this.messages.push(this.message)
 			}
 		}
 		return this.message;
