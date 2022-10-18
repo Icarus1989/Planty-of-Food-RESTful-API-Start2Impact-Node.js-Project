@@ -2806,7 +2806,7 @@ describe("Stub router order Post - not enought products", async () => {
 				.withArgs({ orderid: "order000099" })
 				.returns(null);
 
-			prodUpStubExt.searchProd = sinon.stub().callsFake(function fn() {
+			prodUpStubExt.searchProd = sinon.stub().callsFake(async function fn() {
 				prodUpStubExt.permissions = [];
 				for (let item of prodUpStubExt.data["users"]) {
 					prodUpStubExt.prodsToUpArray = [];
@@ -2822,7 +2822,7 @@ describe("Stub router order Post - not enought products", async () => {
 							origin: "Italy",
 							price: 10.23
 						});
-					const testOne = Product.findOne({
+					const testOne = await Product.findOne({
 						name: "Watermelon"
 					});
 
@@ -2836,7 +2836,7 @@ describe("Stub router order Post - not enought products", async () => {
 							origin: "Italy",
 							price: 10.23
 						});
-					const testTwo = Product.findOne({
+					const testTwo = await Product.findOne({
 						name: "Strawberries"
 					});
 					console.log(testOne);
@@ -3051,6 +3051,8 @@ describe("Stub router order Post", async () => {
 						price: 10.23
 					});
 			});
+
+			// ---
 
 			prodUpStubExt.createNewOrder = sinon.stub().returns(0);
 			prodUpStubExt.restoreQuantities = sinon.stub().returns(null);
@@ -3305,15 +3307,20 @@ describe("Stub router order Put", async () => {
 });
 
 const stubDeleteOneOrder = sinon.stub(deleteOneOrder);
+const stubOrderFindDel = sinon.stub(Order, "findOneAndDelete");
 
 describe("Stub router order Delete One", async () => {
-	const testOrderDelete = "order000098";
+	const testOrderDelete = "000098";
 
 	before(() => {
+		stubProductFindUp.restore();
+
 		const stub = sinon.stub(router, "delete").yields(
-			{ params: testOrderDelete },
+			{ params: { ordNum: "000098" } },
 			{
-				message: "Order delete."
+				body: {
+					message: "Order delete."
+				}
 			},
 			null
 		);
@@ -3327,16 +3334,26 @@ describe("Stub router order Delete One", async () => {
 				const resMock = mockRes(res);
 				stubDeleteOneOrder(reqMock, resMock, next);
 
-				const stubOrderFindDel = sinon
-					.stub(Order, "findOneAndDelete")
+				console.log("req");
+				console.log(req);
+
+				const orderNumber = req.params.ordNum;
+				const orderId = `order${String(orderNumber)}`;
+				console.log("orderid");
+				console.log(orderId);
+
+				// fare in modo di eliminare l'order000098
+				// far funzionare update e restores su orderController
+
+				stubOrderFindDel
 					.withArgs({
-						orderid: "order000098"
+						orderid: orderId
 					})
 					.returns({
 						orderid: "order000098",
 						users: [
 							{
-								username: "UserOne",
+								username: "User1",
 								products: [
 									{
 										productname: "Watermelon",
@@ -3350,66 +3367,276 @@ describe("Stub router order Delete One", async () => {
 							}
 						],
 						shipped: false,
-						totalcost: 2000
+						date: "2022-09-06T21:55:50.076+00:00",
+						totalcost: 769.58
 					});
 				const orderRemoved = await Order.findOneAndDelete({
 					orderid: "order000098"
 				});
-				console.log(orderRemoved);
+				// -------->
+				// provare ad inserire in callsFake sottostanti per vedere eventuale
+				// eliminazione order
+				// <--------
 
-				const userUpdaterStub = sinon.createStubInstance(UserUpdaterClass, {
-					findData: sinon.stub().returnsThis(),
-					usersExistCheck: sinon.stub().returnsThis(),
-					updateAccountsNewOrder: sinon.stub().returns(null),
-					updateAccountsDelOrder: sinon.stub().returnsThis()
-				});
+				// const userUpdaterStub = sinon.createStubInstance(UserUpdaterClass, {
+				// 	findData: sinon.stub().returnsThis(),
+				// 	usersExistCheck: sinon.stub().returnsThis(),
+				// 	updateAccountsNewOrder: sinon.stub().returns(null),
+				// 	updateAccountsDelOrder: sinon.stub().returnsThis()
+				// });
+
+				// stubUserFindOne.restore();
+				// stubUserFindUp.restore();
+
+				userUpdaterStubExt.data = await orderRemoved;
+				userUpdaterStubExt.userModel = User;
+				userUpdaterStubExt.orderModel = Order;
+				userUpdaterStubExt.response = res;
+
+				userUpdaterStubExt.findData = sinon.stub().returns(null);
+				userUpdaterStubExt.usersExistCheck = sinon.stub().returns(null);
+				userUpdaterStubExt.updateAccountsNewOrder = sinon.stub().returns(null);
+				userUpdaterStubExt.updateAccountsDelOrder = sinon
+					.stub()
+					.callsFake(function fakeUpdate() {
+						stubUserFindOne.withArgs({ username: "User1" }).returns({
+							firstname: "UserFromInsomnia",
+							lastname: "from req.body",
+							username: "User1",
+							address: "test@request.com",
+							orders: [
+								{
+									orderid: "order000098",
+									url: "none"
+								}
+							]
+						});
+						userUpdaterStubExt.usersToUpdate = User.findOne({
+							username: "User1"
+						});
+						stubUserFindUp
+							.withArgs({ username: "User1" }, { orders: [] })
+							.returns({
+								firstname: "UserFromInsomnia",
+								lastname: "from req.body",
+								username: "User1",
+								address: "test@request.com",
+								orders: []
+							});
+						userUpdaterStubExt.result = User.findOneAndUpdate(
+							{ username: "User1" },
+							{ orders: [] }
+						);
+						// console.log(userUpdaterStubExt.result);
+					});
+
+				// userUpdaterStubExt.updateAccountsDelOrder = sinon
+				// 	.stub()
+				// 	.callsFake(function fakeUpdate() {
+				// 		stubUserFindOne.withArgs({ username: "User1" }).returns({
+				// 			firstname: "UserFromInsomnia",
+				// 			lastname: "from req.body",
+				// 			username: "User1",
+				// 			address: "test@request.com",
+				// 			orders: [
+				// 				{
+				// 					orderid: "order000098",
+				// 					url: "none"
+				// 				}
+				// 			]
+				// 		});
+
+				// 		userUpdaterStubExt.resolvedUsers = userUpdaterStubExt.usersToUpdate;
+				// 		userUpdaterStubExt.fieldsToUpdate =
+				// 			userUpdaterStubExt.resolvedUsers.map((elem) => {
+				// 				return elem["orders"];
+				// 			});
+
+				// 		for (let orders of userUpdaterStubExt.fieldsToUpdate) {
+				// 			userUpdaterStubExt.dataUpdated = orders.filter((elem) => {
+				// 				return elem["orderid"] !== userUpdaterStubExt.data["orderid"];
+				// 			});
+				// 			userUpdaterStubExt.result = stubUserFindUp
+				// 				.withArgs({ username: "User1" }, { orders: [] })
+				// 				.returns({
+				// 					firstname: "UserFromInsomnia",
+				// 					lastname: "from req.body",
+				// 					username: "User1",
+				// 					address: "test@request.com",
+				// 					orders: []
+				// 				});
+				// 		}
+				// 	});
+
+				// 		// userUpdaterStubExt.usersToUpdate = User.findOne({
+				// 		// 	username: "User1"
+				// 		// });
+				// 		// stubUserFindUp
+				// 		// 	.withArgs({ username: "User1" }, { orders: [] })
+				// 		// 	.returns({
+				// 		// 		firstname: "UserFromInsomnia",
+				// 		// 		lastname: "from req.body",
+				// 		// 		username: "User1",
+				// 		// 		address: "test@request.com",
+				// 		// 		orders: []
+				// 		// 	});
+				// 		// userUpdaterStubExt.result = User.findOneAndUpdate(
+				// 		// 	{ username: "User1" },
+				// 		// 	{ orders: [] }
+				// 		// );
+				// 		// console.log(userUpdaterStubExt.result);
+				// });
+
+				console.log(userUpdaterStubExt);
 
 				const userUpdater = new UserUpdaterClass();
 
-				userUpdater.data = orderRemoved;
-				userUpdater.userModel = User;
-				userUpdater.orderModel = Order;
-				userUpdater.response = res;
+				// const prodUpStub = sinon.createStubInstance(ProductUpdaterClass, {
+				// 	orderExistsCheck: sinon.stub().returnsThis(),
+				// 	searchProd: sinon.stub().returnsThis(),
+				// 	createResults: sinon.stub().returnsThis(),
+				// 	createNewOrder: sinon.stub().returnsThis(),
+				// 	restoreQuantities: sinon.stub().returnsThis()
+				// });
 
-				const prodUpStub = sinon.createStubInstance(ProductUpdaterClass, {
-					orderExistsCheck: sinon.stub().returnsThis(),
-					searchProd: sinon.stub().returnsThis(),
-					createResults: sinon.stub().returnsThis(),
-					createNewOrder: sinon.stub().returnsThis(),
-					restoreQuantities: sinon.stub().returnsThis()
-				});
+				// sistemare tutto delete order - partire dal
+				//  cambiare metodi qui sotto con stub iniziale poi attivare metodo
+				// const quantities = await prodUpdater.restoreQuantities(); in
+				// order controller e creare stub qui corretto come sui post
+
+				console.log(orderRemoved);
+
+				prodUpStubExt.data = await orderRemoved;
+				prodUpStubExt.productModel = Product;
+				prodUpStubExt.orderModel = Order;
+				prodUpStubExt.response = res;
+
+				prodUpStubExt.orderExistsCheck = sinon.stub().returnsThis();
+				prodUpStubExt.searchProd = sinon.stub().returnsThis();
+				prodUpStubExt.createResults = sinon.stub().returnsThis();
+				prodUpStubExt.createNewOrder = sinon.stub().returnsThis();
+				prodUpStubExt.restoreQuantities = sinon
+					.stub()
+					.callsFake(async function fakeUpdate() {
+						for (let user of prodUpStubExt.data["users"]) {
+							console.log("check");
+							console.log(prodUpStubExt.data);
+							// console.log(user);
+							for (let product of user["products"]) {
+								// console.log(product);
+								stubProductFindOne.withArgs({ name: product["productname"] });
+								prodUpStubExt.oldQuantity = await Product.findOne({
+									name: product["productname"]
+								});
+								console.log(
+									product["quantity"] + prodUpStubExt.oldQuantity["quantity"]
+								);
+								// stubProductFindUp.restore();
+								stubProductFindUp
+									.withArgs(
+										{ name: product["productname"] },
+										{
+											quantity:
+												product["quantity"] +
+												prodUpStubExt.oldQuantity["quantity"]
+										}
+									)
+									.returns({
+										name: product["productname"],
+										quantity:
+											product["quantity"] +
+											prodUpStubExt.oldQuantity["quantity"],
+										origin: "Italy",
+										price: prodUpStubExt.oldQuantity["price"]
+									});
+								prodUpStubExt.productUpdate = await Product.findOneAndUpdate(
+									{
+										name: product["productname"]
+									},
+									{
+										quantity:
+											prodUpStubExt.oldQuantity["quantity"] +
+											product["quantity"]
+									}
+								);
+								console.log("prodtoupdate");
+								console.log(prodUpStubExt.productUpdate);
+							}
+						}
+						// stubProductFindOne.withArgs({ name: "Watermelon" });
+						// 	.returns({
+						// 	name: "Watermelon",
+						// 	quantity: 123,
+						// 	origin: "Italy",
+						// 	price: 10.23
+						// });
+						// const firstProd = await Product.findOne({ name: "Watermelon" });
+						// console.log(firstProd);
+						// stubProductFindUp
+						// 	.withArgs(
+						// 		{ name: "Watermelon" },
+						// 		{ quantity: firstProd["quantity"] + 23 }
+						// 	)
+						// 	.returns({
+						// 		name: "Watermelon",
+						// 		quantity: firstProd["quantity"] + 23,
+						// 		origin: "Italy",
+						// 		price: 10.23
+						// 	});
+
+						// stubProductFindOne.withArgs({ name: "Strawberries" });
+						// 	.returns({
+						// 	name: "Strawberries",
+						// 	quantity: 123,
+						// 	origin: "Italy",
+						// 	price: 10.23
+						// });
+						// const secondProd = await Product.findOne({ name: "Strawberries" });
+						// console.log(secondProd);
+						// stubProductFindUp
+						// 	.withArgs(
+						// 		{ name: "Strawberries" },
+						// 		{ quantity: secondProd["quantity"] + 23 }
+						// 	)
+						// 	.returns({
+						// 		name: "Strawberries",
+						// 		quantity: secondProd["quantity"] + 23,
+						// 		origin: "Italy",
+						// 		price: 10.23
+						// 	});
+					});
 
 				const prodUdManager = new ProductUpdaterClass();
 
-				prodUdManager.data = orderRemoved;
-				prodUdManager.productModel = Product;
-				prodUdManager.orderModel = Order;
-				prodUdManager.response = res;
+				// userUpdaterStubExt.findData();
+				// userUpdaterStubExt.usersExistCheck();
+				// userUpdaterStubExt.updateAccountsNewOrder();
+				userUpdaterStubExt.updateAccountsDelOrder();
 
-				userUpdater.findData();
-				userUpdater.usersExistCheck();
-				userUpdater.updateAccountsNewOrder();
-				userUpdater.updateAccountsDelOrder();
-
-				prodUdManager.orderExistsCheck();
-				prodUdManager.searchProd();
-				prodUdManager.createResults();
-				prodUdManager.createNewOrder();
-				prodUdManager.restoreQuantities();
+				prodUpStubExt.orderExistsCheck();
+				prodUpStubExt.searchProd();
+				prodUpStubExt.createResults();
+				prodUpStubExt.createNewOrder();
+				prodUpStubExt.restoreQuantities();
 
 				// for (let orders of userUpdater.fieldsToUpdate) {
 
 				// }
+
+				// console.log(result);
+
 				resMock.status(200).json({
 					message: "Order delete."
 				});
 
-				// console.log(result);
-
 				expect("Content-Type", /json/);
 				expect(200);
 
-				expect(res).to.have.property("message");
+				expect(resMock.body).to.have.property("message");
+
+				sinon.assert.match(res.body, {
+					message: "Order delete."
+				});
 			}
 		);
 	});
@@ -3420,7 +3647,7 @@ describe("Stub router order Delete One", async () => {
 				expect(500);
 				const reqMock = mockReq(req);
 				const resMock = new Error();
-				stubDeleteOneOrder(reqMock, resMock, next);
+				stubDeleteOneOrder(null, null, next);
 			}
 		);
 	});

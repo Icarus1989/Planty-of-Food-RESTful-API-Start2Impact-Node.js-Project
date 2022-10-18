@@ -297,6 +297,9 @@ class ProductUpdaterClass {
 				);
 			}
 		}
+		// return this.response.status(200).json({
+		// 	message: "Order delete."
+		// });
 	}
 }
 

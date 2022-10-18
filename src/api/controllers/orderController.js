@@ -60,19 +60,19 @@ async function postOneOrder(req, res, next) {
 		const existCheck = await userUpdater.usersExistCheck();
 
 		if (existCheck["message0"]) {
-			console.log("One");
+			// console.log("One");
 			res.status(200).json(existCheck);
 		} else if (orderExists !== null) {
-			console.log("Two");
+			// console.log("Two");
 			res.status(200).json({
 				message: "OrderId already exists"
 			});
 		} else if (orderExists == null) {
-			console.log("Three");
-			console.log(orderExists);
+			// console.log("Three");
+			// console.log(orderExists);
 
 			const sp = await prodUpdater.searchProd(); // far funzionare searchProd
-			console.log(sp);
+			// console.log(sp);
 			await prodUpdater.createResults();
 			const numOfErrs = await prodUpdater.createNewOrder();
 			// console.log("numOfErrs");
@@ -117,6 +117,8 @@ async function deleteOneOrder(req, res, next) {
 		const orderId = `order${String(orderNumber)}`;
 		const orderRemoved = await Order.findOneAndDelete({ orderid: orderId });
 
+		console.log(orderRemoved);
+
 		const userUpdater = new UserUpdaterClass(
 			await orderRemoved,
 			User,
@@ -130,11 +132,21 @@ async function deleteOneOrder(req, res, next) {
 			res
 		);
 		// verificare effettivo utilizzo di prodUpdater
+		console.log(userUpdater); // -->>> data non presenti
+
+		console.log(prodUpdater); // -->>> data non presenti
+
 		const updates = await userUpdater.updateAccountsDelOrder();
-		// const restores = await prodUpdater.restoreQuantities();
-		// res.status(200).json({
-		// 	message: "Order delete."
-		// });
+		console.log("update");
+		console.log(updates);
+
+		// const quantities = await prodUpdater.restoreQuantities();
+		const restores = await prodUpdater.restoreQuantities();
+		console.log("restore");
+		console.log(restores);
+		res.status(200).json({
+			message: "Order delete."
+		});
 	} catch (error) {
 		next(error);
 	}
