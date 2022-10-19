@@ -2549,6 +2549,18 @@ describe("Stub router order Post - user not exists", async () => {
 					}
 				]);
 
+			// userUpdaterStubExt.findData = sinon.stub().callsFake(function fakeFn() {
+			// 	const usersArr = [];
+			// 	usersArr.push({
+			// 		name: "User23",
+			// 		data: stubUserFindOne.withArgs({ username: "User23" }).returns(null)
+			// 	});
+			// 	console.log(usersArr);
+			// 	return usersArr;
+			// });
+
+			// console.log(userUpdaterStubExt.findData());
+
 			userUpdaterStubExt.usersExistCheck = sinon
 				.stub()
 				.returns({ message0: "User23 not exist." });
@@ -2566,7 +2578,7 @@ describe("Stub router order Post - user not exists", async () => {
 			userUpdaterStubExt.findData();
 			userUpdaterStubExt.usersExistCheck();
 
-			console.log(userUpdaterStubExt.usersExistCheck());
+			// console.log(userUpdaterStubExt.usersExistCheck());
 
 			resMock.status(200).json({ message0: "User23 not exist." });
 
@@ -2839,8 +2851,8 @@ describe("Stub router order Post - not enought products", async () => {
 					const testTwo = await Product.findOne({
 						name: "Strawberries"
 					});
-					console.log(testOne);
-					console.log(testTwo);
+					// console.log(testOne);
+					// console.log(testTwo);
 
 					prodUpStubExt.prodsToUpArray[0] = {
 						name: "Watermelon",
@@ -2855,6 +2867,7 @@ describe("Stub router order Post - not enought products", async () => {
 						price: 10.23
 					};
 				}
+
 				prodUpStubExt.permissions.push({
 					productname: "Watermelon",
 					response: "negative",
@@ -2868,11 +2881,41 @@ describe("Stub router order Post - not enought products", async () => {
 				return prodUpStubExt.permissions;
 			});
 
-			prodUpStubExt.createResults = sinon.stub().returns({
-				message: "Too little quantity of Watermelon"
-			});
+			// cambiare in callFake con ---->
+			// prodUpStubExt.negativeArr = [
+			// 	{
+			// 		message: "Too little quantity of Watermelon"
+			// 	}
+			// ];
 
-			prodUpStubExt.createNewOrder = sinon.stub().returns(null);
+			prodUpStubExt.createResults = sinon
+				.stub()
+				.callsFake(async function fnTwo() {
+					prodUpStubExt.results = prodUpStubExt.permissions;
+					prodUpStubExt.negativeArr = [];
+					prodUpStubExt.negativeArr.push({
+						message: "Too little quantity of Watermelon"
+					});
+				});
+
+			// <----- Qui collegate .results con .negativeArr
+
+			// prodUpStubExt.createResults = sinon.stub().returns({
+			// 	message: "Too little quantity of Watermelon"
+			// });
+
+			prodUpStubExt.createNewOrder = sinon
+				.stub()
+				.callsFake(function fakeThree() {
+					prodUpStubExt.negInfo = {
+						message0: "Too little quantity of Watermelon"
+					};
+					// prodUpStubExt.negInfo["message0"] =
+					// 	"Too little quantity of Watermelon";
+					// prodUpStubExt.response
+					// 	.status(200)
+					// 	.json({ message0: "Too little quantity of Watermelon" });
+				});
 
 			prodUpStubExt.restoreQuantities = sinon.stub().returns(null);
 
@@ -2886,8 +2929,8 @@ describe("Stub router order Post - not enought products", async () => {
 			prodUpStubExt.orderExistsCheck();
 			prodUpStubExt.searchProd();
 			// console.log(prodUpStubExt.searchProd());
-			// prodUpStubExt.createResults();
-			// prodUpStubExt.createNewOrder();
+			prodUpStubExt.createResults();
+			prodUpStubExt.createNewOrder();
 			// prodUpStubExt.restoreQuantities();
 
 			// ------
@@ -3333,9 +3376,6 @@ describe("Stub router order Delete One", async () => {
 				const reqMock = mockReq(req);
 				const resMock = mockRes(res);
 				stubDeleteOneOrder(reqMock, resMock, next);
-
-				console.log("req");
-				console.log(req);
 
 				const orderNumber = req.params.ordNum;
 				const orderId = `order${String(orderNumber)}`;

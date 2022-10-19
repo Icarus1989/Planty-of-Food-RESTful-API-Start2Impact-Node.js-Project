@@ -222,8 +222,8 @@ class ProductUpdaterClass {
 					message: elem["message"]
 				});
 			} else if (
-				elem["response"] == "positive" &&
-				this.negativeArr.length == 0 // provare questo con Insomnia
+				elem["response"] == "positive"
+				// && this.negativeArr.length == 0 // provare questo con Insomnia
 			) {
 				this.updatingProduct = await this.productModel.findOne({
 					name: elem["productname"]
