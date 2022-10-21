@@ -60,29 +60,23 @@ async function postOneOrder(req, res, next) {
 		const existCheck = await userUpdater.usersExistCheck();
 
 		if (existCheck["message0"]) {
-			// console.log("One");
 			res.status(200).json(existCheck);
 		} else if (orderExists !== null) {
-			// console.log("Two");
 			res.status(200).json({
 				message: "OrderId already exists"
 			});
-		} else if (orderExists == null) {
-			// console.log("Three");
-			// console.log(orderExists);
-
-			const sp = await prodUpdater.searchProd(); // far funzionare searchProd
-			// console.log(sp);
+		} else {
+			await prodUpdater.searchProd(); // far funzionare searchProd
 			await prodUpdater.createResults();
 			const numOfErrs = await prodUpdater.createNewOrder();
-			// console.log("numOfErrs");
-			// console.log(numOfErrs);
+			console.log(numOfErrs);
 			if (numOfErrs == 0) {
 				console.log("Zero Errors");
 				await userUpdater.updateAccountsNewOrder();
-			} else {
-				return;
 			}
+			// else {
+			// 	return;
+			// } ---- testare assenza else
 		}
 
 		// Qui possibile Ric...
