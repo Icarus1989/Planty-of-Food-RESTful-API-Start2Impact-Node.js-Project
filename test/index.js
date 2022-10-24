@@ -402,6 +402,7 @@ describe("Stub router product Post - Exist in DB - Not Saved", async () => {
 			null
 		);
 	});
+
 	it("Stub for product router post - Exist in DB - Not Saved", async () => {
 		router.post("/products-storage/", async (req, res, next) => {
 			sinon.assert.calledWith(router.post, "/products-storage/");
@@ -430,6 +431,7 @@ describe("Stub router product Post - Exist in DB - Not Saved", async () => {
 			});
 		});
 	});
+
 	it("Stub for product router post - Handle Error", async () => {
 		router.post(`/products-storage/`, async (req, res, next) => {
 			expect(500);
@@ -439,6 +441,7 @@ describe("Stub router product Post - Exist in DB - Not Saved", async () => {
 			assert.isFalse(next(new Error()));
 		});
 	});
+
 	after(() => {
 		router.post.restore();
 	});
@@ -2706,8 +2709,6 @@ describe("Stub router order Post - not enought products", async () => {
 							quantity: 23
 						}
 					];
-					console.log("results");
-					console.log(prodUpStubExt.results);
 					prodUpStubExt.negativeArr = [];
 					prodUpStubExt.negativeArr.push({
 						message: "Too little quantity of Watermelon"

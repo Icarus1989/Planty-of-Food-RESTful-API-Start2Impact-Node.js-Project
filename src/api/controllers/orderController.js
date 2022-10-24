@@ -66,10 +66,9 @@ async function postOneOrder(req, res, next) {
 				message: "OrderId already exists"
 			});
 		} else {
-			await prodUpdater.searchProd(); // far funzionare searchProd
+			await prodUpdater.searchProd();
 			await prodUpdater.createResults();
 			const numOfErrs = await prodUpdater.createNewOrder();
-			console.log(numOfErrs);
 			if (numOfErrs == 0) {
 				console.log("Zero Errors");
 				await userUpdater.updateAccountsNewOrder();
@@ -125,19 +124,10 @@ async function deleteOneOrder(req, res, next) {
 			Order,
 			res
 		);
-		// verificare effettivo utilizzo di prodUpdater
-		console.log(userUpdater); // -->>> data non presenti
 
-		console.log(prodUpdater); // -->>> data non presenti
+		await userUpdater.updateAccountsDelOrder();
+		await prodUpdater.restoreQuantities();
 
-		const updates = await userUpdater.updateAccountsDelOrder();
-		console.log("update");
-		console.log(updates);
-
-		// const quantities = await prodUpdater.restoreQuantities();
-		const restores = await prodUpdater.restoreQuantities();
-		console.log("restore");
-		console.log(restores);
 		res.status(200).json({
 			message: "Order delete."
 		});
