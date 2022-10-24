@@ -12,6 +12,15 @@
 <hr>
 <hr>
 
+<p align="center">
+<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Icarus1989/Planty-of-Food-RESTful-API-Start2Impact-Node.js-Project?style=flat-square">
+<img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/Icarus1989/Planty-of-Food-RESTful-API-Start2Impact-Node.js-Project">
+<img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/Icarus1989/Planty-of-Food-RESTful-API-Start2Impact-Node.js-Project">
+<img alt="GitHub language count" src="https://img.shields.io/github/languages/count/Icarus1989/Planty-of-Food-RESTful-API-Start2Impact-Node.js-Project">
+<img alt="GitHub top language" src="https://img.shields.io/github/languages/top/Icarus1989/Planty-of-Food-RESTful-API-Start2Impact-Node.js-Project">
+<img alt="Code Coverage" src="https://img.shields.io/codecov/c/github/Icarus1989/Planty-of-Food-RESTful-API-Start2Impact-Node.js-Project">
+</p>
+
 ## RESTful API testing and experimental sections
 
 - [x] Simple internal MongoDB database
