@@ -1,6 +1,6 @@
 {
 	"all": true,
-	"lines": 80,
+	"lines": 90,
 	"include": [
 		"test/**.js",
 		"src/**.js",
