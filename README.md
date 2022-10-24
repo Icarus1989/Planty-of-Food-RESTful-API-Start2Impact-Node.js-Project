@@ -37,10 +37,9 @@
         <li><a href="#description">Description</a>
           <ul>
           <li><a href="#intro">Intro</a></li>
-          <li><a href="#data">Data</a></li>
-          <li><a href="#architettura rest">Architettura REST</a></li>
+          <li><a href="#rest architecture">REST Architecture</a></li>
           <li><a href="#naming">Naming</a></li>
-          <li><a href="#metodi">Metodi</a></li>
+          <li><a href="#metodi">Methods</a></li>
           <li><a href="#status code">Status Code</a></li>
           <li><a href="#database">Database</a>
             <ul>
@@ -73,37 +72,89 @@
 - [Express.js](https://expressjs.com)
 - [MongoDB Atlas]()
 - [Mongoose]()
-- [Sinon.js]()
 - [Joi]()
 - [Celebrate]()
 - [Bodyparser]()
+
+<hr>
+
+### Testing
+
+- [Sinon.js]()
+- [mocha]
+- [nycrc/instanbul]
 
 <br>
 <br>
 
 <p><a href="#begin">&#9650; Back to summary</a></p>
 
+<hr>
+<hr>
+
 ## Description
 
 ### Intro
 
-### Data
+Questo progetto mira ad ottenere delle API funzionanti per connettere un ecommerce con dei gruppi d'acquisto per conto di Planty Of Food, azienda che opera nel settore del cibo plant based.
+
+<hr>
 
 ### Architettura REST
 
+Basandomi su quanto appreso nelle varie guide, ho cercato di creare queste API seguendo il più possibile le linee guida RESTful: • un'architettura stateless,
+• la composizione finale degli ordini, con il calcolo degli importi per ogni singolo utente e con il loro relativo salvataggio di tale order per esempio viene eseguita interamente dal server, cercando di ottenere così una divisione netta tra client e server,
+• un sistema diviso con una logica a layers, separando database e server, diviso a sua volta server principale tra models, controllers, routes, classes,
+• Un'interfaccia di comunicazione (Uniform Interface) omogenea e che permette la sua modifica a blocchi.
+• Le risorse sono autodescrittive
+• ...
+
+<hr>
+
 ### Naming
+
+Ho prestato particolare attenzione al naming delle resources, ragionado su quali potevano essere i più corretti applicati al contesto di Planty of Food. Da qui i tre gruppi principali: Users, Products-Storage e Orders-Archieve.
+
+<hr>
 
 ### Metodi
 
+Per tutti i gruppi di risorse presenti, users, products e orders, ho creato dei metodi uniformi per la gestione dei dati:
+
+- [GET] - diviso tra GET e GET/:id per ottenere l'intero insieme di risorse o una solamente basandosi sulla ricerca di un id.
+- [POST] - per la creazione di nuove risorse
+- [PUT] - per la modifica di risorse esistenti
+- [DELETE] - per la cancellazione di risorse esistenti.
+
+<hr>
+
 ### Status Code
+
+I vari status code di risposta delle varie API sono basati sulla lista fornita di status codes, ed inseriti ponendo particolare attenzione al fatto che la risposta arrivi o no e che sia positiva o negativa.
+
+<hr>
 
 ### Database
 
+Come Database ho scelto di utilizzare MongoDB con il suo servizio Atlas.
+All'interno del Database PlantyOfFood vi sono le tre collezioni necessarie per la gestione delle risorse: Users, Products-Storage e Orders-Archieve.
+
+<hr>
+
 #### Users
+
+Le risorse Users sonon composte da...
 
 #### Products-storage
 
+Le risorse Products sonon composte da...
+
 #### Orders-archieve
+
+Le risorse Orders sonon composte da...
+
+<hr>
+<hr>
 
 ## Steps RESTful API
 
@@ -116,13 +167,25 @@
 - [x] Highest possible percentage of coverage
 - [x] Automate testing
 
+<hr>
+<hr>
+
 ## Resources
 
+<hr>
+<hr>
+
 ## Usage
+
+<hr>
+<hr>
 
 ## Demo
 
 Si può provare dal link...
+
+<hr>
+<hr>
 
 ## License
 
