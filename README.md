@@ -18,6 +18,8 @@
 <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/Icarus1989/Planty-of-Food-RESTful-API-Start2Impact-Node.js-Project">
 <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/Icarus1989/Planty-of-Food-RESTful-API-Start2Impact-Node.js-Project">
 <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/Icarus1989/Planty-of-Food-RESTful-API-Start2Impact-Node.js-Project">
+<img alt="Min Coverage nycrc Config" src="https://img.shields.io/nycrc/Icarus1989/Planty-of-Food-RESTful-API-Start2Impact-Node.js-Project?config=.nycrc&preferredThreshold=lines&style=flat-square">
+<img alt="Coverage" src="https://img.shields.io/badge/code%20coverage-98%25-brightgreen">
 <img alt="Code Coverage" src="https://img.shields.io/codecov/c/github/Icarus1989/Planty-of-Food-RESTful-API-Start2Impact-Node.js-Project">
 </p>
 
