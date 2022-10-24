@@ -2,6 +2,10 @@
 <hr>
 
 <div align="center">
+  <img src="https://i.ibb.co/4gZTXmr/Schermata-2022-10-24-alle-18-27-52.png" alt="TitleImage" width="60%" height="60%">
+</div>
+
+<div align="center">
 <h1><i>Planty Of Food RESTful API</i></h1>
 </div>
 
@@ -48,9 +52,10 @@
               <li><a href="orders-archieve">Orders-archieve</a></li>
             </ul>
           </li>
+          <li><a href="#testing">Testing</a></li>
           </ul>
         </li>
-        <li><a href="steps restful api">Steps RESTful API</a></li>
+        <li><a href="steps">Steps</a></li>
       </ul>
     </li>
     <li><a href="#resources">Resources</a>
@@ -70,19 +75,19 @@
 
 - [Node.js](https://nodejs.dev/)
 - [Express.js](https://expressjs.com)
-- [MongoDB Atlas]()
-- [Mongoose]()
-- [Joi]()
-- [Celebrate]()
-- [Bodyparser]()
+- [MongoDB Atlas](https://www.mongodb.com/)
+- [Mongoose](https://mongoosejs.com/)
+- [Joi](https://joi.dev/)
+- [Celebrate](https://www.npmjs.com/package/celebrate)
+- [body-parser](https://www.npmjs.com/package/body-parser)
 
 <hr>
 
 ### Testing
 
-- [Sinon.js]()
-- [mocha]
-- [nycrc/instanbul]
+- [Sinon.js](https://sinonjs.org/)
+- [mocha](https://mochajs.org/)
+- [nycrc/instanbul](https://www.npmjs.com/package/nyc)
 
 <br>
 <br>
@@ -121,10 +126,10 @@ Ho prestato particolare attenzione al naming delle resources, ragionado su quali
 
 Per tutti i gruppi di risorse presenti, users, products e orders, ho creato dei metodi uniformi per la gestione dei dati:
 
-- [GET] - diviso tra GET e GET/:id per ottenere l'intero insieme di risorse o una solamente basandosi sulla ricerca di un id.
-- [POST] - per la creazione di nuove risorse
-- [PUT] - per la modifica di risorse esistenti
-- [DELETE] - per la cancellazione di risorse esistenti.
+- GET - diviso tra GET e GET/:id per ottenere l'intero insieme di risorse o una solamente basandosi sulla ricerca di un id.
+- POST - per la creazione di nuove risorse
+- PUT - per la modifica di risorse esistenti
+- DELETE - per la cancellazione di risorse esistenti.
 
 <hr>
 
@@ -152,6 +157,12 @@ Le risorse Products sonon composte da...
 #### Orders-archieve
 
 Le risorse Orders sonon composte da...
+
+<hr>
+
+### Testing
+
+...
 
 <hr>
 <hr>
