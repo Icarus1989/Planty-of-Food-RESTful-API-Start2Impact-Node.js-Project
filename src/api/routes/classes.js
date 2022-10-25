@@ -110,6 +110,7 @@ class OrderManagerClass {
 				}
 			}));
 		} else if (this.arr.length == 0) {
+			// valutare se necessario
 			this.res.status(200).json({
 				message: "No orders with these parameters saved on database"
 			});
