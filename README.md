@@ -3,9 +3,9 @@
 
 <div align="center">
 <hr>
-<h1><i>:articulated_lorry: :package: :leafy_green: :tomato: :pineapple: :strawberry: :grapes: :cherries: :pear: :peach: :mango:<br>
- Planty Of Food RESTful API :computer: <br>
- :articulated_lorry: :package: :leafy_green: :tomato: :pineapple: :strawberry: :grapes: :cherries: :pear: :peach: :mango:</i></h1>
+<h1><i>:articulated_lorry: :package: :blueberries: :apple: :pineapple: :strawberry: :grapes: :cherries: :pear: :peach: :mango:<br><br>
+ Planty Of Food RESTful API :computer: <br><br>
+ :corn: :potato: :eggplant: :carrot: :onion: :cucumber: :broccoli: :avocado: :hot_pepper: :pepper: :leafy_green:</i></h1>
  <hr>
 </div>
 
