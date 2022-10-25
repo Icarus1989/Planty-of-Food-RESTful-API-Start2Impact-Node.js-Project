@@ -193,7 +193,7 @@ Per lo unit-testing delle API ho utilizzato Sinon come consigliato e, anche se √
 I massimi risultati che sono riuscito ad ottenere:<br>
 
 <div align="center">
-<img src="https://i.ibb.co/QM9Yxsk/testing-node-project.png" alt="testing-node-project" width="80%" height="80%">
+<img src="https://i.ibb.co/QM9Yxsk/testing-node-project.png alt="testing-node-project" width="80%" height="80%">
 </div><br>
 
 Per ottenere un risultato pi√π completo nel testing ho usato inoltre i pacchetti sinon-mongoose e sinon-express-mock.
