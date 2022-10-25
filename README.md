@@ -2,14 +2,10 @@
 <hr>
 
 <div align="center">
-  <img src="https://i.ibb.co/4gZTXmr/Schermata-2022-10-24-alle-18-27-52.png" alt="TitleImage" width="60%" height="60%">
+<h1><i>:leafy_green: :tomato: :potato: Planty Of Food RESTful API :watermelon:  :pineapple: :green_apple:</i></h1>
 </div>
 
-<div align="center">
-<h1><i>Planty Of Food RESTful API</i></h1>
-</div>
-
-### Questo é un progetto per certificare le competenze acquisite con la **Super Guida Node.js** di **Start2Impact**, categoria Food.
+### Questo é un progetto per la conclusione della **Super Guida Node.js** di **Start2Impact**, categoria Food.
 
 <br>
 
@@ -53,6 +49,7 @@
             </ul>
           </li>
           <li><a href="#testing">Testing</a></li>
+          <li><a href="#nosqlinjections">NoSQL Injections</a></li>
           </ul>
         </li>
         <li><a href="steps">Steps</a></li>
@@ -107,18 +104,19 @@ Questo progetto mira ad ottenere delle API funzionanti per connettere un ecommer
 
 ### Architettura REST
 
-Basandomi su quanto appreso nelle varie guide, ho cercato di creare queste API seguendo il più possibile le linee guida RESTful: • un'architettura stateless,
-• la composizione finale degli ordini, con il calcolo degli importi per ogni singolo utente e con il loro relativo salvataggio di tale order per esempio viene eseguita interamente dal server, cercando di ottenere così una divisione netta tra client e server,
-• un sistema diviso con una logica a layers, separando database e server, diviso a sua volta server principale tra models, controllers, routes, classes,
-• Un'interfaccia di comunicazione (Uniform Interface) omogenea e che permette la sua modifica a blocchi.
-• Le risorse sono autodescrittive
+Basandomi su quanto appreso nelle varie guide, ho cercato di creare queste API seguendo il più possibile le linee guida RESTful:
+• un'architettura stateless
+• una divisione netta tra client e server - la composizione finale degli ordini, con il calcolo degli importi per ogni singolo utente e il totale, il salvataggio di tale order viene eseguita interamente dal server, come anche ogni controllo di esistenza delle risorse
+• un sistema diviso con una logica a layers - separando database e server, diviso a sua volta tra models, controllers, routes, classes
+• un'interfaccia di comunicazione (Uniform Interface) omogenea e che permette la sua modifica a blocchi separatamente, non richiedendo però modifiche dal client, che si baserà sempre sulle stesse URI per accedere alle API
+• le risorse sono autodescrittive - così come per il codice, i nomi di tutte le risorse sono stati creati per essere il più possibile human-readable
 • ...
 
 <hr>
 
 ### Naming
 
-Ho prestato particolare attenzione al naming delle resources, ragionado su quali potevano essere i più corretti applicati al contesto di Planty of Food. Da qui i tre gruppi principali: Users, Products-Storage e Orders-Archieve.
+Ho prestato particolare attenzione al naming delle resources, ragionado su quali potevano essere i più corretti applicati al contesto di Planty of Food. Da questo per esempio i tre gruppi principali: Users, Products-Storage e Orders-Archieve.
 
 <hr>
 
@@ -141,7 +139,7 @@ I vari status code di risposta delle varie API sono basati sulla lista fornita d
 
 ### Database
 
-Come Database ho scelto di utilizzare MongoDB con il suo servizio Atlas.
+Come Database ho scelto di utilizzare MongoDB tramite il servizio Atlas.
 All'interno del Database PlantyOfFood vi sono le tre collezioni necessarie per la gestione delle risorse: Users, Products-Storage e Orders-Archieve.
 
 <hr>
@@ -165,6 +163,12 @@ Le risorse Orders sonon composte da...
 ...
 
 <hr>
+
+### NoSQLInjections
+
+...
+
+<hr>
 <hr>
 
 ## Steps RESTful API
@@ -182,6 +186,14 @@ Le risorse Orders sonon composte da...
 <hr>
 
 ## Resources
+
+Risorse utilizzate:
+
+- [Start2Impact Courses](https://www.start2impact.it)
+- [Node.js Documentation](https://nodejs.org/en/docs/)
+- [Coding Train "Working with Data and API" Playlist](https://www.youtube.com/playlist?list=PLRqwX-V7Uu6YxDKpFzf_2D84p0cyk4T7X)
+- [Coding Garden Tutorials](https://www.youtube.com/c/CodingGarden)
+- [Net Ninja Node.js for beginners](https://youtube.com/playlist?list=PL4cUxeGkcC9gcy9lrvMJ75z9maRw4byYp)
 
 <hr>
 <hr>
