@@ -2,9 +2,11 @@
 <hr>
 
 <div align="center">
-<h1><i>:articulated_lorry: :package: :leafy_green: :tomato: :pineapple: :strawberry: <hr>
- Planty Of Food RESTful API <hr>
- :computer: :clipboard: :card_index_dividers: :file_cabinet:</i></h1>
+<hr>
+<h1><i>:articulated_lorry: :package: :leafy_green: :tomato: :pineapple: :strawberry: :grapes: :cherries: :pear: :peach: :mango:<br>
+ Planty Of Food RESTful API :computer: <br>
+ :articulated_lorry: :package: :leafy_green: :tomato: :pineapple: :strawberry: :grapes: :cherries: :pear: :peach: :mango:</i></h1>
+ <hr>
 </div>
 
 ### Questo é un progetto per la conclusione della **Super Guida Node.js** di **Start2Impact**, categoria Food.
