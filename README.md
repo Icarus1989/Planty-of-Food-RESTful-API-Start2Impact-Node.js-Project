@@ -2,8 +2,8 @@
 <hr>
 
 <div align="center">
-<h1><i>:articulated_lorry: :package: :leafy_green: :tomato: :pineapple: :strawberry: <br><hr>
- Planty Of Food RESTful API <hr><br>
+<h1><i>:articulated_lorry: :package: :leafy_green: :tomato: :pineapple: :strawberry: <hr>
+ Planty Of Food RESTful API <hr>
  :computer: :clipboard: :card_index_dividers: :file_cabinet:</i></h1>
 </div>
 
@@ -85,6 +85,7 @@
 ### Testing
 
 - [Sinon.js](https://sinonjs.org/)
+- [Sinon-Express-Mock]()
 - [mocha](https://mochajs.org/)
 - [nycrc/instanbul](https://www.npmjs.com/package/nyc)
 
@@ -101,6 +102,8 @@
 ### Intro
 
 Questo progetto mira ad ottenere delle API funzionanti per connettere un ecommerce con dei gruppi d'acquisto per conto di Planty Of Food, azienda che opera nel settore del cibo plant based.
+
+Ho voluto ampliare la consegna data per il progetto arricchendo le varie risorse con ulteriori campi e funzionalità, come per esempio l'inserimento del prezzo di un prodotto e il calcolo del totale di un ordine, cercando comunque di restare pertinente al contesto fornito con (aggiunte/funzionalità/features) utili ad un eventuale uso in un'applicazione reale.
 
 <hr>
 
@@ -144,36 +147,66 @@ I vari status code di risposta delle varie API sono basati sulla lista fornita d
 Come Database ho scelto di utilizzare MongoDB tramite il servizio Atlas.
 All'interno del Database PlantyOfFood vi sono le tre collezioni necessarie per la gestione delle risorse: Users, Products-Storage e Orders-Archieve.
 
-<hr>
-
 #### Users
 
-Le risorse Users sonon composte da...
+Le risorse Users sono composte da:
+• firstname - nome
+• lastname - cognome
+• username - sul quale si basa la ricerca tramite GET/:username
+• address - indirizzo email
+• orders - array di objects composti da id dell'ordine e url dello stesso
+• date - data di registrazione ( semplice creazione in questo progetto )
+
+:heavy_plus_sign: rispetto alla consegna data alle risorse users sono stati aggiunti i campi date, username e orders. Quest'ultimo in particolare verrà aggiornato all'inserimento o alla cancellazione di un ordine.
 
 #### Products-storage
 
-Le risorse Products sonon composte da...
+Le risorse Products sono composte da:
+• name - nome del prodotto
+• quantity - kilogrammi di un determinato prodotto in magazzino
+• origin - origine di un prodotto
+• price - prezzo al kilogrammo di un determinato prodotto
+
+:heavy_plus_sign: rispetto alla consegna data alle risorse products sono stati aggiunti i campi quantity, origin e price. Il campo quantity viene inserito alla creazione di un nuovo product e aggiornato tramite classes alla creazione o alla cancellazione di un ordine. Il campo price viene utilizzato durante la creazione di quest'ultimo per il calcolo del costo sostenuto per ogni singolo utente e del totale comoplessivo.
 
 #### Orders-archieve
 
-Le risorse Orders sonon composte da...
+Le risorse Orders sono composte da:
+• orderid - id dell'ordine con composizione "order000000" - per velocizzare le ricerche in caso di richiesta GET/:orderid sarà sufficente inserire la parte numerica (GET/:000000)
+• users - array contenente objects con:
+•• username - username dell'utente
+•• products - array contente objects con:
+••• productname - nome del prodotto ordinato
+••• quantity - quantità di tale prodotto
+•• cost - costo sostenuto dal singolo utente
+• shipped - indicazione se un ordine é stato spedito o meno
+• date - data di creazione di un ordine
+• totalcost - totale dell'ordine calcolato e aggiunto automaticamente
+
+:heavy_plus_sign: rispetto alla consegna data sono stati aggiunti dettagli agli utenti e ai prodotti che compongono l'ordine, come per esempio la quantità di un determinato prodotto, ed essendo il contesto nell'ambito dei gruppi d'acquisto ho voluto includere un field per il costo sostenuto da ogni singolo utente per la propria parte di ordine, calcolato e aggiunto ai dati forniti nella POST request, che comporrà la risorsa all'interno del Database. I campi aggiuntivi shipped e date potrebbero tornare utili per un futuro aggiornamento o utilizzo del progetto a fini pratici, ma come per il calcolo del costo totale dell'ordine, sono serviti principalmente come ulteriore esercizio pratico nella creazione di API e per un senso di completezza.
 
 <hr>
 
 ### Testing
 
-...
+Per lo unit-testing delle API ho utilizzato Sinon come consigliato e, anche se é stato uno degli scogli più duri del progetto, soprattutto entrando nell'ambito classes di JavaScript, mi é servito per migliorare il codice principale e capire in modo più profondo le logiche che regolano Node.js e le API.
+I massimi risultati che sono riuscito ad ottenere:
+IMMAGINE
+Per ottenere un risultato più completo nei vari testing ho usato inoltre i pacchetti sinon-mongoose e sinon-express-mock.
 
 <hr>
 
 ### NoSQLInjections
 
-...
+La validazione di ogni input viene effettuata dalla combinazione di Joi (ex hapi/joi) e Celebrate, utilizzando parametri abbastanza stringenti basati sui rispettivi Models, come spiegato e consigliato in questa conferenza:
+[Link](https://www.youtube.com/watch?v=xJWZsoYmsIE)
 
 <hr>
 <hr>
 
 ## Steps RESTful API
+
+Fasi del progetto:
 
 - [x] Routes, Naming, Methods and Status Codes study
 - [x] MongoDB and Mongoose study
@@ -184,10 +217,19 @@ Le risorse Orders sonon composte da...
 - [x] Highest possible percentage of coverage
 - [x] Automate testing
 
+Idee future:
+
+- [ ] Utilizzare EJS per creare un file pdf riassuntivo e stampabile dell'ordine e salvato su DB
+
 <hr>
 <hr>
 
 ## Resources
+
+Strumenti utilizzati:
+
+- [Insomnia](https://insomnia.rest/)
+- [MongoDB Compass](https://www.mongodb.com/products/compass)
 
 Risorse utilizzate:
 
@@ -229,7 +271,7 @@ Alex<br>
 [Instagram](http://https://www.instagram.com/alex._.1989/)<br>
 [Facebook](https://www.facebook.com/alex.valente.92)<br>
 
-:link: [GitHub Repo of this project](https://github.com/Icarus1989/how-is-there--lifestyle-web-app)
+:link: [GitHub Repo of this project](https://github.com/Icarus1989/Planty-of-Food-RESTful-API-Start2Impact-Node.js-Project)
 
 <br>
 <p><a href="#begin">&#9650; Back to summary</a></p>

@@ -70,7 +70,7 @@ async function postOneOrder(req, res, next) {
 			await prodUpdater.createResults();
 			const numOfErrs = await prodUpdater.createNewOrder();
 			if (numOfErrs == 0) {
-				console.log("Zero Errors");
+				// console.log("Zero Errors");
 				await userUpdater.updateAccountsNewOrder();
 			}
 			// else {
