@@ -4,7 +4,7 @@
 <div align="center">
 <hr>
 <h1><i>:articulated_lorry: :package: :orange: :apple: :pineapple: :strawberry: :grapes: :cherries: :pear: :peach: :mango:<br><br>
- Planty Of Food RESTful API :computer: <img src="https://i.ibb.co/2j5ny9t/db-icon.png" alt="db-icon" width="5%" height="5%" border="0" padding="0" margin="0"><br><br>
+ :computer:  Planty Of Food RESTful API  :file_cabinet:<br><br>
  :corn: :potato: :eggplant: :carrot: :onion: :cucumber: :broccoli: :avocado: :hot_pepper: :garlic: :leafy_green:</i></h1>
  <hr>
 </div>
