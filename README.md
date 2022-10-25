@@ -3,9 +3,9 @@
 
 <div align="center">
 <hr>
-<h1><i>:articulated_lorry: :package: :blueberries: :apple: :pineapple: :strawberry: :grapes: :cherries: :pear: :peach: :mango:<br><br>
- Planty Of Food RESTful API :computer: <br><br>
- :corn: :potato: :eggplant: :carrot: :onion: :cucumber: :broccoli: :avocado: :hot_pepper: :pepper: :leafy_green:</i></h1>
+<h1><i>:articulated_lorry: :package: :orange: :apple: :pineapple: :strawberry: :grapes: :cherries: :pear: :peach: :mango:<br><br>
+ Planty Of Food RESTful API :computer: <img src="https://i.ibb.co/k3ScNKb/database-solid-svg-1.png" alt="database-solid-svg-1"><br><br>
+ :corn: :potato: :eggplant: :carrot: :onion: :cucumber: :broccoli: :avocado: :hot_pepper: :garlic: :leafy_green:</i></h1>
  <hr>
 </div>
 
@@ -152,6 +152,7 @@ All'interno del Database PlantyOfFood vi sono le tre collezioni necessarie per l
 #### Users
 
 Le risorse Users sono composte da:
+
 • firstname - nome
 • lastname - cognome
 • username - sul quale si basa la ricerca tramite GET/:username
@@ -164,16 +165,18 @@ Le risorse Users sono composte da:
 #### Products-storage
 
 Le risorse Products sono composte da:
+
 • name - nome del prodotto
 • quantity - kilogrammi di un determinato prodotto in magazzino
 • origin - origine di un prodotto
 • price - prezzo al kilogrammo di un determinato prodotto
 
-:heavy_plus_sign: rispetto alla consegna data alle risorse products sono stati aggiunti i campi quantity, origin e price. Il campo quantity viene inserito alla creazione di un nuovo product e aggiornato tramite classes alla creazione o alla cancellazione di un ordine. Il campo price viene utilizzato durante la creazione di quest'ultimo per il calcolo del costo sostenuto per ogni singolo utente e del totale comoplessivo.
+:heavy_plus_sign: rispetto alla consegna data alle risorse products sono stati aggiunti i campi quantity, origin e price. Il campo quantity viene inserito alla creazione di un nuovo product e aggiornato tramite classes alla creazione o alla cancellazione di un ordine. Il campo price viene utilizzato durante la creazione di quest'ultimo per il calcolo del costo sostenuto per ogni singolo utente e del totale complessivo.
 
 #### Orders-archieve
 
 Le risorse Orders sono composte da:
+
 • orderid - id dell'ordine con composizione "order000000" - per velocizzare le ricerche in caso di richiesta GET/:orderid sarà sufficente inserire la parte numerica (GET/:000000)
 • users - array contenente objects con:
 •• username - username dell'utente
