@@ -190,8 +190,12 @@ Le risorse Orders sono composte da:
 ### Testing
 
 Per lo unit-testing delle API ho utilizzato Sinon come consigliato e, anche se é stato uno degli scogli più duri del progetto, soprattutto entrando nell'ambito classes di JavaScript, mi é servito per migliorare il codice principale e capire in modo più profondo le logiche che regolano Node.js e le API.<br>
-I massimi risultati che sono riuscito ad ottenere:
-<img src="https://i.ibb.co/QM9Yxsk/testing-node-project.png" alt="testing-node-project" width="80%" height="80%"><br>
+I massimi risultati che sono riuscito ad ottenere:<br>
+
+<div align="center">
+<img src="https://i.ibb.co/QM9Yxsk/testing-node-project.png" alt="testing-node-project" width="80%" height="80%">
+</div><br>
+
 Per ottenere un risultato più completo nel testing ho usato inoltre i pacchetti sinon-mongoose e sinon-express-mock.
 
 <hr>
