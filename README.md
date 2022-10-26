@@ -3,9 +3,8 @@
 
 <div align="center">
 <hr>
-<h1><i>:articulated_lorry: :package: :orange: :apple: :pineapple: :strawberry: :grapes: :cherries: :pear: :peach: :mango:<br><br>
- :computer:  Planty Of Food RESTful API  :file_cabinet:<br><br>
- :corn: :potato: :eggplant: :carrot: :onion: :cucumber: :broccoli: :avocado: :hot_pepper: :garlic: :leafy_green:</i></h1>
+<h1><i>Planty Of Food RESTful API <br><br>
+ :articulated_lorry: :package: :orange: :apple: :pineapple: :strawberry: :pear: :carrot: :leafy_green: :onion: :broccoli:</i></h1>
  <hr>
 </div>
 
@@ -41,7 +40,7 @@
         <li><a href="#description">Description</a>
           <ul>
           <li><a href="#intro">Intro</a></li>
-          <li><a href="#rest architecture">REST Architecture</a></li>
+          <li><a href="#rest-architecture">REST Architecture</a></li>
           <li><a href="#naming">Naming</a></li>
           <li><a href="#metodi">Methods</a></li>
           <li><a href="#status code">Status Code</a></li>
@@ -109,7 +108,7 @@ Ho voluto ampliare la consegna data per il progetto arricchendo le varie risorse
 
 <hr>
 
-### Architettura REST
+### REST Architecture
 
 Basandomi su quanto appreso nelle varie guide, ho cercato di creare queste API seguendo il più possibile le linee guida RESTful:
 • un'architettura stateless
@@ -127,7 +126,7 @@ Ho prestato particolare attenzione al naming delle resources, ragionado su quali
 
 <hr>
 
-### Metodi
+### Methods
 
 Per tutti i gruppi di risorse presenti, users, products e orders, ho creato dei metodi uniformi per la gestione dei dati:
 
@@ -152,41 +151,41 @@ All'interno del Database PlantyOfFood vi sono le tre collezioni necessarie per l
 #### Users
 
 Le risorse Users sono composte da:
-
-• firstname - nome
-• lastname - cognome
-• username - sul quale si basa la ricerca tramite GET/:username
-• address - indirizzo email
-• orders - array di objects composti da id dell'ordine e url dello stesso
-• date - data di registrazione ( semplice creazione in questo progetto )
+<br>
+• firstname - nome <br>
+• lastname - cognome <br>
+• username - sul quale si basa la ricerca tramite GET/:username <br>
+• address - indirizzo email <br>
+• orders - array di objects composti da id dell'ordine e url dello stesso <br>
+• date - data di registrazione ( semplice creazione in questo progetto ) <br>
 
 :heavy_plus_sign: rispetto alla consegna data alle risorse users sono stati aggiunti i campi date, username e orders. Quest'ultimo in particolare verrà aggiornato all'inserimento o alla cancellazione di un ordine.
 
 #### Products-storage
 
 Le risorse Products sono composte da:
-
-• name - nome del prodotto
-• quantity - kilogrammi di un determinato prodotto in magazzino
-• origin - origine di un prodotto
-• price - prezzo al kilogrammo di un determinato prodotto
+<br>
+• name - nome del prodotto <br>
+• quantity - kilogrammi di un determinato prodotto in magazzino <br>
+• origin - origine di un prodotto <br>
+• price - prezzo al kilogrammo di un determinato prodotto <br>
 
 :heavy_plus_sign: rispetto alla consegna data alle risorse products sono stati aggiunti i campi quantity, origin e price. Il campo quantity viene inserito alla creazione di un nuovo product e aggiornato tramite classes alla creazione o alla cancellazione di un ordine. Il campo price viene utilizzato durante la creazione di quest'ultimo per il calcolo del costo sostenuto per ogni singolo utente e del totale complessivo.
 
 #### Orders-archieve
 
 Le risorse Orders sono composte da:
-
-• orderid - id dell'ordine con composizione "order000000" - per velocizzare le ricerche in caso di richiesta GET/:orderid sarà sufficente inserire la parte numerica (GET/:000000)
-• users - array contenente objects con:
-•• username - username dell'utente
-•• products - array contente objects con:
-••• productname - nome del prodotto ordinato
-••• quantity - quantità di tale prodotto
-•• cost - costo sostenuto dal singolo utente
-• shipped - indicazione se un ordine é stato spedito o meno
-• date - data di creazione di un ordine
-• totalcost - totale dell'ordine calcolato e aggiunto automaticamente
+<br>
+• orderid - id dell'ordine con composizione "order000000" - per velocizzare le ricerche in caso di richiesta GET/:orderid sarà sufficente inserire la parte numerica (GET/:000000) <br>
+• users - array contenente objects con: <br>
+•• username - username dell'utente <br>
+•• products - array contente objects con: <br>
+••• productname - nome del prodotto ordinato <br>
+••• quantity - quantità di tale prodotto <br>
+•• cost - costo sostenuto dal singolo utente <br>
+• shipped - indicazione se un ordine é stato spedito o meno <br>
+• date - data di creazione di un ordine <br>
+• totalcost - totale dell'ordine calcolato e aggiunto automaticamente <br>
 
 :heavy_plus_sign: rispetto alla consegna data sono stati aggiunti dettagli agli utenti e ai prodotti che compongono l'ordine, come per esempio la quantità di un determinato prodotto, ed essendo il contesto nell'ambito dei gruppi d'acquisto ho voluto includere un field per il costo sostenuto da ogni singolo utente per la propria parte di ordine, calcolato e aggiunto ai dati forniti nella POST request, che comporrà la risorsa all'interno del Database. I campi aggiuntivi shipped e date potrebbero tornare utili per un futuro aggiornamento o utilizzo del progetto a fini pratici, ma come per il calcolo del costo totale dell'ordine, sono serviti principalmente come ulteriore esercizio pratico nella creazione di API e per un senso di completezza.
 
