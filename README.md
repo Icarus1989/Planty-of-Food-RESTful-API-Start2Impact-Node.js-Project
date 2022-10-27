@@ -204,7 +204,7 @@ Per lo unit-testing delle API ho utilizzato Sinon come consigliato e, anche se �
 I massimi risultati che sono riuscito ad ottenere:<br>
 
 <div align="center">
-<img src="https://i.ibb.co/QM9Yxsk/testing-node-project.png" alt="testing-node-project" width="80%" height="80%">
+<img src="https://i.ibb.co/QM9Yxsk/testing-node-project.png" alt="testing-node-project" width="60%" height="60%">
 </div>
 <br>
 
@@ -290,7 +290,7 @@ La ricerca può essere effettuata sia utilizzando tutti i parametri, sia senza u
 - per cancellare una risorsa si usi una DELETE request con URL **_"/orders-archieve/:ordnum"_** con userid corrispondente all'**orderid** della risorsa. La response sarà un message di conferma di avvenuta cancellazione. Tramite l'utilizzo di classes JavaScript le risorse User e Product coinvolte verranno modificate e/o aggiornate.
 <br>
 <div align="center">
-<img src="https://i.ibb.co/HBfnsb2/Schermata-2022-10-28-alle-00-16-13.png" alt="Order composition" witdh="40%" height="40%">
+<img src="https://i.ibb.co/HBfnsb2/Schermata-2022-10-28-alle-00-16-13.png" alt="Order composition" width="40%" height="40%">
 </div>
 <br>
 Nota generale per l'utilizzo delle routes: se i fields indicati nel body non corrispondessero alle indicazioni impostate con Celebrate, avverrà un errore di validazione con status 500.
