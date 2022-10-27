@@ -253,9 +253,11 @@ Per le risorse **Users**:
 - per modificare una risorsa si usi una PUT request con URI **_"/users/:userid"_** con userid corrispondente allo **username** della risorsa e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
 
 - per cancellare una risorsa si usi una DELETE request con URI **_"/users/:userid"_** con userid corrispondente allo **username** della risorsa. La response sarà un message di conferma di avvenuta cancellazione.
-
-NOTA immagine User completo con tra parentesi default come una documentazione
-
+<br>
+<div align="center">
+<img src="https://i.ibb.co/ZzpkdWn/Schermata-2022-10-28-alle-00-38-28.png" alt="User Composition" width="40%" height="40%">
+</div>
+<br>
 Per le risorse **Product**:
 
 - una GET request con URL **_"/products-storage/"_** darà come risposta la totalità dei prodotti presenti nella collection, ad una GET request con URL **_"/products-storage/:prodid"_** risponderà con il relativo prodotto con prodid corrispondente, basato sul field **name**, oppure con un message che segnalerà la non esistenza di tale Product
@@ -265,9 +267,11 @@ Per le risorse **Product**:
 - per modificare una risorsa si usi una PUT request con URI **_"/products-storage/:prodid"_** con prodid corrispondente al **name** del Product e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
 
 - per cancellare una risorsa si una DELETE request con URI **_"/products-storage/:prodid"_** con prodid corrispondente al **name** del Product. La response sarà un message di conferma.
-
-NOTA immagine Product completo con tra parentesi default come una documentazione
-
+<br>
+<div align="center">
+<img src="https://i.ibb.co/xMVKqcr/Schermata-2022-10-28-alle-00-39-08.png" alt="Product Composition" width="40%" height="40%">
+</div>
+<br>
 Per le risorse **Orders**:
 
 - una GET request con URI **_"/orders-archieve/"_** darà come risposta la totalità dei prodotti presenti nella collection, che potranno essere riordinati e filtrati in base ai query parameters inseriti nell'URI:
