@@ -55,11 +55,11 @@
           <li><a href="#nosql-injections">NoSQL Injections</a></li>
           </ul>
         </li>
-        <li><a href="steps">Steps</a></li>
       </ul>
     </li>
     <li><a href="#resources">Resources</a>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="steps">Steps</a></li>
     <li><a href="#demo">Demo</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contacts">Contacts</a></li>
@@ -113,14 +113,16 @@ Tra le due possibilità ho preferito optare per MongoDB (come database) visto ch
 ### REST Architecture
 
 Basandomi su quanto appreso nelle varie guide, ho cercato di creare queste API seguendo il più possibile le linee guida RESTful:
-<br>
-<br>
-• un'architettura stateless<br>
-• una divisione netta tra client e server - la composizione finale degli ordini, con il calcolo degli importi per ogni singolo utente e il totale, il salvataggio di tale order viene eseguita interamente dal server, come anche ogni controllo di esistenza delle risorse<br>
-• un sistema diviso con una logica a layers - separando database e server, diviso a sua volta tra la route base e poi tra le tre route principali a loro volta divise tra models, controllers, routes e classes, in modo da separare nel modo migliore possibile tutte le logiche<br>
-• un'interfaccia di comunicazione (Uniform Interface) omogenea e che permette la sua modifica a blocchi separatamente, non richiedendo però modifiche dal client, che si baserà sempre sulle stesse URI per accedere alle API<br>
-• le risorse sono autodescrittive - così come per il codice, i nomi di tutte le risorse sono stati creati per essere il più possibile human-readable<br>
-• ...
+
+- un'architettura stateless
+
+- una divisione netta tra client e server - la composizione finale degli ordini, con il calcolo degli importi per ogni singolo utente e il totale, il salvataggio di tale order viene eseguita interamente dal server, come anche ogni controllo di esistenza delle risorse
+
+- un sistema diviso con una logica a layers - separando database e server, diviso a sua volta tra la route base e poi tra le tre route principali a loro volta divise tra models, controllers, routes e classes, in modo da separare nel modo migliore possibile tutte le logiche
+
+- un'interfaccia di comunicazione (Uniform Interface) omogenea e che permette la sua modifica a blocchi separatamente, non richiedendo però modifiche dal client, che si baserà sempre sulle stesse URI per accedere alle API
+
+- le risorse sono autodescrittive - così come per il codice, i nomi di tutte le risorse sono stati creati per essere il più possibile human-readable
 
 <hr>
 
@@ -155,44 +157,41 @@ All'interno del Database PlantyOfFood vi sono le tre collezioni necessarie per l
 #### Users
 
 Le risorse Users sono composte da:
-<br>
-<br>
-• firstname - nome <br>
-• lastname - cognome <br>
-• username - sul quale si basa la ricerca tramite GET/:username <br>
-• address - indirizzo email <br>
-• orders - array di objects composti da id dell'ordine e url dello stesso <br>
-• date - data di registrazione ( semplice creazione in questo progetto ) <br>
+
+- firstname - nome <br>
+- lastname - cognome <br>
+- username - sul quale si basa la ricerca tramite GET/:username <br>
+- address - indirizzo email <br>
+- orders - array di objects composti da id dell'ordine e url dello stesso <br>
+- date - data di registrazione ( semplice creazione in questo progetto ) <br>
 
 :heavy_plus_sign: rispetto alla consegna data alle risorse users sono stati aggiunti i campi date, username e orders. Quest'ultimo in particolare verrà aggiornato all'inserimento o alla cancellazione di un ordine.
 
 #### Products-storage
 
 Le risorse Products sono composte da:
-<br>
-<br>
-• name - nome del prodotto <br>
-• quantity - kilogrammi di un determinato prodotto in magazzino <br>
-• origin - origine di un prodotto <br>
-• price - prezzo al kilogrammo di un determinato prodotto <br>
+
+- name - nome del prodotto <br>
+- quantity - kilogrammi di un determinato prodotto in magazzino <br>
+- origin - origine di un prodotto <br>
+- price - prezzo al kilogrammo di un determinato prodotto <br>
 
 :heavy_plus_sign: rispetto alla consegna data alle risorse products sono stati aggiunti i campi quantity, origin e price. Il campo quantity viene inserito alla creazione di un nuovo product e aggiornato tramite classes alla creazione o alla cancellazione di un ordine. Il campo price viene utilizzato durante la creazione di quest'ultimo per il calcolo del costo sostenuto per ogni singolo utente e del totale complessivo.
 
 #### Orders-archieve
 
 Le risorse Orders sono composte da:
-<br>
-<br>
-• orderid - id dell'ordine con composizione "order000000" - per velocizzare le ricerche in caso di richiesta GET/:orderid sarà sufficente inserire la parte numerica (GET/:000000) <br>
-• users - array contenente objects con: <br>
-•• username - username dell'utente <br>
-•• products - array contente objects con: <br>
-••• productname - nome del prodotto ordinato <br>
-••• quantity - quantità di tale prodotto <br>
-•• cost - costo sostenuto dal singolo utente <br>
-• shipped - indicazione se un ordine é stato spedito o meno <br>
-• date - data di creazione di un ordine <br>
-• totalcost - totale dell'ordine calcolato e aggiunto automaticamente <br>
+
+- orderid - id dell'ordine con composizione "order000000" - per velocizzare le ricerche in caso di richiesta GET/:orderid sarà sufficente inserire la parte numerica (GET/:000000)
+- users - array contenente objects con:
+  - username - username dell'utente <br>
+  - products - array contente objects con:
+    - productname - nome del prodotto ordinato <br>
+    - quantity - quantità di tale prodotto
+  - cost - costo sostenuto dal singolo utente <br>
+- shipped - indicazione se un ordine é stato spedito o meno <br>
+- date - data di creazione di un ordine <br>
+- totalcost - totale dell'ordine calcolato e aggiunto automaticamente <br>
 
 :heavy_plus_sign: rispetto alla consegna data sono stati aggiunti dettagli agli utenti e ai prodotti che compongono l'ordine, come per esempio la quantità di un determinato prodotto, ed essendo il contesto nell'ambito dei gruppi d'acquisto ho voluto includere un field per il costo sostenuto da ogni singolo utente per la propria parte di ordine, calcolato e aggiunto ai dati forniti nella POST request, che comporrà la risorsa all'interno del Database. I campi aggiuntivi shipped e date potrebbero tornare utili per un futuro aggiornamento o utilizzo del progetto a fini pratici, ma come per il calcolo del costo totale dell'ordine, sono serviti principalmente come ulteriore esercizio pratico nella creazione di API e per un senso di completezza.
 
@@ -246,8 +245,11 @@ La route principale "/" risponderà ad una GET request con un semplice benvenuto
 Per le risorse Users:
 
 - una GET request con URI "/users/" darà come risposta la totalità dei prodotti presenti nella collection, ad una GET request con URL "/users/:userid" risponderà con il relativo User con userid corrispondente, basato sul field **username**, oppure con un message che segnalerà la non esistenza di tale User
+
 - per poter inserire un nuovo User con una POST request occorrerà usare l'URI "/users/" e fornire un body in formato JSON, che dovrà rispettare i parametri dei field che compongono le risorse: **firstname**, **lastname**, **username**, **address**, **date** e **orders** (che può essere anche un Array vuoto). Dopo aver inviato la POST request e andata a buon fine, la risposta sarà lo User stesso oppure, in caso negativo, un message adatto. I field hanno dei parametri di default per velocizzare le request soprattutto a scopo dimostrativo.
+
 - per modificare una risorsa si usi una PUT request con URI "/users/:userid" con userid corrispondente allo **username** della risorsa e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
+
 - per cancellare una risorsa si usi una DELETE request con URI "/users/:userid" con userid corrispondente allo **username** della risorsa. La response sarà un message di conferma di avvenuta cancellazione.
 
 NOTA immagine User completo con tra parentesi default come una documentazione
@@ -266,16 +268,20 @@ NOTA immagine Product completo con tra parentesi default come una documentazione
 
 Per le risorse Orders:
 
-<!-- (Aggiungere paremetri del GET...vedi classes e testing) -->
+- una GET request con URI "/orders-archieve/" darà come risposta la totalità dei prodotti presenti nella collection, che potranno essere riordinati e filtrati in base ai query parameters inseriti nell'URI:
+  - filter - uno tra productname, username, shipped, \_id, orderid, date
+  - value - la value del filter per la quale filtrare i risultati
+  - order - parametro di riferiemento per l'ordine - stesse value del filter
+  - sort - uno tra increasing e decreasing
 
-- una GET request con URI "/orders-archieve/" darà come risposta la totalità dei prodotti presenti nella collection, che potranno essere riordinati e filtrati in base ai parametri inseriti nell'URI:
-  - filter
-  - value
-  - order
-  - sort
+La ricerca può essere effettuata sia utilizzando tutti i parametri, sia senza utilizzarli, sia utilizzando solo i parametri filter e value, sia solo con order e sort. In caso di utilizzo di filter senza value o viceversa oppure di order senza sort e viceversa, la response sarà un messaggio di errore che indicherà la mancanza del parametro del caso.
+
 - una GET request con URI "/orders-archieve/:ordnum" (inserire nell'immagine sotto un esempio per chiarezza) risponderà con il relativo Order con ordnum corrispondente, basato sul field **orderid** senza la componente "order" (i.e. ~~order~~999999) , oppure con un message che segnalerà la non esistenza di tale Order
+
 - per poter inserire un nuovo Order con una POST request occorrerà usare l'URI "/orders-archieve/" e fornire un body in formato JSON, che dovrà rispettare i parametri dei field che compongono le risorse: **orderid**, **users** (struttura complassa vedi immagine), **date** e **shipped**. Verranno inoltre calcolati ed aggiunti i fields cost e totalcost basati sul field price delle risorse Product e relativa quantity. Dopo aver inviato la POST request e andata a buon fine, la risposta sarà l'Order stesso oppure, in caso negativo, un message adatto. I field hanno dei parametri di default per velocizzare le request soprattutto a scopo dimostrativo. Tramite l'utilizzo di classes JavaScript le risorse User e Product coinvolte verranno modificate e/o aggiornate.
+
 - per modificare una risorsa si usi una PUT request con URL "/orders-archieve/:ordnum" con ordnum corrispondente all'**orderid** della risorsa e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
+
 - per cancellare una risorsa si usi una DELETE request con URL "/orders-archieve/:ordnum" con userid corrispondente all'**orderid** della risorsa. La response sarà un message di conferma di avvenuta cancellazione. Tramite l'utilizzo di classes JavaScript le risorse User e Product coinvolte verranno modificate e/o aggiornate.
 
 NOTA immagine Order completo con tra parentesi default come una documentazione

@@ -41,8 +41,8 @@ class OrderManagerClass {
 			}
 			return this.results;
 		} else if (
-			this.filterQuery == "username" ||
-			this.filterQuery == "products"
+			this.filterQuery == "username"
+			// || this.filterQuery == "products" - dubbio test senza e con
 		) {
 			this.users = await this.data.map((elem) => {
 				return elem["users"][0];
