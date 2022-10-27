@@ -1,6 +1,4 @@
 <hr>
-<hr>
-
 <div align="center">
 <hr>
 <h1><i>Planty Of Food RESTful API <br><br>
@@ -278,7 +276,7 @@ Per le risorse **Orders**:
   - order - parametro di riferiemento per l'ordine - stesse value del filter
   - sort - uno tra increasing e decreasing
 
-    i.e. **_"/orders-archieve/filter=productname&value=strawberries&order=orderid&sort=increasing"_**
+    i.e. **_"/orders-archieve?filter=productname&value=strawberries&order=orderid&sort=increasing"_**
 
 La ricerca può essere effettuata sia utilizzando tutti i parametri, sia senza utilizzarli, sia utilizzando solo i parametri filter e value, sia solo con order e sort. In caso di utilizzo di filter senza value o viceversa oppure di order senza sort e viceversa, la response sarà un messaggio di errore che indicherà la mancanza del parametro del caso.
 
@@ -289,6 +287,12 @@ La ricerca può essere effettuata sia utilizzando tutti i parametri, sia senza u
 - per modificare una risorsa si usi una PUT request con URL **_"/orders-archieve/:ordnum"_** con ordnum corrispondente all'**orderid** della risorsa e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
 
 - per cancellare una risorsa si usi una DELETE request con URL **_"/orders-archieve/:ordnum"_** con userid corrispondente all'**orderid** della risorsa. La response sarà un message di conferma di avvenuta cancellazione. Tramite l'utilizzo di classes JavaScript le risorse User e Product coinvolte verranno modificate e/o aggiornate.
+
+<div align="center">
+<img src="https://i.ibb.co/HBfnsb2/Schermata-2022-10-28-alle-00-16-13.png" alt="Order composition">
+</div>
+
+Nota generale per l'utilizzo delle routes: se i fields indicati nel body non corrispondessero alle indicazioni impostate con Celebrate, avverrà un errore di validazione con status 500.
 
 NOTA immagine Order completo con tra parentesi default come una documentazione
 
