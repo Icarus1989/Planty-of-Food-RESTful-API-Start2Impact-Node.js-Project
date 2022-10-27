@@ -15,7 +15,7 @@ async function getAllProducts(req, res, next) {
 
 async function getOneProduct(req, res, next) {
 	try {
-		const prodId = await req.params.prodId;
+		const prodId = await req.params.prodid;
 		const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(
 			1
 		)}`;
@@ -62,7 +62,7 @@ async function postOneProduct(req, res, next) {
 async function putOneProduct(req, res, next) {
 	try {
 		const data = await req.body;
-		const prodId = await req.params.prodId;
+		const prodId = await req.params.prodid;
 		const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(
 			1
 		)}`;
@@ -81,7 +81,7 @@ async function putOneProduct(req, res, next) {
 
 async function deleteOneProduct(req, res, next) {
 	try {
-		const prodId = req.params.prodId;
+		const prodId = req.params.prodid;
 		const label = `${String(prodId)[0].toUpperCase()}${String(prodId).slice(
 			1
 		)}`;

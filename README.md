@@ -52,7 +52,7 @@
             </ul>
           </li>
           <li><a href="#testing">Testing</a></li>
-          <li><a href="#nosqlinjections">NoSQL Injections</a></li>
+          <li><a href="#nosql-injections">NoSQL Injections</a></li>
           </ul>
         </li>
         <li><a href="steps">Steps</a></li>
@@ -102,20 +102,24 @@
 
 ### Intro
 
-Questo progetto mira ad ottenere delle API funzionanti per connettere un ecommerce con dei gruppi d'acquisto per conto di Planty Of Food, azienda che opera nel settore del cibo plant based.
+Questo progetto mira ad ottenere delle API funzionanti per connettere un ecommerce con dei gruppi d'acquisto per conto di Planty Of Food, azienda che opera nel settore del cibo plant based.<br>
 
 Ho voluto ampliare la consegna data per il progetto arricchendo le varie risorse con ulteriori campi e funzionalità, come per esempio l'inserimento del prezzo di un prodotto e il calcolo del totale di un ordine, cercando comunque di restare pertinente al contesto fornito con (aggiunte/funzionalità/features) utili ad un eventuale uso in un'applicazione reale.
+
+Tra le due possibilità ho preferito optare per MongoDB (come database) visto che proprio grazie al fatto di voler imparare ad usarlo, per migliorare ed ampliare [lo scorso progetto](https://github.com/Icarus1989/how-is-there--lifestyle-web-app), ho scelto di cominciare questa guida di Node.js, capendone l'importanza anche in senso più ampio.
 
 <hr>
 
 ### REST Architecture
 
 Basandomi su quanto appreso nelle varie guide, ho cercato di creare queste API seguendo il più possibile le linee guida RESTful:
-• un'architettura stateless
-• una divisione netta tra client e server - la composizione finale degli ordini, con il calcolo degli importi per ogni singolo utente e il totale, il salvataggio di tale order viene eseguita interamente dal server, come anche ogni controllo di esistenza delle risorse
-• un sistema diviso con una logica a layers - separando database e server, diviso a sua volta tra models, controllers, routes, classes
-• un'interfaccia di comunicazione (Uniform Interface) omogenea e che permette la sua modifica a blocchi separatamente, non richiedendo però modifiche dal client, che si baserà sempre sulle stesse URI per accedere alle API
-• le risorse sono autodescrittive - così come per il codice, i nomi di tutte le risorse sono stati creati per essere il più possibile human-readable
+<br>
+<br>
+• un'architettura stateless<br>
+• una divisione netta tra client e server - la composizione finale degli ordini, con il calcolo degli importi per ogni singolo utente e il totale, il salvataggio di tale order viene eseguita interamente dal server, come anche ogni controllo di esistenza delle risorse<br>
+• un sistema diviso con una logica a layers - separando database e server, diviso a sua volta tra la route base e poi tra le tre route principali a loro volta divise tra models, controllers, routes e classes, in modo da separare nel modo migliore possibile tutte le logiche<br>
+• un'interfaccia di comunicazione (Uniform Interface) omogenea e che permette la sua modifica a blocchi separatamente, non richiedendo però modifiche dal client, che si baserà sempre sulle stesse URI per accedere alle API<br>
+• le risorse sono autodescrittive - così come per il codice, i nomi di tutte le risorse sono stati creati per essere il più possibile human-readable<br>
 • ...
 
 <hr>
@@ -152,6 +156,7 @@ All'interno del Database PlantyOfFood vi sono le tre collezioni necessarie per l
 
 Le risorse Users sono composte da:
 <br>
+<br>
 • firstname - nome <br>
 • lastname - cognome <br>
 • username - sul quale si basa la ricerca tramite GET/:username <br>
@@ -165,6 +170,7 @@ Le risorse Users sono composte da:
 
 Le risorse Products sono composte da:
 <br>
+<br>
 • name - nome del prodotto <br>
 • quantity - kilogrammi di un determinato prodotto in magazzino <br>
 • origin - origine di un prodotto <br>
@@ -175,6 +181,7 @@ Le risorse Products sono composte da:
 #### Orders-archieve
 
 Le risorse Orders sono composte da:
+<br>
 <br>
 • orderid - id dell'ordine con composizione "order000000" - per velocizzare le ricerche in caso di richiesta GET/:orderid sarà sufficente inserire la parte numerica (GET/:000000) <br>
 • users - array contenente objects con: <br>
@@ -197,37 +204,17 @@ Per lo unit-testing delle API ho utilizzato Sinon come consigliato e, anche se �
 I massimi risultati che sono riuscito ad ottenere:<br>
 
 <div align="center">
-<img src="https://i.ibb.co/QM9Yxsk/testing-node-project.png alt="testing-node-project" width="80%" height="80%">
+<img src="https://i.ibb.co/QM9Yxsk/testing-node-project.png" alt="testing-node-project" width="80%" height="80%">
 </div><br>
 
 Per ottenere un risultato più completo nel testing ho usato inoltre i pacchetti sinon-mongoose e sinon-express-mock.
 
 <hr>
 
-### NoSQLInjections
+### NoSQL Injections
 
 La validazione di ogni input viene effettuata dalla combinazione di Joi (ex hapi/joi) e Celebrate, utilizzando parametri abbastanza stringenti basati sui rispettivi Models, come spiegato e consigliato in questa conferenza:
 [Link](https://www.youtube.com/watch?v=xJWZsoYmsIE)
-
-<hr>
-<hr>
-
-## Steps RESTful API
-
-Fasi del progetto:
-
-- [x] Routes, Naming, Methods and Status Codes study
-- [x] MongoDB and Mongoose study
-- [x] Simple internal MongoDB database creation
-- [x] Simple database on MongoDB Atlas creation
-- [x] Sinon.js stubs, mocks and spies study
-- [x] Test code coverage instanbul/nyc
-- [x] Highest possible percentage of coverage
-- [x] Automate testing
-
-Idee future:
-
-- [ ] Utilizzare EJS per creare un file pdf riassuntivo e stampabile dell'ordine e salvato su DB
 
 <hr>
 <hr>
@@ -251,6 +238,60 @@ Risorse utilizzate:
 <hr>
 
 ## Usage
+
+Per poter utilizzare queste API basta utilizzare un programma per la gestione delle requests come Insomnia oppure creare un client-side adatto usando le URI descritte.
+
+La route principale "/" risponderà ad una GET request con un semplice benvenuto.
+
+Per le risorse Users:
+<br>
+<br>
+•  una GET request con URI "/users/" darà come risposta la totalità dei prodotti presenti nella collection, ad una GET request con URL "/users/:userid" risponderà con il relativo User con userid corrispondente, basato sul field username, oppure con un message che segnalerà la non esistenza di tale User <br>
+• per poter inserire un nuovo User con una POST request occorrerà usare l'URL "/users/" e fornire un body in formato JSON a tale request, che dovrà rispettare i parametri dei field che compongono le risorse: firstname, lastname, username, address, date e orders. Dopo aver inviato la POST request, e andata a buon fine, la risposta sarà lo User stesso oppure, in caso negativo, un message adatto. I field hanno dei parametri di default per velocizzare le request soprattutto a scopo dimostrativo.<br>
+• per modificare una risorsa si usi una PUT request con URL "/users/:userid" con userid corrispondente allo username della risorsa e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
+• per cancellare una risorsa si usi una DELETE request con URL "/users/:userid" con userid corrispondente allo username della risorsa. La response sarà un message di conferma di avvenuta cancellazione.
+
+NOTA immagine User completo con tra parentesi default come una documentazione
+
+Per le risorse Product:
+<br>
+<br>
+•  una GET request con URL "/products-storage/" darà come risposta la totalità dei prodotti presenti nella collection, ad una GET request con URL "/products-storage/:prodid" risponderà con il relativo prodotto con prodid corrispondente, basato sul field name, oppure con un message che segnalerà la non esistenza di tale Product <br>
+• per poter inserire un nuovo product con una POST request occorrerà usare l'URL "/products-storage/" e fornire un body in formato JSON a tale request, che dovrà rispettare i parametri dei quattro field che compongono le risorse: name, origin, price, quantity. Dopo aver inviato la POST request, e andata a buon fine, la risposta sarà il product stesso oppure, in caso negativo, un message adatto. I field hanno dei parametri di default per velocizzare le request soprattutto a scopo dimostrativo.<br>
+• per modificare una risorsa si usi una PUT request con URL "/products-storage/:prodid" con prodid corrispondente al name del Product e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
+• per cancellare una risorsa si una DELETE request con URL "/products-storage/:prodid" con prodid corrispondente al name del Product. La response sarà un message di conferma.
+
+NOTA immagine Product completo con tra parentesi default come una documentazione
+
+Per le risorse Users:
+<br>
+<br>
+•  una GET request con URI "/orders-archieve/" darà come risposta la totalità dei prodotti presenti nella collection, ad una GET request con URI "/orders-archieve/:ordnum" risponderà con il relativo Order con ordnum corrispondente, basato sul field orderid, oppure con un message che segnalerà la non esistenza di tale Order <br>
+• per poter inserire un nuovo Order con una POST request occorrerà usare l'URI "/orders-archieve/" e fornire un body in formato JSON a tale request, che dovrà rispettare i parametri dei field che compongono le risorse: orderid, users (struttura complassa vedi immagine), date e shipped. Verranno inoltre calcolati ed aggiunti i fields cost e totalcost basati sul field price delle risorse Product e relativa quantity. Dopo aver inviato la POST request, e andata a buon fine, la risposta sarà l'Order stesso oppure, in caso negativo, un message adatto. I field hanno dei parametri di default per velocizzare le request soprattutto a scopo dimostrativo. Tramite l'utilizzo di classes JavaScript le risorse User e Product coinvolte verranno modificate e/o aggiornate.<br>
+• per modificare una risorsa si usi una PUT request con URL "/orders-archieve/:ordnum" con ordnum corrispondente all'orderid della risorsa e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
+• per cancellare una risorsa si usi una DELETE request con URL "/orders-archieve/:ordnum" con userid corrispondente all'orderid della risorsa. La response sarà un message di conferma di avvenuta cancellazione. Tramite l'utilizzo di classes JavaScript le risorse User e Product coinvolte verranno modificate e/o aggiornate.
+
+NOTA immagine Order completo con tra parentesi default come una documentazione
+
+<hr>
+<hr>
+
+## Steps RESTful API
+
+Fasi del progetto:
+
+- [x] Routes, Naming, Methods and Status Codes study
+- [x] MongoDB and Mongoose study
+- [x] Simple internal MongoDB database creation
+- [x] Simple database on MongoDB Atlas creation
+- [x] Sinon.js stubs, mocks and spies study
+- [x] Test code coverage instanbul/nyc
+- [x] Highest possible percentage of coverage
+- [x] Automate testing
+
+Idee future:
+
+- [ ] Utilizzare EJS per creare un file pdf riassuntivo e stampabile dell'ordine e salvato su DB
 
 <hr>
 <hr>

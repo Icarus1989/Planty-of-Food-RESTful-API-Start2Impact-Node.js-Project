@@ -25,7 +25,7 @@ const router = express.Router();
 
 router.get("/", getAllOrders);
 
-router.get("/:ordNum", getOneOrder);
+router.get("/:ordnum", getOneOrder);
 
 router.post(
 	"/",
@@ -55,7 +55,7 @@ router.post(
 );
 
 router.put(
-	"/:ordNum",
+	"/:ordnum",
 	celebrate({
 		[Segments.BODY]: Joi.object({
 			orderId: Joi.string().trim(),
@@ -80,7 +80,7 @@ router.put(
 );
 
 router.delete(
-	"/:ordNum",
+	"/:ordnum",
 	celebrate({
 		[Segments.BODY]: Joi.object({
 			orderId: Joi.string().trim(),

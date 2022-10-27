@@ -33,7 +33,7 @@ const router = express.Router();
 
 router.get("/", getAllProducts);
 
-router.get("/:prodId", getOneProduct);
+router.get("/:prodid", getOneProduct);
 
 router.post(
 	"/",

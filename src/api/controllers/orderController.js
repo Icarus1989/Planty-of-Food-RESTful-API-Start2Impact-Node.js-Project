@@ -31,7 +31,7 @@ async function getAllOrders(req, res, next) {
 
 async function getOneOrder(req, res, next) {
 	try {
-		const orderNumber = req.params.ordNum;
+		const orderNumber = req.params.ordnum;
 		const orderId = `order${String(orderNumber)}`;
 		const data = await Order.findOne({ orderid: orderId });
 		if (data !== null) {
@@ -88,7 +88,7 @@ async function postOneOrder(req, res, next) {
 async function putOneOrder(req, res, next) {
 	try {
 		const data = await req.body;
-		const orderNumber = await req.params.ordNum;
+		const orderNumber = await req.params.ordnum;
 		const orderId = `order${String(orderNumber)}`;
 		const orderChanged = await Order.findOneAndUpdate(
 			{ orderId: orderId },
@@ -106,7 +106,7 @@ async function putOneOrder(req, res, next) {
 
 async function deleteOneOrder(req, res, next) {
 	try {
-		const orderNumber = await req.params.ordNum;
+		const orderNumber = await req.params.ordnum;
 		const orderId = `order${String(orderNumber)}`;
 		const orderRemoved = await Order.findOneAndDelete({ orderid: orderId });
 
