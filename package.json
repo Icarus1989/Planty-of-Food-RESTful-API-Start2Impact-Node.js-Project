@@ -2,7 +2,7 @@
 	"name": "node.js-project",
 	"version": "1.0.0",
 	"description": "This is a project made for the Node.js guide of start2impact courses",
-	"main": "index.js",
+	"main": "server.js",
 	"scripts": {
 		"start": "node src/index.js",
 		"dev": "nodemon src/server.js",
