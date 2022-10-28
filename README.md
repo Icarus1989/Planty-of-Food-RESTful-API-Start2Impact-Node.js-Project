@@ -354,7 +354,7 @@ MIT License.
 
 Alex<br>
 [GitHub](http://https://github.com/Icarus1989)<br>
-[Linkedin](www.linkedin.com/in/alex-valente-018586156)
+[Linkedin](https://www.linkedin.com/in/alex-valente-018586156/)<br>
 [Instagram](http://https://www.instagram.com/alex._.1989/)<br>
 [Facebook](https://www.facebook.com/alex.valente.92)<br>
 
