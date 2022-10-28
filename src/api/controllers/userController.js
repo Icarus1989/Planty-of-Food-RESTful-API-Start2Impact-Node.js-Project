@@ -1,14 +1,4 @@
-const express = require("express");
-
-// const Order = require("../models/Order");
-// const Product = require("../models/Product");
 const User = require("../models/User");
-
-// const {
-// 	OrderManagerClass,
-// 	ProductUpdaterClass,
-// 	UserUpdaterClass
-// } = require("../routes/classes");
 
 async function getAllUsers(req, res, next) {
 	try {
@@ -22,14 +12,12 @@ async function getAllUsers(req, res, next) {
 async function getOneUser(req, res, next) {
 	try {
 		const username = await req.params.userid;
-		// console.log(username);
-		// User.findOne({ username: username }, (err, data) => {
-		// 	// gestire error
-		// 	// console.log(data);
-		// 	res.status(200).json(data);
-		// });
 		const result = await User.findOne({ username: username });
-		res.status(200).json(result);
+		if (result !== null) {
+			res.status(200).json(result);
+		} else {
+			res.status(404).json({ message: `${username} not found.` });
+		}
 	} catch (error) {
 		next(error);
 	}

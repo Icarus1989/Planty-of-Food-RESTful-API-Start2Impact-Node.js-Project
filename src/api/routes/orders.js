@@ -21,7 +21,6 @@ const {
 } = require("../routes/classes");
 
 const router = express.Router();
-// const app = express();
 
 router.get("/", getAllOrders);
 
@@ -70,7 +69,6 @@ router.put(
 					)
 				})
 			),
-			// createdAt: Joi.date().default(Date.now).required(),
 			totalcost: Joi.number(),
 			shipped: Joi.boolean(),
 			date: Joi.date()
@@ -95,7 +93,6 @@ router.delete(
 					)
 				})
 			),
-			// createdAt: Joi.date().default(Date.now).required(),
 			totalcost: Joi.number(),
 			shipped: Joi.boolean(),
 			date: Joi.date()
@@ -104,23 +101,4 @@ router.delete(
 	deleteOneOrder
 );
 
-// Delete all
-// router.delete("/", (req, res) => {
-// 	try {
-// 		Order.remove({}, (err, doc) => {
-// 			if (err) {
-// 				console.log(err);
-// 			}
-// 			res.json({
-// 				message: "All data removed."
-// 			});
-// 		});
-// 	} catch (error) {
-// 		next(error);
-// 	}
-// });
-// Delete all
-
 module.exports = router;
-
-// -----> continuare a dividere routes da controller anche per altri file <-----

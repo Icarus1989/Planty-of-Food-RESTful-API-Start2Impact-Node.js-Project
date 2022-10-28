@@ -1,5 +1,3 @@
-const express = require("express");
-
 const Order = require("../models/Order");
 const Product = require("../models/Product");
 const User = require("../models/User");
@@ -37,25 +35,20 @@ async function getOneOrder(req, res, next) {
 		if (data !== null) {
 			res.status(200).json(data);
 		} else {
-			res.status(200).json({
+			res.status(404).json({
 				message: `${orderId} not exists`
 			});
 		}
 	} catch (error) {
 		next(error);
-		// res.status(500).json({
-		// 	message: `Error in searching order`
-		// });
 	}
 }
 
 async function postOneOrder(req, res, next) {
 	try {
 		const data = await req.body;
-
 		const prodUpdater = new ProductUpdaterClass(data, Product, Order, res);
 		const userUpdater = new UserUpdaterClass(data, User, Order, res);
-
 		const orderExists = await prodUpdater.orderExistsCheck();
 		const existCheck = await userUpdater.usersExistCheck();
 
@@ -70,15 +63,9 @@ async function postOneOrder(req, res, next) {
 			await prodUpdater.createResults();
 			const numOfErrs = await prodUpdater.createNewOrder();
 			if (numOfErrs == 0) {
-				// console.log("Zero Errors");
 				await userUpdater.updateAccountsNewOrder();
 			}
-			// else {
-			// 	return;
-			// } ---- testare assenza else
 		}
-
-		// Qui possibile Ric...
 	} catch (error) {
 		res.status(404).json({ message: "Problem occured" });
 		next(error);
@@ -107,10 +94,11 @@ async function putOneOrder(req, res, next) {
 async function deleteOneOrder(req, res, next) {
 	try {
 		const orderNumber = await req.params.ordnum;
+		// console.log(orderNumber);
 		const orderId = `order${String(orderNumber)}`;
 		const orderRemoved = await Order.findOneAndDelete({ orderid: orderId });
 
-		console.log(orderRemoved);
+		// console.log(orderRemoved);
 
 		const userUpdater = new UserUpdaterClass(
 			await orderRemoved,

@@ -19,17 +19,6 @@ const {
 } = require("../routes/classes");
 
 const router = express.Router();
-// const app = express();
-
-// mongoose.connect(
-// 	`mongodb://localhost:27017/PoFTestDatabase`,
-// 	() => {
-// 		console.log("connected");
-// 	},
-// 	(error) => {
-// 		console.log(error);
-// 	}
-// );
 
 router.get("/", getAllProducts);
 
@@ -71,22 +60,5 @@ router.delete(
 	}),
 	deleteOneProduct
 );
-
-// Delete all
-// router.delete("/", (req, res, next) => {
-// 	try {
-// 		Product.remove({}, (err, doc) => {
-// 			if (err) {
-// 				console.log(err);
-// 			}
-// 			res.json({
-// 				message: "All data removed."
-// 			});
-// 		});
-// 	} catch (error) {
-// 		next(error);
-// 	}
-// });
-// Delete all
 
 module.exports = router;

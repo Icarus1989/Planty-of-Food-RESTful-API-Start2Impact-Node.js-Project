@@ -77,7 +77,6 @@
 - [Joi](https://joi.dev/)
 - [Celebrate](https://www.npmjs.com/package/celebrate)
 - [body-parser](https://www.npmjs.com/package/body-parser)
-
 - [Sinon.js](https://sinonjs.org/)
 - [Sinon-Express-Mock]()
 - [mocha](https://mochajs.org/)
@@ -235,7 +234,7 @@ Risorse utilizzate:
 
 ## Usage
 
-Per poter utilizzare queste API basta utilizzare un programma per la gestione delle requests come Insomnia oppure creare un client-side adatto usando le URI descritte.
+L'utilizzo di queste API necessita di un programma per la gestione delle requests come Insomnia oppure creare un client-side adatto usando le URI descritte.
 
 La route principale "/" risponderà ad una GET request con un semplice benvenuto.
 
@@ -334,6 +333,7 @@ Come host per questo progetto ho scelto [Glitch.com](https://glitch.com/), conti
 ## Demo
 
 E' possibile utilizzare una versione totalmente funzionante del progetto, collegata ad un database MongoDB attivo, da questo [link](https://planty-of-food-restful-api.glitch.me/) utilizzando Insomnia o altri tool per la gestione delle API.
+Si consiglia di effettuare una GET request con endpoint "/" prima di provare ad inviare dati per abilitare le API e disabilitare la modalità sleep, imposta dall'host dopo 5 minuti di inattività per i piani gratuiti.
 
 In alternativa si può clonare la repository.
 

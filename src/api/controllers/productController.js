@@ -1,8 +1,4 @@
-const express = require("express");
-
-// const Order = require("../models/Order");
 const Product = require("../models/Product");
-// const User = require("../models/User");
 
 async function getAllProducts(req, res, next) {
 	try {
@@ -21,22 +17,17 @@ async function getOneProduct(req, res, next) {
 		)}`;
 
 		const prodFound = await Product.findOne({ name: label });
-		// console.log(prodFound);
-		// to fix --> test ok data null
-
 		if (prodFound !== null) {
 			res.status(200).json(prodFound);
 		} else {
-			res.status(200).json({
+			res.status(404).json({
 				message: `${prodId} not exists`
 			});
 		}
 	} catch (error) {
-		// res.status(500) ?
 		next(error);
 	}
 }
-// searching bug...
 
 async function postOneProduct(req, res, next) {
 	try {
@@ -54,7 +45,6 @@ async function postOneProduct(req, res, next) {
 			});
 		}
 	} catch (error) {
-		// res.status(500).json({ message: "Error during Product saving..." });
 		next(error);
 	}
 }

@@ -1,25 +1,12 @@
 const express = require("express");
 const api = require("../../api");
-const monk = require("monk");
 const mongoose = require("mongoose");
-// const User = require("../models/User");
 const { celebrate, Joi, errors, Segments } = require("celebrate");
 const router = express.Router();
-// const app = express();
 
 const Order = require("../models/Order");
 const Product = require("../models/Product");
 const User = require("../models/User");
-
-// mongoose.connect(
-// 	`mongodb://localhost:27017/PoFTestDatabase`,
-// 	() => {
-// 		console.log("connected");
-// 	},
-// 	(error) => {
-// 		console.log(error);
-// 	}
-// );
 
 const {
 	OrderManagerClass,
@@ -47,7 +34,6 @@ router.post(
 			lastname: Joi.string().required(),
 			username: Joi.string().required(),
 			address: Joi.string().email().required(),
-			// createdAt: Joi.date().default(Date.now).required(),
 			orders: Joi.array()
 				.items(
 					Joi.object({
@@ -69,7 +55,6 @@ router.put(
 			lastname: Joi.string(),
 			username: Joi.string().required(),
 			address: Joi.string().email(),
-			// createdAt: Joi.date().default(Date.now).required(),
 			orders: Joi.array().items(
 				Joi.object({
 					orderid: Joi.string(),
@@ -99,22 +84,5 @@ router.delete(
 	}),
 	deleteOneUser
 );
-
-// Delete all
-// router.delete("/", (req, res) => {
-// 	try {
-// 		User.remove({}, (err, doc) => {
-// 			if (err) {
-// 				console.log(err);
-// 			}
-// 			res.json({
-// 				message: "All data removed."
-// 			});
-// 		});
-// 	} catch (error) {
-// 		next(error);
-// 	}
-// });
-// Delete all
 
 module.exports = router;

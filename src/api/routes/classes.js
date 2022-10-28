@@ -110,7 +110,6 @@ class OrderManagerClass {
 				}
 			}));
 		} else if (this.arr.length == 0) {
-			// valutare se necessario
 			this.res.status(200).json({
 				message: "No orders with these parameters saved on database"
 			});
@@ -182,12 +181,8 @@ class ProductUpdaterClass {
 				this.prodsToUp = await this.productModel.findOne({
 					name: user["productname"]
 				});
-				// console.log(this.prodsToUp);
-
 				this.prodsToUpArray.push(this.prodsToUp);
 			}
-			// console.log(this.prodsToUpArray); // problema QUI
-
 			for (let i = 0; i < this.prodsToUpArray.length; i++) {
 				if (
 					(await this.prodsToUpArray[i]["quantity"]) <
@@ -209,8 +204,6 @@ class ProductUpdaterClass {
 				}
 			}
 		}
-		// console.log("Perm");
-		// console.log(this.permissions);
 		return this.permissions;
 	}
 	async createResults() {
@@ -231,7 +224,6 @@ class ProductUpdaterClass {
 				});
 				this.totalprice =
 					this.totalprice + this.updatingProduct["price"] * elem["quantity"];
-				// test with await... -->
 				await this.productModel.findOneAndUpdate(
 					{
 						name: elem["productname"]
@@ -240,12 +232,10 @@ class ProductUpdaterClass {
 						quantity: this.updatingProduct["quantity"] - elem["quantity"]
 					}
 				);
-				// <--- test with await...
 			}
 		}
 	}
 	async createNewOrder() {
-		// console.log(this.negativeArr);
 		if (this.negativeArr.length == 0) {
 			this.newOrder = new this.orderModel(this.data);
 			for await (let user of this.newOrder["users"]) {
@@ -263,12 +253,6 @@ class ProductUpdaterClass {
 			}
 			this.newOrder.totalcost = Number(this.totalprice.toFixed(2));
 
-			// this.newOrder.save((err, savedData) => {
-			// 	if (err) {
-			// 		console.log(err);
-			// 	}
-			// 	this.response.status(200).json(savedData);
-			// });
 			this.savedData = await this.newOrder.save();
 			this.response.status(200).json(this.savedData);
 		} else {
@@ -280,7 +264,7 @@ class ProductUpdaterClass {
 			this.response.status(200).json(this.negInfo);
 		}
 		return this.negativeArr.length;
-	} // <-- tutto questo
+	}
 
 	async restoreQuantities() {
 		for await (let user of this.data["users"]) {
@@ -298,9 +282,6 @@ class ProductUpdaterClass {
 				);
 			}
 		}
-		// return this.response.status(200).json({
-		// 	message: "Order delete."
-		// });
 	}
 }
 
@@ -325,7 +306,6 @@ class UserUpdaterClass {
 				});
 			} catch {
 				this.usersArr.push({
-					// <--- questa
 					name: user["username"],
 					data: null
 				});
@@ -336,14 +316,12 @@ class UserUpdaterClass {
 
 	async usersExistCheck() {
 		this.existArray = await this.findData();
-		// this.messages = [];
 		this.message = {};
 		for (let elem of this.existArray) {
 			if (elem["data"] == null) {
 				this.message[
 					`message${this.usersArr.indexOf(elem)}`
 				] = `${elem["name"]} not exist.`;
-				// this.messages.push(this.message)
 			}
 		}
 		return this.message;

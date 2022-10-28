@@ -27,11 +27,9 @@
 		"celebrate": "^15.0.1",
 		"chai": "^4.3.6",
 		"dotenv": "^16.0.1",
-		"ejs": "^3.1.8",
 		"express": "^4.18.1",
 		"mocha": "^10.0.0",
 		"mongoose": "^6.4.7",
-		"monk": "^7.3.4",
 		"sinon": "^14.0.0"
 	},
 	"devDependencies": {
