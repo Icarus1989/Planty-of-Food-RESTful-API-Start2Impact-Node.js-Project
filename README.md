@@ -1,14 +1,12 @@
 <hr>
 <div align="center">
 <hr>
-<h1><i>Planty Of Food RESTful API <br><br>
+<h1><i>Planty Of Food RESTful API <br>
  :articulated_lorry: :package: :strawberry: :pear: :carrot: :leafy_green:</i></h1>
  <hr>
 </div>
 
 ### Questo é un progetto per la conclusione della **Super Guida Node.js** di **Start2Impact**, categoria Food.
-
-<br>
 
 <hr>
 <hr>
@@ -58,6 +56,7 @@
     <li><a href="#resources">Resources</a>
     <li><a href="#usage">Usage</a></li>
     <li><a href="steps">Steps</a></li>
+    <li><a href="host">Host</a></li>
     <li><a href="#demo">Demo</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contacts">Contacts</a></li>
@@ -204,7 +203,7 @@ Per lo unit-testing delle API ho utilizzato Sinon come consigliato e, anche se �
 I massimi risultati che sono riuscito ad ottenere:<br>
 
 <div align="center">
-<img src="https://i.ibb.co/QM9Yxsk/testing-node-project.png" alt="testing-node-project" width="60%" height="60%">
+<img src="https://i.ibb.co/JzXGMKm/testing-node-results.png" alt="testing-node-project" width="60%" height="60%">
 </div>
 <br>
 
@@ -257,7 +256,7 @@ Per le risorse **Users**:
 - per cancellare una risorsa si usi una DELETE request con endpoint **_"/users/:userid"_** con userid corrispondente allo **username** della risorsa. La response sarà un message di conferma di avvenuta cancellazione.
 <br>
 <div align="center">
-<img src="https://i.ibb.co/ZzpkdWn/Schermata-2022-10-28-alle-00-38-28.png" alt="User Composition" width="40%" height="40%">
+<img src="https://i.ibb.co/1bxZhNG/Schermata-2022-10-28-alle-12-09-26.png" alt="User Composition" width="40%" height="40%">
 </div>
 <br>
 
@@ -338,7 +337,7 @@ Come host per questo progetto ho scelto [Glitch.com](https://glitch.com/), conti
 
 ## Demo
 
-E' possibile utilizzare una versione totalmente funzionante del progetto, collegata ad un database MongoDB attivo, a questo [link](https://planty-of-food-restful-api.glitch.me/).
+E' possibile utilizzare una versione totalmente funzionante del progetto, collegata ad un database MongoDB attivo, da questo [link](https://planty-of-food-restful-api.glitch.me/) utilizzando Insomnia o altri tool per la gestione delle API.
 
 In alternativa si può clonare la repository.
 
@@ -347,7 +346,7 @@ In alternativa si può clonare la repository.
 
 ## License
 
-Distributed under MIT License.
+MIT License.
 
 <br>
 <p><a href="#begin">&#9650; Back to summary</a></p>
