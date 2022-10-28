@@ -244,15 +244,17 @@ Per poter utilizzare queste API basta utilizzare un programma per la gestione de
 
 La route principale "/" risponderà ad una GET request con un semplice benvenuto.
 
+L'accesso alle risorse avverrà dagli endpoint **_/api/v1/users/_**, **_/api/v1/products-storage/_**, **_/api/v1/orders-archieve/_**.
+
 Per le risorse **Users**:
 
-- una GET request con URI **_"/users/"_** darà come risposta la totalità dei prodotti presenti nella collection, ad una GET request con URL **_"/users/:userid"_** risponderà con il relativo User con userid corrispondente, basato sul field **username**, oppure con un message che segnalerà la non esistenza di tale User
+- una GET request con endpoint **_"/users/"_** darà come risposta la totalità dei prodotti presenti nella collection, ad una GET request con URL **_"/users/:userid"_** risponderà con il relativo User con userid corrispondente, basato sul field **username**, oppure con un message che segnalerà la non esistenza di tale User
 
-- per poter inserire un nuovo User con una POST request occorrerà usare l'URI **_"/users/"_** e fornire un body in formato JSON, che dovrà rispettare i parametri dei field che compongono le risorse: **firstname**, **lastname**, **username**, **address**, **date** e **orders** (che può essere anche un Array vuoto). Dopo aver inviato la POST request e andata a buon fine, la risposta sarà lo User stesso oppure, in caso negativo, un message adatto. I field hanno dei parametri di default per velocizzare le request soprattutto a scopo dimostrativo.
+- per poter inserire un nuovo User con una POST request occorrerà usare l'endpoint **_"/users/"_** e fornire un body in formato JSON, che dovrà rispettare i parametri dei field che compongono le risorse: **firstname**, **lastname**, **username**, **address**, **date** e **orders** (che può essere anche un Array vuoto). Dopo aver inviato la POST request e andata a buon fine, la risposta sarà lo User stesso oppure, in caso negativo, un message adatto. I field hanno dei parametri di default per velocizzare le request soprattutto a scopo dimostrativo.
 
-- per modificare una risorsa si usi una PUT request con URI **_"/users/:userid"_** con userid corrispondente allo **username** della risorsa e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
+- per modificare una risorsa si usi una PUT request con endpoint **_"/users/:userid"_** con userid corrispondente allo **username** della risorsa e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
 
-- per cancellare una risorsa si usi una DELETE request con URI **_"/users/:userid"_** con userid corrispondente allo **username** della risorsa. La response sarà un message di conferma di avvenuta cancellazione.
+- per cancellare una risorsa si usi una DELETE request con endpoint **_"/users/:userid"_** con userid corrispondente allo **username** della risorsa. La response sarà un message di conferma di avvenuta cancellazione.
 <br>
 <div align="center">
 <img src="https://i.ibb.co/ZzpkdWn/Schermata-2022-10-28-alle-00-38-28.png" alt="User Composition" width="40%" height="40%">
@@ -261,13 +263,13 @@ Per le risorse **Users**:
 
 Per le risorse **Product**:
 
-- una GET request con URL **_"/products-storage/"_** darà come risposta la totalità dei prodotti presenti nella collection, ad una GET request con URL **_"/products-storage/:prodid"_** risponderà con il relativo prodotto con prodid corrispondente, basato sul field **name**, oppure con un message che segnalerà la non esistenza di tale Product
+- una GET request con endpoint **_"/products-storage/"_** darà come risposta la totalità dei prodotti presenti nella collection, ad una GET request con URL **_"/products-storage/:prodid"_** risponderà con il relativo prodotto con prodid corrispondente, basato sul field **name**, oppure con un message che segnalerà la non esistenza di tale Product
 
-- per poter inserire un nuovo Product con una POST request occorrerà usare l'URI **_"/products-storage/"_** e fornire un body in formato JSON, che dovrà rispettare i parametri dei quattro field che compongono le risorse: **name**, **origin**, **price**, **quantity**. Dopo aver inviato la POST request e andata a buon fine, la risposta sarà il Product stesso oppure, in caso negativo, un message adatto. I field hanno dei parametri di default per velocizzare le request soprattutto a scopo dimostrativo.
+- per poter inserire un nuovo Product con una POST request occorrerà usare l'endpoint **_"/products-storage/"_** e fornire un body in formato JSON, che dovrà rispettare i parametri dei quattro field che compongono le risorse: **name**, **origin**, **price**, **quantity**. Dopo aver inviato la POST request e andata a buon fine, la risposta sarà il Product stesso oppure, in caso negativo, un message adatto. I field hanno dei parametri di default per velocizzare le request soprattutto a scopo dimostrativo.
 
-- per modificare una risorsa si usi una PUT request con URI **_"/products-storage/:prodid"_** con prodid corrispondente al **name** del Product e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
+- per modificare una risorsa si usi una PUT request con endpoint **_"/products-storage/:prodid"_** con prodid corrispondente al **name** del Product e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
 
-- per cancellare una risorsa si una DELETE request con URI **_"/products-storage/:prodid"_** con prodid corrispondente al **name** del Product. La response sarà un message di conferma.
+- per cancellare una risorsa si una DELETE request con endpoint **_"/products-storage/:prodid"_** con prodid corrispondente al **name** del Product. La response sarà un message di conferma.
 <br>
 <div align="center">
 <img src="https://i.ibb.co/xMVKqcr/Schermata-2022-10-28-alle-00-39-08.png" alt="Product Composition" width="40%" height="40%">
@@ -276,7 +278,7 @@ Per le risorse **Product**:
 
 Per le risorse **Orders**:
 
-- una GET request con URI **_"/orders-archieve/"_** darà come risposta la totalità dei prodotti presenti nella collection, che potranno essere riordinati e filtrati in base ai query parameters inseriti nell'URI:
+- una GET request con endpoint **_"/orders-archieve/"_** darà come risposta la totalità dei prodotti presenti nella collection, che potranno essere riordinati e filtrati in base ai query parameters inseriti nell'URI:
 
   - filter - uno tra productname, username, shipped, \_id, orderid, date
   - value - la value del filter per la quale filtrare i risultati
@@ -287,9 +289,9 @@ Per le risorse **Orders**:
 
 La ricerca può essere effettuata sia utilizzando tutti i parametri, sia senza utilizzarli, sia utilizzando solo i parametri filter e value, sia solo con order e sort. In caso di utilizzo di filter senza value o viceversa oppure di order senza sort e viceversa, la response sarà un messaggio di errore che indicherà la mancanza del parametro del caso.
 
-- una GET request con URI **_"/orders-archieve/:ordnum"_** (inserire nell'immagine sotto un esempio per chiarezza) risponderà con il relativo Order con ordnum corrispondente, basato sul field **orderid** senza la componente "order" (i.e. ~~order~~999999) , oppure con un message che segnalerà la non esistenza di tale Order
+- una GET request con endpoint **_"/orders-archieve/:ordnum"_** (inserire nell'immagine sotto un esempio per chiarezza) risponderà con il relativo Order con ordnum corrispondente, basato sul field **orderid** senza la componente "order" (i.e. ~~order~~999999) , oppure con un message che segnalerà la non esistenza di tale Order
 
-- per poter inserire un nuovo Order con una POST request occorrerà usare l'URI **_"/orders-archieve/"_** e fornire un body in formato JSON, che dovrà rispettare i parametri dei field che compongono le risorse: **orderid**, **users** (struttura complassa vedi immagine), **date** e **shipped**. Verranno inoltre calcolati ed aggiunti i fields cost e totalcost basati sul field price delle risorse Product e relativa quantity. Dopo aver inviato la POST request e andata a buon fine, la risposta sarà l'Order stesso oppure, in caso negativo, un message adatto. I field hanno dei parametri di default per velocizzare le request soprattutto a scopo dimostrativo. Tramite l'utilizzo di classes JavaScript le risorse User e Product coinvolte verranno modificate e/o aggiornate.
+- per poter inserire un nuovo Order con una POST request occorrerà usare l'endpoint **_"/orders-archieve/"_** e fornire un body in formato JSON, che dovrà rispettare i parametri dei field che compongono le risorse: **orderid**, **users** (struttura complassa vedi immagine), **date** e **shipped**. Verranno inoltre calcolati ed aggiunti i fields cost e totalcost basati sul field price delle risorse Product e relativa quantity. Dopo aver inviato la POST request e andata a buon fine, la risposta sarà l'Order stesso oppure, in caso negativo, un message adatto. I field hanno dei parametri di default per velocizzare le request soprattutto a scopo dimostrativo. Tramite l'utilizzo di classes JavaScript le risorse User e Product coinvolte verranno modificate e/o aggiornate.
 
 - per modificare una risorsa si usi una PUT request con URL **_"/orders-archieve/:ordnum"_** con ordnum corrispondente all'**orderid** della risorsa e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
 
@@ -300,8 +302,6 @@ La ricerca può essere effettuata sia utilizzando tutti i parametri, sia senza u
 </div>
 <br>
 Nota generale per l'utilizzo delle routes: se i fields indicati nel body non corrispondessero alle indicazioni impostate con Celebrate, avverrà un errore di validazione con status 500.
-
-NOTA immagine Order completo con tra parentesi default come una documentazione
 
 <hr>
 <hr>
@@ -316,8 +316,7 @@ Fasi del progetto:
 - [x] Simple database on MongoDB Atlas creation
 - [x] Sinon.js stubs, mocks and spies study
 - [x] Test code coverage instanbul/nyc
-- [x] Highest possible percentage of coverage
-- [x] Automate testing
+- [x] Highest possible percentage - unit test code coverage
 
 Idee future:
 
@@ -326,9 +325,22 @@ Idee future:
 <hr>
 <hr>
 
+## Host
+
+Come host per questo progetto ho scelto [Glitch.com](https://glitch.com/), continuando così a differenziare per ogni nuovo progetto, in modo da apprendere il più possibile.
+
+- [x] GitHub Pages
+- [x] Firebase
+- [x] Heroku
+- [x] Glitch
+- [ ] Netlify
+- [ ] ...
+
 ## Demo
 
-Si può provare dal link...
+E' possibile utilizzare una versione totalmente funzionante del progetto, collegata ad un database MongoDB attivo, a questo [link](https://planty-of-food-restful-api.glitch.me/).
+
+In alternativa si può clonare la repository.
 
 <hr>
 <hr>
