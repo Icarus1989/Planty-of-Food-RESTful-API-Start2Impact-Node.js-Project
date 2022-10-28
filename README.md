@@ -78,10 +78,6 @@
 - [Celebrate](https://www.npmjs.com/package/celebrate)
 - [body-parser](https://www.npmjs.com/package/body-parser)
 
-<hr>
-
-### Testing
-
 - [Sinon.js](https://sinonjs.org/)
 - [Sinon-Express-Mock]()
 - [mocha](https://mochajs.org/)
@@ -358,6 +354,7 @@ MIT License.
 
 Alex<br>
 [GitHub](http://https://github.com/Icarus1989)<br>
+[Linkedin](www.linkedin.com/in/alex-valente-018586156)
 [Instagram](http://https://www.instagram.com/alex._.1989/)<br>
 [Facebook](https://www.facebook.com/alex.valente.92)<br>
 
