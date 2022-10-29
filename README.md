@@ -177,7 +177,7 @@ Le risorse Products sono composte da:
 
 Le risorse Orders sono composte da:
 
-- orderid - id dell'ordine con composizione "order000000" - per velocizzare le ricerche in caso di richiesta GET/:orderid sarà sufficente inserire la parte numerica (GET/:000000)
+- orderid - id dell'ordine con composizione "order000000"
 - users - array contenente objects con:
   - username - username dell'utente <br>
   - products - array contente objects con:
@@ -248,7 +248,7 @@ Per le risorse **Users**:
 
 - per modificare una risorsa si usi una PUT request con endpoint **_"/users/:userid"_** con userid corrispondente allo **username** della risorsa e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
 
-- per cancellare una risorsa si usi una DELETE request con endpoint **_"/users/:userid"_** con userid corrispondente allo **username** della risorsa. La response sarà un message di conferma di avvenuta cancellazione.
+- per cancellare una risorsa si usi una DELETE request con endpoint **_"/users/:userid"_** con userid corrispondente allo **username** della risorsa. La response sarà la risorsa stessa.
 <br>
 <div align="center">
 <img src="https://i.ibb.co/1bxZhNG/Schermata-2022-10-28-alle-12-09-26.png" alt="User Composition" width="40%" height="40%">
@@ -263,7 +263,7 @@ Per le risorse **Product**:
 
 - per modificare una risorsa si usi una PUT request con endpoint **_"/products-storage/:prodid"_** con prodid corrispondente al **name** del Product e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
 
-- per cancellare una risorsa si una DELETE request con endpoint **_"/products-storage/:prodid"_** con prodid corrispondente al **name** del Product. La response sarà un message di conferma.
+- per cancellare una risorsa si una DELETE request con endpoint **_"/products-storage/:prodid"_** con prodid corrispondente al **name** del Product. La response sarà la risorsa stessa.
 <br>
 <div align="center">
 <img src="https://i.ibb.co/xMVKqcr/Schermata-2022-10-28-alle-00-39-08.png" alt="Product Composition" width="40%" height="40%">
@@ -289,7 +289,7 @@ La ricerca può essere effettuata sia utilizzando tutti i parametri, sia senza u
 
 - per modificare una risorsa si usi una PUT request con URL **_"/orders-archieve/:ordnum"_** con ordnum corrispondente all'**orderid** della risorsa e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
 
-- per cancellare una risorsa si usi una DELETE request con URL **_"/orders-archieve/:ordnum"_** con userid corrispondente all'**orderid** della risorsa. La response sarà un message di conferma di avvenuta cancellazione. Tramite l'utilizzo di classes JavaScript le risorse User e Product coinvolte verranno modificate e/o aggiornate.
+- per cancellare una risorsa si usi una DELETE request con URL **_"/orders-archieve/:ordnum"_** con userid corrispondente all'**orderid** della risorsa. La response sarà la risorsa stessa. Tramite l'utilizzo di classes JavaScript le risorse User e Product coinvolte verranno modificate e/o aggiornate.
 <br>
 <div align="center">
 <img src="https://i.ibb.co/HBfnsb2/Schermata-2022-10-28-alle-00-16-13.png" alt="Order composition" width="40%" height="40%">
@@ -321,6 +321,7 @@ Idee future:
 
 ## Host
 
+Anche se non necessario dalle specifiche del progetto, ho preferito pubblicarlo per completezza e per renderne più accessibile la visione e la fruizione.
 Come host per questo progetto ho scelto [Glitch.com](https://glitch.com/), continuando così a differenziare per ogni nuovo progetto, in modo da apprendere il più possibile.
 
 - [x] GitHub Pages

@@ -116,9 +116,7 @@ async function deleteOneOrder(req, res, next) {
 		await userUpdater.updateAccountsDelOrder();
 		await prodUpdater.restoreQuantities();
 
-		res.status(200).json({
-			message: "Order delete."
-		});
+		res.status(200).json(orderRemoved);
 	} catch (error) {
 		next(error);
 	}
