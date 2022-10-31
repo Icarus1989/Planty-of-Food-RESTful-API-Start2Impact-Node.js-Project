@@ -96,9 +96,9 @@
 
 Questo progetto mira ad ottenere delle API funzionanti per connettere un ecommerce con dei gruppi d'acquisto per conto di Planty Of Food, azienda che opera nel settore del cibo plant based.<br>
 
-Ho voluto ampliare la consegna data per il progetto arricchendo le varie risorse con ulteriori campi e funzionalità, come per esempio l'inserimento del prezzo di un prodotto e il calcolo del totale di un ordine, cercando comunque di restare pertinente al contesto fornito con (aggiunte/funzionalità/features) utili ad un eventuale uso in un'applicazione reale.
+Ho voluto ampliare la consegna data per il progetto arricchendo le varie risorse con ulteriori campi e funzionalità, come per esempio l'inserimento del prezzo di un prodotto e il calcolo del totale di un ordine, cercando comunque di restare pertinente al contesto fornito con features utili ad un eventuale uso in un'applicazione reale.
 
-Tra le due possibilità ho preferito optare per MongoDB (come database) visto che proprio grazie al fatto di voler imparare ad usarlo, per migliorare ed ampliare [lo scorso progetto](https://github.com/Icarus1989/how-is-there--lifestyle-web-app), ho scelto di cominciare questa guida di Node.js, capendone l'importanza anche in senso più ampio.
+Tra i due databse proposti ho preferito optare per MongoDB visto che, proprio grazie al fatto di voler imparare ad usarlo per migliorare ed ampliare il [progetto precedente](https://github.com/Icarus1989/how-is-there--lifestyle-web-app), ho scelto di cominciare questa guida di Node.js, capendone l'importanza anche in senso più ampio.
 
 <hr>
 

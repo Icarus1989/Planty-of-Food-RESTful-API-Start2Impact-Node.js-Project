@@ -1114,6 +1114,8 @@ const stubGetAllOrders = sinon.stub(getAllOrders);
 
 const stubOrderFind = sinon.stub(Order, "find");
 
+const orderClassStub = sinon.createStubInstance(OrderManagerClass);
+
 describe("Stub router order Get All - filter: date, value: 202..., orderBy: undefined, sort: undefined", async () => {
 	const results = [
 		{
@@ -1221,6 +1223,10 @@ describe("Stub router order Get All - filter: date, value: 202..., orderBy: unde
 
 	it("Stub for router order get (all)", async () => {
 		router.get("/orders-archieve/", async (req, res, next) => {
+			expect("Content-Type", /json/);
+			expect(200);
+			sinon.assert.calledWith(router.get, "/orders-archieve/");
+
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
 			stubGetAllOrders(reqMock, resMock, next);
@@ -1228,26 +1234,34 @@ describe("Stub router order Get All - filter: date, value: 202..., orderBy: unde
 			stubOrderFind.withArgs({}).returns(resMock.body);
 			const result = await Order.find({});
 
-			const eightOrderStub = sinon.createStubInstance(OrderManagerClass, {
-				parametersHandling: sinon.stub().returnsThis(),
-				determinate: sinon.stub().returns(result),
-				ordering: sinon.stub().returns(result),
-				createResponse: sinon
-					.stub()
-					.withArgs(result)
-					.returns(resMock.status(200).json(result))
-			});
+			// const orderClassStubv8 = sinon.createStubInstance(OrderManagerClass, {
+			// 	parametersHandling: sinon.stub().returns(result),
+			// 	determinate: sinon.stub().returns(result),
+			// 	ordering: sinon.stub().returns(result),
+			// 	createResponse: sinon
+			// 		.stub()
+			// 		.withArgs(result)
+			// 		.returns(resMock.status(200).json(result))
+			// });
 
-			const eightOrderManager = new OrderManagerClass();
+			orderClassStub.parametersHandling = sinon.stub().returns(result);
+			orderClassStub.determinate = sinon.stub().returns(result);
+			orderClassStub.ordering = sinon.stub().returns(result);
+			orderClassStub.createResponse = sinon
+				.stub()
+				.withArgs(result)
+				.returns(resMock.status(200).json(result));
 
-			eightOrderManager.response = await result;
-			eightOrderManager.data = await result;
-			eightOrderManager.filterQuery = "date";
-			eightOrderManager.valueQuery = "2022-09-06T21:55:50.076+00:00";
-			eightOrderManager.orderByQuery = undefined;
-			eightOrderManager.sortQuery = undefined;
+			const orderManagerv8 = new OrderManagerClass();
 
-			await eightOrderManager.parametersHandling();
+			orderManagerv8.response = await result;
+			orderManagerv8.data = await result;
+			orderManagerv8.filterQuery = "date";
+			orderManagerv8.valueQuery = "2022-09-06T21:55:50.076+00:00";
+			orderManagerv8.orderByQuery = undefined;
+			orderManagerv8.sortQuery = undefined;
+
+			await orderManagerv8.parametersHandling();
 		});
 	});
 
@@ -1335,6 +1349,10 @@ describe("Stub router order Get All - filter: orderid, value: order000001, order
 
 	it("Stub for router order get (all)", async () => {
 		router.get("/orders-archieve/", async (req, res, next) => {
+			expect("Content-Type", /json/);
+			expect(200);
+			sinon.assert.calledWith(router.get, "/orders-archieve/");
+
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
 			stubGetAllOrders(reqMock, resMock, next);
@@ -1343,26 +1361,34 @@ describe("Stub router order Get All - filter: orderid, value: order000001, order
 
 			const result = await Order.find({});
 
-			const seventhOrderStub = sinon.createStubInstance(OrderManagerClass, {
-				parametersHandling: sinon.stub().returnsThis(),
-				determinate: sinon.stub().returns(result),
-				ordering: sinon.stub().returns(result),
-				createResponse: sinon
-					.stub()
-					.withArgs(result)
-					.returns(resMock.status(200).json(result))
-			});
+			// const orderClassStubv7 = sinon.createStubInstance(OrderManagerClass, {
+			// 	parametersHandling: sinon.stub().returnsThis(),
+			// 	determinate: sinon.stub().returns(result),
+			// 	ordering: sinon.stub().returns(result),
+			// 	createResponse: sinon
+			// 		.stub()
+			// 		.withArgs(result)
+			// 		.returns(resMock.status(200).json(result))
+			// });
 
-			const seventhOrderManager = new OrderManagerClass();
+			orderClassStub.parametersHandling = sinon.stub().returns(result);
+			orderClassStub.determinate = sinon.stub().returns(result);
+			orderClassStub.ordering = sinon.stub().returns(result);
+			orderClassStub.createResponse = sinon
+				.stub()
+				.withArgs(result)
+				.returns(resMock.status(200).json(result));
 
-			seventhOrderManager.response = await result;
-			seventhOrderManager.data = await result;
-			seventhOrderManager.filterQuery = "orderid";
-			seventhOrderManager.valueQuery = "order00001";
-			seventhOrderManager.orderByQuery = undefined;
-			seventhOrderManager.sortQuery = undefined;
+			const orderManagerv7 = new OrderManagerClass();
 
-			await seventhOrderManager.parametersHandling();
+			orderManagerv7.response = await result;
+			orderManagerv7.data = await result;
+			orderManagerv7.filterQuery = "orderid";
+			orderManagerv7.valueQuery = "order00001";
+			orderManagerv7.orderByQuery = undefined;
+			orderManagerv7.sortQuery = undefined;
+
+			await orderManagerv7.parametersHandling();
 		});
 	});
 
@@ -1380,6 +1406,8 @@ describe("Stub router order Get All - filter: orderid, value: order000001, order
 		router.get.restore();
 	});
 });
+
+// Qui
 
 describe("Stub router order Get All - filter: orderid, value: order000001, orderBy: orderid, sort: increasing", async () => {
 	const results = [
@@ -1445,32 +1473,44 @@ describe("Stub router order Get All - filter: orderid, value: order000001, order
 
 	it("Stub for router order get (all)", async () => {
 		router.get("/orders-archieve/", async (req, res, next) => {
+			expect("Content-Type", /json/);
+			expect(200);
+			sinon.assert.calledWith(router.get, "/orders-archieve/");
+
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
 			stubGetAllOrders(reqMock, resMock, next);
 
 			const result = await Order.find({});
 
-			const sixthOrderStub = sinon.createStubInstance(OrderManagerClass, {
-				parametersHandling: sinon.stub().returnsThis(),
-				determinate: sinon.stub().returns(result),
-				ordering: sinon.stub().returns(result),
-				createResponse: sinon
-					.stub()
-					.withArgs(result)
-					.returns(resMock.status(200).json(result))
-			});
+			// const orderClassStubv6 = sinon.createStubInstance(OrderManagerClass, {
+			// 	parametersHandling: sinon.stub().returnsThis(),
+			// 	determinate: sinon.stub().returns(result),
+			// 	ordering: sinon.stub().returns(result),
+			// 	createResponse: sinon
+			// 		.stub()
+			// 		.withArgs(result)
+			// 		.returns(resMock.status(200).json(result))
+			// });
 
-			const sixthOrderManager = new OrderManagerClass();
+			orderClassStub.parametersHandling = sinon.stub().returns(result);
+			orderClassStub.determinate = sinon.stub().returns(result);
+			orderClassStub.ordering = sinon.stub().returns(result);
+			orderClassStub.createResponse = sinon
+				.stub()
+				.withArgs(result)
+				.returns(resMock.status(200).json(result));
 
-			sixthOrderManager.response = await result;
-			sixthOrderManager.data = await result;
-			sixthOrderManager.filterQuery = "orderid";
-			sixthOrderManager.valueQuery = "order00001";
-			sixthOrderManager.orderByQuery = "orderid";
-			sixthOrderManager.sortQuery = "increasing";
+			const orderManagerv6 = new OrderManagerClass();
 
-			await sixthOrderManager.parametersHandling();
+			orderManagerv6.response = await result;
+			orderManagerv6.data = await result;
+			orderManagerv6.filterQuery = "orderid";
+			orderManagerv6.valueQuery = "order00001";
+			orderManagerv6.orderByQuery = "orderid";
+			orderManagerv6.sortQuery = "increasing";
+
+			await orderManagerv6.parametersHandling();
 		});
 	});
 
@@ -1553,6 +1593,10 @@ describe("Stub router order Get All - filter: shipped, value: true, orderBy: ord
 
 	it("Stub for router order get (all)", async () => {
 		router.get("/orders-archieve/", async (req, res, next) => {
+			expect("Content-Type", /json/);
+			expect(200);
+			sinon.assert.calledWith(router.get, "/orders-archieve/");
+
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
 			stubGetAllOrders(reqMock, resMock, next);
@@ -1561,26 +1605,34 @@ describe("Stub router order Get All - filter: shipped, value: true, orderBy: ord
 
 			const result = await Order.find({});
 
-			const fifthOrderStub = sinon.createStubInstance(OrderManagerClass, {
-				parametersHandling: sinon.stub().returnsThis(),
-				determinate: sinon.stub().returns(result),
-				ordering: sinon.stub().returns(result),
-				createResponse: sinon
-					.stub()
-					.withArgs(result)
-					.returns(resMock.status(200).json(result))
-			});
+			// const orderClassStubv5 = sinon.createStubInstance(OrderManagerClass, {
+			// 	parametersHandling: sinon.stub().returnsThis(),
+			// 	determinate: sinon.stub().returns(result),
+			// 	ordering: sinon.stub().returns(result),
+			// 	createResponse: sinon
+			// 		.stub()
+			// 		.withArgs(result)
+			// 		.returns(resMock.status(200).json(result))
+			// });
 
-			const fifthOrderManager = new OrderManagerClass();
+			orderClassStub.parametersHandling = sinon.stub().returns(result);
+			orderClassStub.determinate = sinon.stub().returns(result);
+			orderClassStub.ordering = sinon.stub().returns(result);
+			orderClassStub.createResponse = sinon
+				.stub()
+				.withArgs(result)
+				.returns(resMock.status(200).json(result));
 
-			fifthOrderManager.response = await result;
-			fifthOrderManager.data = await result;
-			fifthOrderManager.filterQuery = reqMock.params.filter;
-			fifthOrderManager.valueQuery = reqMock.params.value;
-			fifthOrderManager.orderByQuery = reqMock.params.orderBy;
-			fifthOrderManager.sortQuery = reqMock.params.sort;
+			const orderManagerv5 = new OrderManagerClass();
 
-			await fifthOrderManager.parametersHandling();
+			orderManagerv5.response = await result;
+			orderManagerv5.data = await result;
+			orderManagerv5.filterQuery = reqMock.params.filter;
+			orderManagerv5.valueQuery = reqMock.params.value;
+			orderManagerv5.orderByQuery = reqMock.params.orderBy;
+			orderManagerv5.sortQuery = reqMock.params.sort;
+
+			await orderManagerv5.parametersHandling();
 		});
 	});
 
@@ -1598,8 +1650,6 @@ describe("Stub router order Get All - filter: shipped, value: true, orderBy: ord
 		router.get.restore();
 	});
 });
-
-// Arrivato qui 30/11
 
 describe("Stub router order Get All - filter: date, value: 2022..., orderBy: orderid, sort: decreasing", async () => {
 	const results = [
@@ -1665,6 +1715,10 @@ describe("Stub router order Get All - filter: date, value: 2022..., orderBy: ord
 
 	it("Stub for router order get (all)", async () => {
 		router.get("/orders-archieve/", async (req, res, next) => {
+			expect("Content-Type", /json/);
+			expect(200);
+			sinon.assert.calledWith(router.get, "/orders-archieve/");
+
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
 			stubGetAllOrders(reqMock, resMock, next);
@@ -1672,15 +1726,23 @@ describe("Stub router order Get All - filter: date, value: 2022..., orderBy: ord
 			stubOrderFind.withArgs({}).returns(results);
 			const result = await Order.find({});
 
-			const orderClassStubv4 = sinon.createStubInstance(OrderManagerClass, {
-				parametersHandling: sinon.stub().returnsThis(),
-				determinate: sinon.stub().returns(result),
-				ordering: sinon.stub().returns(result),
-				createResponse: sinon
-					.stub()
-					.withArgs(result)
-					.returns(resMock.status(200).json(result))
-			});
+			// const orderClassStubv4 = sinon.createStubInstance(OrderManagerClass, {
+			// 	parametersHandling: sinon.stub().returnsThis(),
+			// 	determinate: sinon.stub().returns(result),
+			// 	ordering: sinon.stub().returns(result),
+			// 	createResponse: sinon
+			// 		.stub()
+			// 		.withArgs(result)
+			// 		.returns(resMock.status(200).json(result))
+			// });
+
+			orderClassStub.parametersHandling = sinon.stub().returns(result);
+			orderClassStub.determinate = sinon.stub().returns(result);
+			orderClassStub.ordering = sinon.stub().returns(result);
+			orderClassStub.createResponse = sinon
+				.stub()
+				.withArgs(result)
+				.returns(resMock.status(200).json(result));
 
 			const orderManagerv4 = new OrderManagerClass();
 
@@ -1775,6 +1837,10 @@ describe("Stub router order Get All - All undefined", async () => {
 
 	it("Stub for router order get (all)", async () => {
 		router.get("/orders-archieve/", async (req, res, next) => {
+			expect("Content-Type", /json/);
+			expect(200);
+			sinon.assert.calledWith(router.get, "/orders-archieve/");
+
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
 			stubGetAllOrders(reqMock, resMock, next);
@@ -1783,15 +1849,23 @@ describe("Stub router order Get All - All undefined", async () => {
 
 			const result = await Order.find({});
 
-			const orderClassStubv3 = sinon.createStubInstance(OrderManagerClass, {
-				parametersHandling: sinon.stub().returns(result),
-				determinate: sinon.stub().returns(result),
-				ordering: sinon.stub().returns(result),
-				createResponse: sinon
-					.stub()
-					.withArgs(result)
-					.returns(resMock.status(200).json(result))
-			});
+			// const orderClassStubv3 = sinon.createStubInstance(OrderManagerClass, {
+			// 	parametersHandling: sinon.stub().returns(result),
+			// 	determinate: sinon.stub().returns(result),
+			// 	ordering: sinon.stub().returns(result),
+			// 	createResponse: sinon
+			// 		.stub()
+			// 		.withArgs(result)
+			// 		.returns(resMock.status(200).json(result))
+			// });
+
+			orderClassStub.parametersHandling = sinon.stub().returns(result);
+			orderClassStub.determinate = sinon.stub().returns(result);
+			orderClassStub.ordering = sinon.stub().returns(result);
+			orderClassStub.createResponse = sinon
+				.stub()
+				.withArgs(result)
+				.returns(resMock.status(200).json(result));
 
 			const orderManagerv3 = new OrderManagerClass();
 
@@ -1889,6 +1963,10 @@ describe("Stub router order Get All - miss sort param", async () => {
 
 	it("Stub for router order get (all) - miss sort param", () => {
 		router.get("/orders-archieve/", async (req, res, next) => {
+			expect("Content-Type", /json/);
+			expect(200);
+			sinon.assert.calledWith(router.get, "/orders-archieve/");
+
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
 			stubGetAllOrders(reqMock, resMock, next);
@@ -1897,17 +1975,27 @@ describe("Stub router order Get All - miss sort param", async () => {
 
 			const savedResult = await Order.find({});
 
-			const orderClassStubv2 = sinon.createStubInstance(OrderManagerClass, {
-				parametersHandling: sinon.stub().returnsThis(),
-				missParam: sinon
-					.stub()
-					.withArgs("&sort= ")
-					.returns(
-						resMock.status(400).json({
-							message: `Need a &sort= parameter for search...`
-						})
-					)
-			});
+			// const orderClassStubv2 = sinon.createStubInstance(OrderManagerClass, {
+			// 	parametersHandling: sinon.stub().returnsThis(),
+			// 	missParam: sinon
+			// 		.stub()
+			// 		.withArgs("&sort= ")
+			// 		.returns(
+			// 			resMock.status(400).json({
+			// 				message: `Need a &sort= parameter for search...`
+			// 			})
+			// 		)
+			// });
+
+			orderClassStub.parametersHandling = sinon.stub().returnsThis();
+			orderClassStub.missParam = sinon
+				.stub()
+				.withArgs("&sort= ")
+				.returns(
+					resMock.status(400).json({
+						message: `Need a &sort= parameter for search...`
+					})
+				);
 
 			const orderManagerv2 = new OrderManagerClass();
 
@@ -2006,17 +2094,16 @@ describe("Stub router order Get All", async () => {
 
 	it("Stub for router order get (all)", async () => {
 		router.get("/orders-archieve/", async (req, res, next) => {
-			const orderClassStubv1 = sinon.createStubInstance(OrderManagerClass, {
-				determinate: sinon.stub().returnsThis(),
-				ordering: sinon.stub().returnsThis(),
-				createResponse: sinon.stub().returnsThis(),
-				parametersHandling: sinon.stub().returnsThis(),
-				noProducts: sinon.stub().returnsThis()
-			});
+			// const orderClassStubv1 = sinon.createStubInstance(OrderManagerClass, {
+			// 	determinate: sinon.stub().returnsThis(),
+			// 	ordering: sinon.stub().returnsThis(),
+			// 	createResponse: sinon.stub().returnsThis(),
+			// 	parametersHandling: sinon.stub().returnsThis(),
+			// 	noProducts: sinon.stub().returnsThis()
+			// });
 
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
-
 			stubGetAllOrders(reqMock, resMock, next);
 
 			const stubOrderFindTwo = sinon
@@ -2069,16 +2156,32 @@ describe("Stub router order Get All", async () => {
 
 			const result = await Order.find({});
 
-			const secondOrderManager = new OrderManagerClass();
+			orderClassStub.response = await result;
+			orderClassStub.data = await result;
+			orderClassStub.filterQuery = reqMock.params.filter;
+			orderClassStub.valueQuery = reqMock.params.value;
+			orderClassStub.orderByQuery = reqMock.params.orderBy;
+			orderClassStub.sortQuery = reqMock.params.sort;
 
-			orderClassStubv1.response = await result;
-			orderClassStubv1.data = await result;
-			orderClassStubv1.filterQuery = reqMock.params.filter;
-			orderClassStubv1.valueQuery = reqMock.params.value;
-			orderClassStubv1.orderByQuery = reqMock.params.orderBy;
-			orderClassStubv1.sortQuery = reqMock.params.sort;
+			// Testing qui 31-10
 
-			await orderClassStubv1.parametersHandling();
+			orderClassStub.determinate = sinon.stub().returns(result);
+			orderClassStub.ordering = sinon.stub().returns(result);
+			orderClassStub.createResponse = sinon
+				.stub()
+				.withArgs(result)
+				.returns(resMock.status(200).json(result));
+			orderClassStub.parametersHandling = sinon
+				.stub()
+				.callsFake(function fakeGetAll() {
+					orderClassStub.ordersArchived = orderClassStub.determinate();
+					orderClassStub.ordering();
+					orderClassStub.createResponse();
+				});
+
+			const orderManager = new OrderManagerClass();
+
+			await orderClassStub.parametersHandling();
 
 			expect("Content-Type", /json/);
 			expect(200);
@@ -2151,21 +2254,17 @@ describe("Stub router order Get One", () => {
 
 	it("Stub for order router get (one)", async () => {
 		router.get(`/orders-archieve/${testOrderGet}`, async (req, res, next) => {
-			expect("Content-Type", /json/);
-			expect(200);
-			sinon.assert.calledWith(router.get, `/orders-archieve/${testOrderGet}`);
-
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
 			stubGetOneOrder(reqMock, resMock, next);
 
 			stubOrderFindOne.withArgs({ orderid: "order000001" }).returns(res);
-
 			const result = await Order.findOne({ orderid: "order000001" });
 
 			resMock.status(200).json(result);
 
-			assert.match(res.body, {
+			sinon.assert.calledWith(router.get, `/orders-archieve/${testOrderGet}`);
+			sinon.assert.match(resMock.body, {
 				orderid: "order000001",
 				users: [
 					{
@@ -2187,6 +2286,8 @@ describe("Stub router order Get One", () => {
 				totalcost: 2000
 			});
 
+			expect("Content-Type", /json/);
+			expect(200);
 			expect(resMock.body).to.have.property("orderid");
 			expect(resMock.body).to.have.property("users");
 			expect(resMock.body).to.have.property("shipped");
@@ -2235,19 +2336,17 @@ describe("Stub router order Get One - Order not found", async () => {
 		router.get(`/orders-archieve/${testOrderGet}`, async (req, res, next) => {
 			expect("Content-Type", /json/);
 			expect(404);
-
-			sinon.assert.calledWith(router.get, `/orders-archieve/${testOrderGet}`);
-
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
-
 			stubGetOneOrder(reqMock, resMock, next);
 
 			stubOrderFindOne.withArgs({ orderid: testOrderGet }).returns(null);
 			const existence = await Order.findOne({ orderid: testOrderGet });
+
 			resMock.status(404).json({
 				message: `order000001 not exists`
 			});
+			sinon.assert.calledWith(router.get, `/orders-archieve/${testOrderGet}`);
 		});
 	});
 
@@ -2283,9 +2382,7 @@ describe("Stub router order Get One - Error", async () => {
 		router.get(`/orders-archieve/${testOrderGet}`, async (req, res, next) => {
 			expect("Content-Type", /json/);
 			expect(500);
-
 			sinon.assert.calledWith(router.get, `/orders-archieve/${testOrderGet}`);
-
 			const reqMock = mockReq(req);
 			const resMock = new Error();
 			stubGetOneOrder(reqMock, resMock, new Error());
@@ -2312,7 +2409,6 @@ describe("Stub router order Get One - Error", async () => {
 const stubpostOneOrder = sinon.stub(postOneOrder);
 
 const userUpdaterStubExt = sinon.createStubInstance(UserUpdaterClass);
-
 const prodUpStubExt = sinon.createStubInstance(ProductUpdaterClass);
 
 describe("Stub router order Post - user not exists", async () => {
@@ -2388,9 +2484,10 @@ describe("Stub router order Post - user not exists", async () => {
 
 			resMock.status(200).json({ message0: "User23 not exist." });
 
+			sinon.assert.calledWith(router.post, "/orders-archieve/");
+			sinon.assert.match(res, { message0: "User23 not exist." });
 			expect("Content-Type", /json/);
 			expect(200);
-			assert.match(res, { message0: "User23 not exist." });
 			expect(res).to.have.property("message0");
 		});
 	});
@@ -2444,11 +2541,8 @@ describe("Stub router order Post - order just exists", async () => {
 
 	it("Stub for order router post - order just exists", async () => {
 		router.post("/orders-archieve/", async (req, res, next) => {
-			sinon.assert.calledWith(router.post, "/orders-archieve/");
-
 			const reqMock = mockReq(req);
 			const resMock = mockRes(res);
-
 			stubpostOneOrder(reqMock, resMock, next);
 
 			userUpdaterStubExt.data = req.body;
@@ -2510,13 +2604,14 @@ describe("Stub router order Post - order just exists", async () => {
 				message: "OrderId already exists"
 			});
 
-			expect("Content-Type", /json/);
-			expect(200);
-			sinon.assert.match(res.body, {
+			sinon.assert.calledWith(router.post, "/orders-archieve/");
+			sinon.assert.match(resMock.body, {
 				message: "OrderId already exists"
 			});
-			expect(res.body).to.have.property("message");
-			assert.strictEqual(res.body, {
+			expect("Content-Type", /json/);
+			expect(200);
+			expect(resMock.body).to.have.property("message");
+			assert.strictEqual(resMock.body, {
 				message: "OrderId already exists"
 			});
 		});
@@ -2691,11 +2786,12 @@ describe("Stub router order Post - not enought products", async () => {
 			prodUpStubExt.createResults();
 			prodUpStubExt.createNewOrder();
 
-			expect("Content-Type", /json/);
-			expect(200);
-			assert.match(res, {
+			sinon.assert.calledWith(router.post, "/orders-archieve/");
+			sinon.assert.match(res, {
 				message0: `Too little quantity of Watermelon`
 			});
+			expect("Content-Type", /json/);
+			expect(200);
 		});
 	});
 
@@ -2894,6 +2990,8 @@ describe("Stub router order Post", async () => {
 
 			expect("Content-Type", /json/);
 			expect(200);
+
+			sinon.assert.calledWith(router.post, "/orders-archieve/");
 			sinon.assert.match(res, {
 				orderid: "order000098",
 				users: [
@@ -2973,25 +3071,27 @@ describe("Stub router order Put", async () => {
 		const stub = sinon.stub(router, "put").yields(
 			{ params: testOrderPut },
 			{
-				orderid: testOrderPut,
-				users: [
-					{
-						username: "UserOne",
-						products: [
-							{
-								productname: "Watermelon",
-								quantity: 23
-							},
-							{
-								productname: "Strawberries",
-								quantity: 23
-							}
-						]
-					}
-				],
-				shipped: newShipStatus,
-				date: "2022-09-06T21:55:50.076+00:00",
-				totalcost: 2000
+				body: {
+					orderid: testOrderPut,
+					users: [
+						{
+							username: "UserOne",
+							products: [
+								{
+									productname: "Watermelon",
+									quantity: 23
+								},
+								{
+									productname: "Strawberries",
+									quantity: 23
+								}
+							]
+						}
+					],
+					shipped: newShipStatus,
+					date: "2022-09-06T21:55:50.076+00:00",
+					totalcost: 2000
+				}
 			},
 			null
 		);
@@ -3055,12 +3155,8 @@ describe("Stub router order Put", async () => {
 
 			resMock.status(200).json(result);
 
-			expect(res).to.have.property("orderid");
-			expect(res).to.have.property("users");
-			expect(res).to.have.property("shipped");
-			expect(res).to.have.property("date");
-			expect(res).to.have.property("totalcost");
-			expect(resMock.status).to.equal(200);
+			sinon.assert.calledWith(router.put, `/orders-archieve/${testOrderPut}`);
+			sinon.assert.match(resMock.body, result);
 		});
 	});
 
@@ -3107,7 +3203,6 @@ describe("Stub router order Delete One", async () => {
 
 				const orderNumber = req.params.ordnum;
 				const orderId = `order${String(orderNumber)}`;
-
 				const stubOrderFindDel = sinon
 					.stub(Order, "findOneAndDelete")
 					.withArgs({
@@ -3135,9 +3230,6 @@ describe("Stub router order Delete One", async () => {
 						totalcost: 769.58
 					});
 				const orderRemoved = await Order.findOneAndDelete({
-					orderid: "order000098"
-				});
-				const ordTest = await Order.findOne({
 					orderid: "order000098"
 				});
 
@@ -3220,6 +3312,7 @@ describe("Stub router order Delete One", async () => {
 										origin: "Italy",
 										price: prodUpStubExt.oldQuantity["price"]
 									});
+
 								prodUpStubExt.productUpdate = await Product.findOneAndUpdate(
 									{
 										name: product["productname"]
@@ -3248,14 +3341,17 @@ describe("Stub router order Delete One", async () => {
 					message: "Order delete."
 				});
 
-				expect("Content-Type", /json/);
-				expect(200);
-
-				expect(resMock.body).to.have.property("message");
-
-				sinon.assert.match(res.body, {
+				sinon.assert.calledWith(
+					router.delete,
+					`/orders-archieve/${testOrderDelete}`
+				);
+				sinon.assert.match(resMock.body, {
 					message: "Order delete."
 				});
+
+				expect("Content-Type", /json/);
+				expect(200);
+				expect(resMock.body).to.have.property("message");
 			}
 		);
 	});
