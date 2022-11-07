@@ -1379,7 +1379,6 @@ describe("Stub router order Get All - filter: orderid, value: order000001, order
 			orderManagerv7.sortQuery = undefined;
 
 			await orderManagerv7.parametersHandling();
-			// orderClassStub.parametersHandling();
 		});
 	});
 
@@ -2251,13 +2250,6 @@ describe("Stub router order Get One", () => {
 			const resMock = new Error();
 			stubGetOneOrder(reqMock, resMock, next);
 			assert.isFalse(next(new Error()));
-			// sinon.assert.called(next);
-
-			// Qui 05/10
-
-			// resMock.status(500).json({
-			// 	message: `Error in searching order`
-			// });
 		});
 	});
 
@@ -2571,7 +2563,6 @@ describe("Stub router order Post - order just exists", async () => {
 			const resMock = new Error();
 
 			stubpostOneOrder(null, null, next);
-			// res.status(404).json({ message: "Problem occured" });
 		});
 	});
 
@@ -3125,10 +3116,7 @@ const stubDeleteOneOrder = sinon.stub(deleteOneOrder);
 
 describe("Stub router order Delete One", async () => {
 	const testOrderDelete = "000098";
-
 	before(() => {
-		// stubProductFindUp.restore();
-
 		const stub = sinon.stub(router, "delete").yields(
 			{ params: { ordnum: "000098" } },
 			{
@@ -3139,7 +3127,6 @@ describe("Stub router order Delete One", async () => {
 			null
 		);
 	});
-
 	it("Stub for order router delete", async () => {
 		router.delete(
 			`/orders-archieve/${testOrderDelete}`,
@@ -3316,7 +3303,6 @@ describe("Stub router order Delete One", async () => {
 
 	after(() => {
 		Order.findOneAndDelete.restore();
-
 		router.delete.restore();
 	});
 });
