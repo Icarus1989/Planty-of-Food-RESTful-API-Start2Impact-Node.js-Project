@@ -188,7 +188,7 @@ Le risorse Orders sono composte da:
 - date - data di creazione di un ordine <br>
 - totalcost - totale dell'ordine calcolato e aggiunto automaticamente <br>
 
-:heavy_plus_sign: rispetto alla consegna data sono stati aggiunti dettagli agli utenti e ai prodotti che compongono l'ordine, come per esempio la quantità di un determinato prodotto, ed essendo il contesto nell'ambito dei gruppi d'acquisto ho voluto includere un field per il costo sostenuto da ogni singolo utente per la propria parte di ordine, calcolato e aggiunto ai dati forniti nella POST request, che comporrà la risorsa all'interno del Database. I campi aggiuntivi shipped e date potrebbero tornare utili per un futuro aggiornamento o utilizzo del progetto a fini pratici, ma come per il calcolo del costo totale dell'ordine, sono serviti principalmente come ulteriore esercizio pratico nella creazione di API e per un senso di completezza.
+:heavy_plus_sign: rispetto alla consegna data sono stati aggiunti dettagli come per esempio la quantità di un determinato prodotto, ed essendo il contesto nell'ambito dei gruppi d'acquisto, ho voluto includere un field per il costo sostenuto da ogni singolo utente per la propria parte di ordine, calcolato e aggiunto ai dati forniti nella POST request, che comporrà la risorsa all'interno del Database. I campi aggiuntivi shipped e date potrebbero tornare utili per un futuro aggiornamento o utilizzo del progetto a fini pratici, ma come per il calcolo del costo totale dell'ordine, sono serviti principalmente come ulteriore esercizio pratico nella creazione di API e per un senso di completezza.
 
 <hr>
 
@@ -335,7 +335,7 @@ Come servizio di hosting per questo progetto ho scelto [Glitch.com](https://glit
 ## Demo
 
 E' possibile utilizzare una versione totalmente funzionante del progetto, collegata ad un database MongoDB attivo, dal link incluso solo nella presentazione, utilizzando Insomnia o altri tool per la gestione delle API.
-Si consiglia di effettuare una GET request con endpoint "/" prima di provare ad inviare dati per disabilitare la modalità sleep, imposta dal servizio di hosting dopo 5 minuti di inattività per i piani gratuiti.
+Si consiglia di effettuare una GET request con endpoint "/", o di cliccare semplicemente sull'icona del link, prima di provare ad inviare dati per disabilitare la modalità sleep, imposta dal servizio di hosting dopo 5 minuti di inattività per i piani gratuiti.
 
 In alternativa si può clonare la repository.
 
