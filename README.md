@@ -98,7 +98,7 @@ Questo progetto mira ad ottenere delle API funzionanti per connettere un ecommer
 
 Ho voluto ampliare la consegna data per il progetto arricchendo le varie risorse con ulteriori campi e funzionalità, come per esempio l'inserimento del prezzo di un prodotto e il calcolo del totale di un ordine, cercando comunque di restare pertinente al contesto fornito con features utili ad un eventuale uso in un'applicazione reale.
 
-Tra i due databse proposti ho preferito optare per MongoDB visto che, proprio grazie al fatto di voler imparare ad usarlo per migliorare ed ampliare il [progetto precedente](https://github.com/Icarus1989/how-is-there--lifestyle-web-app), ho scelto di cominciare questa guida di Node.js, capendone l'importanza anche in senso più ampio.
+Tra i due database proposti ho preferito optare per MongoDB visto che, proprio grazie al fatto di voler imparare ad usarlo per migliorare ed ampliare il [progetto precedente](https://github.com/Icarus1989/how-is-there--lifestyle-web-app), ho scelto di cominciare questa guida di Node.js, capendone l'importanza anche in senso più ampio.
 
 <hr>
 
@@ -108,7 +108,7 @@ Basandomi su quanto appreso nelle varie guide, ho cercato di creare queste API s
 
 - un'architettura stateless
 
-- una divisione netta tra client e server - la composizione finale degli ordini, con il calcolo degli importi per ogni singolo utente e il totale, il salvataggio di tale order viene eseguita interamente dal server, come anche ogni controllo di esistenza delle risorse
+- una divisione netta tra client e server - la composizione finale degli ordini, con il calcolo degli importi per ogni singolo utente e il totale ed il salvataggio di tale order,viene eseguita interamente dal server, come anche ogni controllo di esistenza delle risorse
 
 - un sistema diviso con una logica a layers - separando database e server, diviso a sua volta tra la route base e poi tra le tre route principali a loro volta divise tra models, controllers, routes e classes, in modo da separare nel modo migliore possibile tutte le logiche
 
@@ -140,7 +140,7 @@ Per tutti i gruppi di risorse presenti, users, products e orders, ho creato dei 
 
 ### Status Code
 
-I vari status code di risposta delle varie API sono basati sulla lista fornita di status codes, ed inseriti ponendo particolare attenzione al fatto che la risposta arrivi o no e che sia positiva o negativa.
+Gli status code di risposta delle API sono basati sulla lista fornita ed inseriti ponendo particolare attenzione al fatto che la risposta arrivi o no e che sia positiva o negativa.
 
 <hr>
 
@@ -171,7 +171,7 @@ Le risorse Products sono composte da:
 - origin - origine di un prodotto <br>
 - price - prezzo al kilogrammo di un determinato prodotto <br>
 
-:heavy_plus_sign: rispetto alla consegna data alle risorse products sono stati aggiunti i campi quantity, origin e price. Il campo quantity viene inserito alla creazione di un nuovo product e aggiornato tramite classes alla creazione o alla cancellazione di un ordine. Il campo price viene utilizzato durante la creazione di quest'ultimo per il calcolo del costo sostenuto per ogni singolo utente e del totale complessivo.
+:heavy_plus_sign: rispetto alla consegna data alle risorse products sono stati aggiunti i campi quantity, origin e price. Il campo quantity viene inserito alla creazione di un nuovo product e aggiornato tramite classes alla creazione o alla cancellazione di un ordine mentre il campo price viene utilizzato durante la creazione di quest'ultimo per il calcolo del costo sostenuto per ogni singolo utente e del totale complessivo.
 
 #### Orders-archieve
 
@@ -194,7 +194,7 @@ Le risorse Orders sono composte da:
 
 ### Testing
 
-Per lo unit-testing delle API ho utilizzato Sinon come consigliato e, anche se é stato uno degli scogli più duri del progetto, soprattutto entrando nell'ambito classes di JavaScript, mi é servito per migliorare il codice principale e capire in modo più profondo le logiche che regolano Node.js e le API.<br>
+Per lo unit-testing delle API ho utilizzato Sinon.js come consigliato e, anche se é stato uno degli scogli più duri del progetto, soprattutto entrando nell'ambito delle Classes di JavaScript, mi é servito per migliorare il codice principale e capire in modo più profondo le logiche che regolano Node.js e le API.<br>
 I massimi risultati che sono riuscito ad ottenere:<br>
 
 <div align="center">
@@ -244,9 +244,9 @@ Per le risorse **Users**:
 
 - una GET request con endpoint **_"/users/"_** darà come risposta la totalità dei prodotti presenti nella collection, ad una GET request con URL **_"/users/:userid"_** risponderà con il relativo User con userid corrispondente, basato sul field **username**, oppure con un message che segnalerà la non esistenza di tale User
 
-- per poter inserire un nuovo User con una POST request occorrerà usare l'endpoint **_"/users/"_** e fornire un body in formato JSON, che dovrà rispettare i parametri dei field che compongono le risorse: **firstname**, **lastname**, **username**, **address**, **date** e **orders** (che può essere anche un Array vuoto). Dopo aver inviato la POST request e andata a buon fine, la risposta sarà lo User stesso oppure, in caso negativo, un message adatto. I field hanno dei parametri di default per velocizzare le request soprattutto a scopo dimostrativo.
+- per poter inserire un nuovo User con una POST request occorrerà usare l'endpoint **_"/users/"_** e fornire un body in formato JSON, che dovrà rispettare i parametri dei field che compongono le risorse: **firstname**, **lastname**, **username**, **address**, **date** (altrimenti aggiunto automaticamente) e **orders** (che può essere anche un Array vuoto). Dopo aver inviato la POST request e andata a buon fine, la risposta sarà lo User stesso oppure, in caso negativo, un message adatto.
 
-- per modificare una risorsa si usi una PUT request con endpoint **_"/users/:userid"_** con userid corrispondente allo **username** della risorsa e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
+- per modificare una risorsa si usi una PUT request con endpoint **_"/users/:userid"_** con userid corrispondente allo **username** della risorsa e body completo con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata.
 
 - per cancellare una risorsa si usi una DELETE request con endpoint **_"/users/:userid"_** con userid corrispondente allo **username** della risorsa. La response sarà la risorsa stessa.
 <br>
@@ -259,9 +259,9 @@ Per le risorse **Product**:
 
 - una GET request con endpoint **_"/products-storage/"_** darà come risposta la totalità dei prodotti presenti nella collection, ad una GET request con URL **_"/products-storage/:prodid"_** risponderà con il relativo prodotto con prodid corrispondente, basato sul field **name**, oppure con un message che segnalerà la non esistenza di tale Product
 
-- per poter inserire un nuovo Product con una POST request occorrerà usare l'endpoint **_"/products-storage/"_** e fornire un body in formato JSON, che dovrà rispettare i parametri dei quattro field che compongono le risorse: **name**, **origin**, **price**, **quantity**. Dopo aver inviato la POST request e andata a buon fine, la risposta sarà il Product stesso oppure, in caso negativo, un message adatto. I field hanno dei parametri di default per velocizzare le request soprattutto a scopo dimostrativo.
+- per poter inserire un nuovo Product con una POST request occorrerà usare l'endpoint **_"/products-storage/"_** e fornire un body in formato JSON, che dovrà rispettare i parametri dei quattro field che compongono le risorse: **name**, **origin**, **price**, **quantity**. Dopo aver inviato la POST request e andata a buon fine, la risposta sarà il Product stesso oppure, in caso negativo, un message adatto.
 
-- per modificare una risorsa si usi una PUT request con endpoint **_"/products-storage/:prodid"_** con prodid corrispondente al **name** del Product e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
+- per modificare una risorsa si usi una PUT request con endpoint **_"/products-storage/:prodid"_** con prodid corrispondente al **name** del Product e body completo con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata
 
 - per cancellare una risorsa si una DELETE request con endpoint **_"/products-storage/:prodid"_** con prodid corrispondente al **name** del Product. La response sarà la risorsa stessa.
 <br>
@@ -281,13 +281,13 @@ Per le risorse **Orders**:
 
     i.e. **_"/orders-archieve?filter=productname&value=strawberries&order=orderid&sort=increasing"_**
 
-La ricerca può essere effettuata sia utilizzando tutti i parametri, sia senza utilizzarli, sia utilizzando solo i parametri filter e value, sia solo con order e sort. In caso di utilizzo di filter senza value o viceversa oppure di order senza sort e viceversa, la response sarà un messaggio di errore che indicherà la mancanza del parametro del caso.
+La ricerca può essere effettuata sia utilizzando tutti i parametri, sia senza utilizzarli, sia utilizzando solo i parametri filter e value, sia solo con order e sort. In caso di utilizzo di filter senza value o viceversa oppure di order senza sort e viceversa, la response sarà un messaggio di errore che indicherà la mancanza del parametro necessario.
 
-- una GET request con endpoint **_"/orders-archieve/:ordnum"_** (inserire nell'immagine sotto un esempio per chiarezza) risponderà con il relativo Order con ordnum corrispondente, basato sul field **orderid** senza la componente "order" (i.e. ~~order~~999999) , oppure con un message che segnalerà la non esistenza di tale Order
+- una GET request con endpoint **_"/orders-archieve/:ordnum"_** risponderà con il relativo Order con ordnum corrispondente oppure con un message che segnalerà la non esistenza di tale Order. Il parametro di ricerca "ordnum" é basato sul field **orderid** senza la componente "order" (i.e. ~~order~~999999).
 
-- per poter inserire un nuovo Order con una POST request occorrerà usare l'endpoint **_"/orders-archieve/"_** e fornire un body in formato JSON, che dovrà rispettare i parametri dei field che compongono le risorse: **orderid**, **users** (struttura complassa vedi immagine), **date** e **shipped**. Verranno inoltre calcolati ed aggiunti i fields cost e totalcost basati sul field price delle risorse Product e relativa quantity. Dopo aver inviato la POST request e andata a buon fine, la risposta sarà l'Order stesso oppure, in caso negativo, un message adatto. I field hanno dei parametri di default per velocizzare le request soprattutto a scopo dimostrativo. Tramite l'utilizzo di classes JavaScript le risorse User e Product coinvolte verranno aggiornate, aggiungendo alle risorse User il nuovo Order e modificando le quantità nelle risorse Product.
+- per poter inserire un nuovo Order con una POST request occorrerà usare l'endpoint **_"/orders-archieve/"_** e fornire un body in formato JSON, che dovrà rispettare i parametri dei field che compongono le risorse: **orderid**, **users** (struttura complessa vedi immagine), **date** e **shipped**. Verranno inoltre calcolati ed aggiunti i fields cost e totalcost basati sul field price delle risorse Product e relativa quantity. Dopo aver inviato la POST request e andata a buon fine, la risposta sarà l'Order stesso oppure, in caso negativo, un message adatto. I field hanno dei parametri di default per velocizzare le request soprattutto a scopo dimostrativo. Tramite l'utilizzo di classes JavaScript le risorse User e Product coinvolte verranno aggiornate, aggiungendo alle risorse User il nuovo Order e modificando le quantità nelle risorse Product.
 
-- per modificare una risorsa si usi una PUT request con URL **_"/orders-archieve/:ordnum"_** con ordnum corrispondente all'**orderid** della risorsa senza la componente "order" (i.e. ~~order~~999999) e body con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata.
+- per modificare una risorsa si usi una PUT request con URL **_"/orders-archieve/:ordnum"_** con ordnum corrispondente all'**orderid** della risorsa senza la componente "order" (i.e. ~~order~~999999) e body completo con la modifica desiderata. La response positiva corrisponderà alla risorsa modificata.
 
 - per cancellare una risorsa si usi una DELETE request con URL **_"/orders-archieve/:ordnum"_** con userid corrispondente all'**orderid** della risorsa senza la componente "order" (i.e. ~~order~~999999). La response sarà la risorsa stessa. Tramite l'utilizzo di classes JavaScript le risorse User e Product coinvolte verranno aggiornate, rimuovendo dalle risorse User la risorsa Order cancellata e modificando le quantità delle risorse Product.
 <br>
@@ -302,7 +302,7 @@ Nota generale per l'utilizzo delle routes: se i fields indicati nel body non cor
 
 ## Steps RESTful API
 
-Project steps:
+**Project steps**:
 
 - [x] Routes, Naming, Methods and Status Codes study
 - [x] MongoDB and Mongoose study
@@ -313,7 +313,7 @@ Project steps:
 - [x] Highest possible percentage - unit test code coverage
 - [x] Deploy on Glitch.com - added .npmrc file
 
-Future ideas:
+**Future ideas**:
 
 - [ ] Use EJS for create a .pdf file with a printable order summary and save it on DB
 
@@ -323,7 +323,7 @@ Future ideas:
 ## Host
 
 Anche se non necessario dalle specifiche del progetto, ho preferito pubblicarlo per completezza e per renderne più accessibile la visione e la fruizione.
-Come host per questo progetto ho scelto [Glitch.com](https://glitch.com/), continuando così a differenziare per ogni nuovo progetto, in modo da apprendere il più possibile.
+Come servizio di hosting per questo progetto ho scelto [Glitch.com](https://glitch.com/), continuando così a differenziare per ogni nuovo progetto, in modo da apprendere il più possibile.
 
 - [x] GitHub Pages
 - [x] Firebase
@@ -334,7 +334,7 @@ Come host per questo progetto ho scelto [Glitch.com](https://glitch.com/), conti
 
 ## Demo
 
-E' possibile utilizzare una versione totalmente funzionante del progetto, collegata ad un database MongoDB attivo, dal link incluso solo nella presentazione utilizzando Insomnia o altri tool per la gestione delle API.
+E' possibile utilizzare una versione totalmente funzionante del progetto, collegata ad un database MongoDB attivo, dal link incluso solo nella presentazione, utilizzando Insomnia o altri tool per la gestione delle API.
 Si consiglia di effettuare una GET request con endpoint "/" prima di provare ad inviare dati per disabilitare la modalità sleep, imposta dal servizio di hosting dopo 5 minuti di inattività per i piani gratuiti.
 
 In alternativa si può clonare la repository.
