@@ -302,7 +302,7 @@ Nota generale per l'utilizzo delle routes: se i fields indicati nel body non cor
 
 ## Steps RESTful API
 
-Fasi del progetto:
+Project steps:
 
 - [x] Routes, Naming, Methods and Status Codes study
 - [x] MongoDB and Mongoose study
@@ -311,10 +311,11 @@ Fasi del progetto:
 - [x] Sinon.js stubs, mocks and spies study
 - [x] Test code coverage instanbul/nyc
 - [x] Highest possible percentage - unit test code coverage
+- [x] Deploy on Glitch.com - added .npmrc file
 
-Idee future:
+Future ideas:
 
-- [ ] Utilizzare EJS per creare un file .pdf riassuntivo e stampabile dell'ordine e salvato su DB
+- [ ] Use EJS for create a .pdf file with a printable order summary and save it on DB
 
 <hr>
 <hr>
@@ -333,8 +334,8 @@ Come host per questo progetto ho scelto [Glitch.com](https://glitch.com/), conti
 
 ## Demo
 
-E' possibile utilizzare una versione totalmente funzionante del progetto, collegata ad un database MongoDB attivo, da questo [link](https://planty-of-food-restful-api.glitch.me/) utilizzando Insomnia o altri tool per la gestione delle API.
-Si consiglia di effettuare una GET request con endpoint "/" prima di provare ad inviare dati per abilitare le API e disabilitare la modalità sleep, imposta dall'host dopo 5 minuti di inattività per i piani gratuiti.
+E' possibile utilizzare una versione totalmente funzionante del progetto, collegata ad un database MongoDB attivo, dal link incluso solo nella presentazione utilizzando Insomnia o altri tool per la gestione delle API.
+Si consiglia di effettuare una GET request con endpoint "/" prima di provare ad inviare dati per disabilitare la modalità sleep, imposta dal servizio di hosting dopo 5 minuti di inattività per i piani gratuiti.
 
 In alternativa si può clonare la repository.
 
