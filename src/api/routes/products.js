@@ -38,27 +38,18 @@ router.post(
 );
 
 router.put(
-	"/:prodId",
+	"/:prodid",
 	celebrate({
 		[Segments.BODY]: Joi.object({
 			name: Joi.string(),
 			quantity: Joi.number().integer().greater(0),
-			origin: Joi.string()
+			origin: Joi.string(),
+			price: Joi.number().precision(2)
 		})
 	}),
 	putOneProduct
 );
 
-router.delete(
-	"/:prodId",
-	celebrate({
-		[Segments.BODY]: Joi.object({
-			name: Joi.string().required(),
-			quantity: Joi.number().integer().greater(0),
-			origin: Joi.string()
-		})
-	}),
-	deleteOneProduct
-);
+router.delete("/:prodid", deleteOneProduct);
 
 module.exports = router;

@@ -40,24 +40,26 @@ class OrderManagerClass {
 				}
 			}
 			return this.results;
-		} else if (
-			this.filterQuery == "username"
-			// || this.filterQuery == "products" - dubbio test senza e con
-		) {
-			this.users = await this.data.map((elem) => {
-				return elem["users"][0];
+		} else if (this.filterQuery == "username") {
+			this.usersOrd = this.data.map((elem) => {
+				return elem["users"];
 			});
-			for (let user of this.users) {
-				if (user["username"] == this.valueQuery) {
-					this.results.push(this.data[this.users.indexOf(user)]);
-				}
+			for (let elem of this.usersOrd) {
+				elem
+					.map((arr) => {
+						return arr["username"];
+					})
+					.filter((user) => {
+						if (user == this.valueQuery) {
+							this.results.push(this.data[this.usersOrd.indexOf(elem)]);
+						}
+					});
 			}
+			return this.results;
 		} else if (this.filterQuery == "shipped") {
-			this.results = this.data.filter((elem) => {
-				if (elem[this.filterQuery] == Boolean(this.valueQuery)) {
-					return true;
-				} else {
-					return false;
+			this.data.map((elem) => {
+				if (String(elem[this.filterQuery]) == String(this.valueQuery)) {
+					this.results.push(elem);
 				}
 			});
 			return this.results;
@@ -92,7 +94,7 @@ class OrderManagerClass {
 	}
 
 	async ordering(arr) {
-		this.arr = arr;
+		this.arr = arr || [];
 		if (this.sortQuery == "decreasing" && this.arr.length > 0) {
 			return (this.arr = this.arr.sort((a, b) => {
 				if (a[this.orderByQuery] > b[this.orderByQuery]) {
@@ -110,7 +112,7 @@ class OrderManagerClass {
 				}
 			}));
 		} else if (this.arr.length == 0) {
-			this.res.status(200).json({
+			this.res.status(404).json({
 				message: "No orders with these parameters saved on database"
 			});
 		} else {
@@ -123,8 +125,8 @@ class OrderManagerClass {
 	}
 
 	async noProducts() {
-		this.res.status(200).json({
-			message: `Product ${this.valueQuery} is not present in the orders archieve`
+		this.res.status(404).json({
+			message: `${this.valueQuery} is not present in the orders archieve`
 		});
 	}
 
@@ -142,7 +144,7 @@ class OrderManagerClass {
 			(this.orderByQuery && this.sortQuery)
 		) {
 			this.ordersArchived = await this.determinate();
-			if (this.ordersArchived < 1) {
+			if (this.ordersArchived <= 0) {
 				await this.noProducts();
 			} else {
 				await this.ordering(this.ordersArchived);
@@ -215,10 +217,7 @@ class ProductUpdaterClass {
 				this.negativeArr.push({
 					message: elem["message"]
 				});
-			} else if (
-				elem["response"] == "positive"
-				// && this.negativeArr.length == 0 // provare questo con Insomnia
-			) {
+			} else if (elem["response"] == "positive") {
 				this.updatingProduct = await this.productModel.findOne({
 					name: elem["productname"]
 				});

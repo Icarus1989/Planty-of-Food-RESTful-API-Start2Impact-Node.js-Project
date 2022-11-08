@@ -66,23 +66,6 @@ router.put(
 	putOneUser
 );
 
-router.delete(
-	"/:username",
-	celebrate({
-		[Segments.BODY]: Joi.object({
-			firstname: Joi.string(),
-			lastname: Joi.string(),
-			username: Joi.string().required(),
-			address: Joi.string().email(),
-			orders: Joi.array().items(
-				Joi.object({
-					orderid: Joi.string(),
-					url: Joi.string()
-				})
-			)
-		})
-	}),
-	deleteOneUser
-);
+router.delete("/:username", deleteOneUser);
 
 module.exports = router;

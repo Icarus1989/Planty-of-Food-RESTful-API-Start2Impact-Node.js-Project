@@ -67,7 +67,7 @@ async function postOneOrder(req, res, next) {
 			}
 		}
 	} catch (error) {
-		res.status(404).json({ message: "Problem occured" });
+		res.status(500).json({ message: "Problem occured" });
 		next(error);
 	}
 }
@@ -78,13 +78,12 @@ async function putOneOrder(req, res, next) {
 		const orderNumber = await req.params.ordnum;
 		const orderId = `order${String(orderNumber)}`;
 		const orderChanged = await Order.findOneAndUpdate(
-			{ orderId: orderId },
+			{ orderid: orderId },
 			data,
 			{
 				new: true
 			}
 		);
-
 		res.status(200).json(orderChanged);
 	} catch (error) {
 		next(error);
@@ -94,12 +93,8 @@ async function putOneOrder(req, res, next) {
 async function deleteOneOrder(req, res, next) {
 	try {
 		const orderNumber = await req.params.ordnum;
-		// console.log(orderNumber);
 		const orderId = `order${String(orderNumber)}`;
 		const orderRemoved = await Order.findOneAndDelete({ orderid: orderId });
-
-		// console.log(orderRemoved);
-
 		const userUpdater = new UserUpdaterClass(
 			await orderRemoved,
 			User,

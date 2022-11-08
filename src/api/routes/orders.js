@@ -57,7 +57,7 @@ router.put(
 	"/:ordnum",
 	celebrate({
 		[Segments.BODY]: Joi.object({
-			orderId: Joi.string().trim(),
+			orderid: Joi.string().trim(),
 			users: Joi.array().items(
 				Joi.object({
 					username: Joi.string().trim(),
@@ -66,10 +66,11 @@ router.put(
 							productname: Joi.string().trim(),
 							quantity: Joi.number().greater(0).integer()
 						})
-					)
+					),
+					cost: Joi.number().greater(0)
 				})
 			),
-			totalcost: Joi.number(),
+			totalcost: Joi.number().greater(0),
 			shipped: Joi.boolean(),
 			date: Joi.date()
 		})
@@ -77,28 +78,6 @@ router.put(
 	putOneOrder
 );
 
-router.delete(
-	"/:ordnum",
-	celebrate({
-		[Segments.BODY]: Joi.object({
-			orderId: Joi.string().trim(),
-			users: Joi.array().items(
-				Joi.object({
-					username: Joi.string().trim(),
-					products: Joi.array().items(
-						Joi.object({
-							productname: Joi.string().trim(),
-							quantity: Joi.number().greater(0).integer()
-						})
-					)
-				})
-			),
-			totalcost: Joi.number(),
-			shipped: Joi.boolean(),
-			date: Joi.date()
-		})
-	}),
-	deleteOneOrder
-);
+router.delete("/:ordnum", deleteOneOrder);
 
 module.exports = router;

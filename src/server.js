@@ -6,7 +6,7 @@ const port = process.env.PORT;
 app.use(express.json());
 
 app.get("/", (req, res) => {
-	res.json({
+	res.status(200).json({
 		message: "Welcome!",
 		GetAllOption1: "/api/v1/products-storage/",
 		GetAllOption2: "/api/v1/users/",
